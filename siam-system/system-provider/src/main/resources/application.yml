@@ -1,0 +1,5 @@
+# 切换正式、测试环境
+spring:
+  profiles:
+    #默认连接测试环境
+    active: test

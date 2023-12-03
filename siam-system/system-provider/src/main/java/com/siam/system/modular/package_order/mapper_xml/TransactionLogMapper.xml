@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siam.system.modular.package_order.mapper.TransactionLogMapper">
+
+	<resultMap type="com.siam.system.modular.package_order.entity.TransactionLog" id="Result">
+		<id     property="id"        column="id"           />
+		<result property="business"      column="business"         />
+		<result property="foreignKey"    column="foreign_key"       />
+	</resultMap>
+
+	<insert id="insertTransactionLog" parameterType="com.siam.system.modular.package_order.entity.TransactionLog">
+		insert into transaction_log (id, business, foreign_key)
+		values (#{id}, #{business}, #{foreignKey})
+	</insert>
+
+	<select id="selectTransactionLogById" resultMap="Result">
+		select * from transaction_log where id=#{transId}
+    </select>
+</mapper>

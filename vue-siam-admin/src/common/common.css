@@ -1,0 +1,76 @@
+html, body, div, label, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6,
+pre, code, form, fieldset, legend, p, blockquote, th, td, img, textarea
+{
+  border: 0;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+}
+img {
+  display: inline-block;
+}
+:focus {
+  outline: 0;
+}
+li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+em, i, u {
+  font-style: normal;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+input, button, textarea, select, optgroup, option {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+}
+input, button, textarea, select {
+  *font-size: 100%;
+}
+ol, ul {
+  list-style: none outside none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+:link, :visited, ins {
+  text-decoration: none;
+}
+a {
+  color: #666;
+  text-decoration: none;
+}
+a:hover {
+  color: #c40000;
+  border: none;
+}
+a:visited {
+  border: none;
+  width: auto;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  color: #424242;
+  font-size: 12px;
+  font-family: "Microsoft YaHei", Arial, Helvetica, sans-serif, STHeiti;
+  letter-spacing: 0;
+  height: 100%;
+  width: 100%;
+}
+.clearfix:after, .p-price:after, ul:after, li:after {
+  display: block;
+  content: ".";
+  height: 0;
+  visibility: hidden;
+  clear: both;
+  font-size: 0;
+  line-height: 0;
+}
+.ellipsis {overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}

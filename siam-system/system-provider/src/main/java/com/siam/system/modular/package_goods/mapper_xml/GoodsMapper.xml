@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.siam.system.modular.package_goods.mapper.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.siam.system.modular.package_goods.entity.Goods" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="main_image" property="mainImage" jdbcType="VARCHAR" />
+    <result column="sub_images" property="subImages" jdbcType="VARCHAR" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="detail_images" property="detailImages" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <result column="is_hot" property="isHot" jdbcType="BIT" />
+    <result column="is_new" property="isNew" jdbcType="BIT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_sale" property="isSale" jdbcType="BIT" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="monthly_sales" property="monthlySales" jdbcType="INTEGER" />
+    <result column="total_sales" property="totalSales" jdbcType="INTEGER" />
+    <result column="total_comments" property="totalComments" jdbcType="INTEGER" />
+    <result column="preferential_name" property="preferentialName" jdbcType="VARCHAR" />
+    <result column="packing_charges" property="packingCharges" jdbcType="DECIMAL" />
+    <result column="product_time" property="productTime" jdbcType="DECIMAL" />
+    <result column="exchange_points" property="exchangePoints" jdbcType="INTEGER" />
+    <result column="sort_number" property="sortNumber" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="java.util.Map" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="main_image" property="mainImage" jdbcType="VARCHAR" />
+    <result column="sub_images" property="subImages" jdbcType="VARCHAR" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="detail_images" property="detailImages" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <result column="is_hot" property="isHot" jdbcType="BIT" />
+    <result column="is_new" property="isNew" jdbcType="BIT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_sale" property="isSale" jdbcType="BIT" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="monthly_sales" property="monthlySales" jdbcType="INTEGER" />
+    <result column="total_sales" property="totalSales" jdbcType="INTEGER" />
+    <result column="total_comments" property="totalComments" jdbcType="INTEGER" />
+    <result column="preferential_name" property="preferentialName" jdbcType="VARCHAR" />
+    <result column="packing_charges" property="packingCharges" jdbcType="DECIMAL" />
+    <result column="product_time" property="productTime" jdbcType="DECIMAL" />
+    <result column="exchange_points" property="exchangePoints" jdbcType="INTEGER" />
+    <result column="sort_number" property="sortNumber" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, shop_id, name, main_image, sub_images, detail, detail_images, price, stock, is_hot,
+    is_new, status, is_sale, sale_price, monthly_sales, total_sales, total_comments,
+    preferential_name, packing_charges, product_time, exchange_points, sort_number, create_time,
+    update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.siam.system.modular.package_goods.model.example.GoodsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_goods
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_goods
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.siam.system.modular.package_goods.model.example.GoodsExample" >
+    delete from tb_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.siam.system.modular.package_goods.entity.Goods" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="mainImage != null" >
+        main_image,
+      </if>
+      <if test="subImages != null" >
+        sub_images,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+      <if test="detailImages != null" >
+        detail_images,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="stock != null" >
+        stock,
+      </if>
+      <if test="isHot != null" >
+        is_hot,
+      </if>
+      <if test="isNew != null" >
+        is_new,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isSale != null" >
+        is_sale,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="monthlySales != null" >
+        monthly_sales,
+      </if>
+      <if test="totalSales != null" >
+        total_sales,
+      </if>
+      <if test="totalComments != null" >
+        total_comments,
+      </if>
+      <if test="preferentialName != null" >
+        preferential_name,
+      </if>
+      <if test="packingCharges != null" >
+        packing_charges,
+      </if>
+      <if test="productTime != null" >
+        product_time,
+      </if>
+      <if test="exchangePoints != null" >
+        exchange_points,
+      </if>
+      <if test="sortNumber != null" >
+        sort_number,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mainImage != null" >
+        #{mainImage,jdbcType=VARCHAR},
+      </if>
+      <if test="subImages != null" >
+        #{subImages,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="detailImages != null" >
+        #{detailImages,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="isHot != null" >
+        #{isHot,jdbcType=BIT},
+      </if>
+      <if test="isNew != null" >
+        #{isNew,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isSale != null" >
+        #{isSale,jdbcType=BIT},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="monthlySales != null" >
+        #{monthlySales,jdbcType=INTEGER},
+      </if>
+      <if test="totalSales != null" >
+        #{totalSales,jdbcType=INTEGER},
+      </if>
+      <if test="totalComments != null" >
+        #{totalComments,jdbcType=INTEGER},
+      </if>
+      <if test="preferentialName != null" >
+        #{preferentialName,jdbcType=VARCHAR},
+      </if>
+      <if test="packingCharges != null" >
+        #{packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="productTime != null" >
+        #{productTime,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangePoints != null" >
+        #{exchangePoints,jdbcType=INTEGER},
+      </if>
+      <if test="sortNumber != null" >
+        #{sortNumber,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.siam.system.modular.package_goods.model.example.GoodsExample" resultType="java.lang.Integer" >
+    select count(*) from tb_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_goods
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mainImage != null" >
+        main_image = #{record.mainImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subImages != null" >
+        sub_images = #{record.subImages,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detail != null" >
+        detail = #{record.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailImages != null" >
+        detail_images = #{record.detailImages,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stock != null" >
+        stock = #{record.stock,jdbcType=INTEGER},
+      </if>
+      <if test="record.isHot != null" >
+        is_hot = #{record.isHot,jdbcType=BIT},
+      </if>
+      <if test="record.isNew != null" >
+        is_new = #{record.isNew,jdbcType=BIT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.isSale != null" >
+        is_sale = #{record.isSale,jdbcType=BIT},
+      </if>
+      <if test="record.salePrice != null" >
+        sale_price = #{record.salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.monthlySales != null" >
+        monthly_sales = #{record.monthlySales,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalSales != null" >
+        total_sales = #{record.totalSales,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalComments != null" >
+        total_comments = #{record.totalComments,jdbcType=INTEGER},
+      </if>
+      <if test="record.preferentialName != null" >
+        preferential_name = #{record.preferentialName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packingCharges != null" >
+        packing_charges = #{record.packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productTime != null" >
+        product_time = #{record.productTime,jdbcType=DECIMAL},
+      </if>
+      <if test="record.exchangePoints != null" >
+        exchange_points = #{record.exchangePoints,jdbcType=INTEGER},
+      </if>
+      <if test="record.sortNumber != null" >
+        sort_number = #{record.sortNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_goods
+    set id = #{record.id,jdbcType=INTEGER},
+    shop_id = #{record.shopId,jdbcType=INTEGER},
+    name = #{record.name,jdbcType=VARCHAR},
+    main_image = #{record.mainImage,jdbcType=VARCHAR},
+    sub_images = #{record.subImages,jdbcType=VARCHAR},
+    detail = #{record.detail,jdbcType=VARCHAR},
+    detail_images = #{record.detailImages,jdbcType=VARCHAR},
+    price = #{record.price,jdbcType=DECIMAL},
+    stock = #{record.stock,jdbcType=INTEGER},
+    is_hot = #{record.isHot,jdbcType=BIT},
+    is_new = #{record.isNew,jdbcType=BIT},
+    status = #{record.status,jdbcType=INTEGER},
+    is_sale = #{record.isSale,jdbcType=BIT},
+    sale_price = #{record.salePrice,jdbcType=DECIMAL},
+    monthly_sales = #{record.monthlySales,jdbcType=INTEGER},
+    total_sales = #{record.totalSales,jdbcType=INTEGER},
+    total_comments = #{record.totalComments,jdbcType=INTEGER},
+    preferential_name = #{record.preferentialName,jdbcType=VARCHAR},
+    packing_charges = #{record.packingCharges,jdbcType=DECIMAL},
+    product_time = #{record.productTime,jdbcType=DECIMAL},
+    exchange_points = #{record.exchangePoints,jdbcType=INTEGER},
+    sort_number = #{record.sortNumber,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.siam.system.modular.package_goods.entity.Goods" >
+    update tb_goods
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mainImage != null" >
+        main_image = #{mainImage,jdbcType=VARCHAR},
+      </if>
+      <if test="subImages != null" >
+        sub_images = #{subImages,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="detailImages != null" >
+        detail_images = #{detailImages,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="isHot != null" >
+        is_hot = #{isHot,jdbcType=BIT},
+      </if>
+      <if test="isNew != null" >
+        is_new = #{isNew,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isSale != null" >
+        is_sale = #{isSale,jdbcType=BIT},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="monthlySales != null" >
+        monthly_sales = #{monthlySales,jdbcType=INTEGER},
+      </if>
+      <if test="totalSales != null" >
+        total_sales = #{totalSales,jdbcType=INTEGER},
+      </if>
+      <if test="totalComments != null" >
+        total_comments = #{totalComments,jdbcType=INTEGER},
+      </if>
+      <if test="preferentialName != null" >
+        preferential_name = #{preferentialName,jdbcType=VARCHAR},
+      </if>
+      <if test="packingCharges != null" >
+        packing_charges = #{packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="productTime != null" >
+        product_time = #{productTime,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangePoints != null" >
+        exchange_points = #{exchangePoints,jdbcType=INTEGER},
+      </if>
+      <if test="sortNumber != null" >
+        sort_number = #{sortNumber,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.siam.system.modular.package_goods.entity.Goods" >
+    update tb_goods
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      main_image = #{mainImage,jdbcType=VARCHAR},
+      sub_images = #{subImages,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR},
+      detail_images = #{detailImages,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      stock = #{stock,jdbcType=INTEGER},
+      is_hot = #{isHot,jdbcType=BIT},
+      is_new = #{isNew,jdbcType=BIT},
+      status = #{status,jdbcType=INTEGER},
+      is_sale = #{isSale,jdbcType=BIT},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
+      monthly_sales = #{monthlySales,jdbcType=INTEGER},
+      total_sales = #{totalSales,jdbcType=INTEGER},
+      total_comments = #{totalComments,jdbcType=INTEGER},
+      preferential_name = #{preferentialName,jdbcType=VARCHAR},
+      packing_charges = #{packingCharges,jdbcType=DECIMAL},
+      product_time = #{productTime,jdbcType=DECIMAL},
+      exchange_points = #{exchangePoints,jdbcType=INTEGER},
+      sort_number = #{sortNumber,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

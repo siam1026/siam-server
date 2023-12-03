@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.siam.system.modular.package_order.mapper.OrderRefundMapper" >
+  <resultMap id="BaseResultMap" type="com.siam.system.modular.package_order.entity.OrderRefund" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="refund_way" property="refundWay" jdbcType="INTEGER" />
+    <result column="refund_reason" property="refundReason" jdbcType="INTEGER" />
+    <result column="refund_reason_description" property="refundReasonDescription" jdbcType="VARCHAR" />
+    <result column="evidence_images" property="evidenceImages" jdbcType="VARCHAR" />
+    <result column="refund_amount" property="refundAmount" jdbcType="DECIMAL" />
+    <result column="refund_account" property="refundAccount" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="goods_total_quantity" property="goodsTotalQuantity" jdbcType="INTEGER" />
+    <result column="goods_total_price" property="goodsTotalPrice" jdbcType="DECIMAL" />
+    <result column="packing_charges" property="packingCharges" jdbcType="DECIMAL" />
+    <result column="is_refund_delivery_fee" property="isRefundDeliveryFee" jdbcType="BIT" />
+    <result column="delivery_fee" property="deliveryFee" jdbcType="DECIMAL" />
+    <result column="is_used_coupons" property="isUsedCoupons" jdbcType="BIT" />
+    <result column="is_used_full_reduction_rule" property="isUsedFullReductionRule" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="java.util.Map" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="refund_way" property="refundWay" jdbcType="INTEGER" />
+    <result column="refund_reason" property="refundReason" jdbcType="INTEGER" />
+    <result column="refund_reason_description" property="refundReasonDescription" jdbcType="VARCHAR" />
+    <result column="evidence_images" property="evidenceImages" jdbcType="VARCHAR" />
+    <result column="refund_amount" property="refundAmount" jdbcType="DECIMAL" />
+    <result column="refund_account" property="refundAccount" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="goods_total_quantity" property="goodsTotalQuantity" jdbcType="INTEGER" />
+    <result column="goods_total_price" property="goodsTotalPrice" jdbcType="DECIMAL" />
+    <result column="packing_charges" property="packingCharges" jdbcType="DECIMAL" />
+    <result column="is_refund_delivery_fee" property="isRefundDeliveryFee" jdbcType="BIT" />
+    <result column="delivery_fee" property="deliveryFee" jdbcType="DECIMAL" />
+    <result column="is_used_coupons" property="isUsedCoupons" jdbcType="BIT" />
+    <result column="is_used_full_reduction_rule" property="isUsedFullReductionRule" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, order_id, type, refund_way, refund_reason, refund_reason_description, evidence_images,
+    refund_amount, refund_account, status, goods_total_quantity, goods_total_price, packing_charges,
+    is_refund_delivery_fee, delivery_fee, is_used_coupons, is_used_full_reduction_rule,
+    create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.siam.system.modular.package_order.model.example.OrderRefundExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_order_refund
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_order_refund
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_order_refund
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.siam.system.modular.package_order.model.example.OrderRefundExample" >
+    delete from tb_order_refund
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.siam.system.modular.package_order.entity.OrderRefund" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_order_refund
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="refundWay != null" >
+        refund_way,
+      </if>
+      <if test="refundReason != null" >
+        refund_reason,
+      </if>
+      <if test="refundReasonDescription != null" >
+        refund_reason_description,
+      </if>
+      <if test="evidenceImages != null" >
+        evidence_images,
+      </if>
+      <if test="refundAmount != null" >
+        refund_amount,
+      </if>
+      <if test="refundAccount != null" >
+        refund_account,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="goodsTotalQuantity != null" >
+        goods_total_quantity,
+      </if>
+      <if test="goodsTotalPrice != null" >
+        goods_total_price,
+      </if>
+      <if test="packingCharges != null" >
+        packing_charges,
+      </if>
+      <if test="isRefundDeliveryFee != null" >
+        is_refund_delivery_fee,
+      </if>
+      <if test="deliveryFee != null" >
+        delivery_fee,
+      </if>
+      <if test="isUsedCoupons != null" >
+        is_used_coupons,
+      </if>
+      <if test="isUsedFullReductionRule != null" >
+        is_used_full_reduction_rule,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="refundWay != null" >
+        #{refundWay,jdbcType=INTEGER},
+      </if>
+      <if test="refundReason != null" >
+        #{refundReason,jdbcType=INTEGER},
+      </if>
+      <if test="refundReasonDescription != null" >
+        #{refundReasonDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="evidenceImages != null" >
+        #{evidenceImages,jdbcType=VARCHAR},
+      </if>
+      <if test="refundAmount != null" >
+        #{refundAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refundAccount != null" >
+        #{refundAccount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="goodsTotalQuantity != null" >
+        #{goodsTotalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="goodsTotalPrice != null" >
+        #{goodsTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingCharges != null" >
+        #{packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="isRefundDeliveryFee != null" >
+        #{isRefundDeliveryFee,jdbcType=BIT},
+      </if>
+      <if test="deliveryFee != null" >
+        #{deliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="isUsedCoupons != null" >
+        #{isUsedCoupons,jdbcType=BIT},
+      </if>
+      <if test="isUsedFullReductionRule != null" >
+        #{isUsedFullReductionRule,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.siam.system.modular.package_order.model.example.OrderRefundExample" resultType="java.lang.Integer" >
+    select count(*) from tb_order_refund
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_order_refund
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.refundWay != null" >
+        refund_way = #{record.refundWay,jdbcType=INTEGER},
+      </if>
+      <if test="record.refundReason != null" >
+        refund_reason = #{record.refundReason,jdbcType=INTEGER},
+      </if>
+      <if test="record.refundReasonDescription != null" >
+        refund_reason_description = #{record.refundReasonDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.evidenceImages != null" >
+        evidence_images = #{record.evidenceImages,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refundAmount != null" >
+        refund_amount = #{record.refundAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundAccount != null" >
+        refund_account = #{record.refundAccount,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsTotalQuantity != null" >
+        goods_total_quantity = #{record.goodsTotalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsTotalPrice != null" >
+        goods_total_price = #{record.goodsTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.packingCharges != null" >
+        packing_charges = #{record.packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isRefundDeliveryFee != null" >
+        is_refund_delivery_fee = #{record.isRefundDeliveryFee,jdbcType=BIT},
+      </if>
+      <if test="record.deliveryFee != null" >
+        delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isUsedCoupons != null" >
+        is_used_coupons = #{record.isUsedCoupons,jdbcType=BIT},
+      </if>
+      <if test="record.isUsedFullReductionRule != null" >
+        is_used_full_reduction_rule = #{record.isUsedFullReductionRule,jdbcType=BIT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_order_refund
+    set id = #{record.id,jdbcType=INTEGER},
+    order_id = #{record.orderId,jdbcType=INTEGER},
+    type = #{record.type,jdbcType=INTEGER},
+    refund_way = #{record.refundWay,jdbcType=INTEGER},
+    refund_reason = #{record.refundReason,jdbcType=INTEGER},
+    refund_reason_description = #{record.refundReasonDescription,jdbcType=VARCHAR},
+    evidence_images = #{record.evidenceImages,jdbcType=VARCHAR},
+    refund_amount = #{record.refundAmount,jdbcType=DECIMAL},
+    refund_account = #{record.refundAccount,jdbcType=INTEGER},
+    status = #{record.status,jdbcType=INTEGER},
+    goods_total_quantity = #{record.goodsTotalQuantity,jdbcType=INTEGER},
+    goods_total_price = #{record.goodsTotalPrice,jdbcType=DECIMAL},
+    packing_charges = #{record.packingCharges,jdbcType=DECIMAL},
+    is_refund_delivery_fee = #{record.isRefundDeliveryFee,jdbcType=BIT},
+    delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
+    is_used_coupons = #{record.isUsedCoupons,jdbcType=BIT},
+    is_used_full_reduction_rule = #{record.isUsedFullReductionRule,jdbcType=BIT},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.siam.system.modular.package_order.entity.OrderRefund" >
+    update tb_order_refund
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="refundWay != null" >
+        refund_way = #{refundWay,jdbcType=INTEGER},
+      </if>
+      <if test="refundReason != null" >
+        refund_reason = #{refundReason,jdbcType=INTEGER},
+      </if>
+      <if test="refundReasonDescription != null" >
+        refund_reason_description = #{refundReasonDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="evidenceImages != null" >
+        evidence_images = #{evidenceImages,jdbcType=VARCHAR},
+      </if>
+      <if test="refundAmount != null" >
+        refund_amount = #{refundAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refundAccount != null" >
+        refund_account = #{refundAccount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="goodsTotalQuantity != null" >
+        goods_total_quantity = #{goodsTotalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="goodsTotalPrice != null" >
+        goods_total_price = #{goodsTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingCharges != null" >
+        packing_charges = #{packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="isRefundDeliveryFee != null" >
+        is_refund_delivery_fee = #{isRefundDeliveryFee,jdbcType=BIT},
+      </if>
+      <if test="deliveryFee != null" >
+        delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="isUsedCoupons != null" >
+        is_used_coupons = #{isUsedCoupons,jdbcType=BIT},
+      </if>
+      <if test="isUsedFullReductionRule != null" >
+        is_used_full_reduction_rule = #{isUsedFullReductionRule,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.siam.system.modular.package_order.entity.OrderRefund" >
+    update tb_order_refund
+    set order_id = #{orderId,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      refund_way = #{refundWay,jdbcType=INTEGER},
+      refund_reason = #{refundReason,jdbcType=INTEGER},
+      refund_reason_description = #{refundReasonDescription,jdbcType=VARCHAR},
+      evidence_images = #{evidenceImages,jdbcType=VARCHAR},
+      refund_amount = #{refundAmount,jdbcType=DECIMAL},
+      refund_account = #{refundAccount,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      goods_total_quantity = #{goodsTotalQuantity,jdbcType=INTEGER},
+      goods_total_price = #{goodsTotalPrice,jdbcType=DECIMAL},
+      packing_charges = #{packingCharges,jdbcType=DECIMAL},
+      is_refund_delivery_fee = #{isRefundDeliveryFee,jdbcType=BIT},
+      delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+      is_used_coupons = #{isUsedCoupons,jdbcType=BIT},
+      is_used_full_reduction_rule = #{isUsedFullReductionRule,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

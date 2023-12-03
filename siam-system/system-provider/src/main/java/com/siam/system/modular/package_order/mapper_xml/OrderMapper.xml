@@ -1,0 +1,1152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+  <mapper namespace="com.siam.system.modular.package_order.mapper.OrderMapper" >
+    <resultMap id="BaseResultMap" type="com.siam.system.modular.package_order.entity.Order" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="goods_total_quantity" property="goodsTotalQuantity" jdbcType="INTEGER" />
+    <result column="goods_total_price" property="goodsTotalPrice" jdbcType="DECIMAL" />
+    <result column="packing_charges" property="packingCharges" jdbcType="DECIMAL" />
+    <result column="delivery_fee" property="deliveryFee" jdbcType="DECIMAL" />
+    <result column="actual_price" property="actualPrice" jdbcType="DECIMAL" />
+    <result column="shopping_way" property="shoppingWay" jdbcType="INTEGER" />
+    <result column="delivery_address_id" property="deliveryAddressId" jdbcType="INTEGER" />
+    <result column="contact_realname" property="contactRealname" jdbcType="VARCHAR" />
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="contact_province" property="contactProvince" jdbcType="VARCHAR" />
+    <result column="contact_city" property="contactCity" jdbcType="VARCHAR" />
+    <result column="contact_area" property="contactArea" jdbcType="VARCHAR" />
+    <result column="contact_street" property="contactStreet" jdbcType="VARCHAR" />
+    <result column="contact_sex" property="contactSex" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="trade_id" property="tradeId" jdbcType="INTEGER" />
+    <result column="order_logistics_id" property="orderLogisticsId" jdbcType="INTEGER" />
+    <result column="is_invoice" property="isInvoice" jdbcType="BIT" />
+    <result column="invoice_id" property="invoiceId" jdbcType="INTEGER" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_address" property="shopAddress" jdbcType="VARCHAR" />
+    <result column="cancel_reason" property="cancelReason" jdbcType="INTEGER" />
+    <result column="payment_deadline" property="paymentDeadline" jdbcType="TIMESTAMP" />
+    <result column="is_printed" property="isPrinted" jdbcType="BIT" />
+    <result column="queue_no" property="queueNo" jdbcType="INTEGER" />
+    <result column="full_reduction_rule_id" property="fullReductionRuleId" jdbcType="INTEGER" />
+    <result column="full_reduction_rule_description" property="fullReductionRuleDescription" jdbcType="VARCHAR" />
+    <result column="coupons_id" property="couponsId" jdbcType="INTEGER" />
+    <result column="coupons_description" property="couponsDescription" jdbcType="VARCHAR" />
+    <result column="coupons_member_relation_id" property="couponsMemberRelationId" jdbcType="INTEGER" />
+    <result column="is_change_to_delivery" property="isChangeToDelivery" jdbcType="BIT" />
+    <result column="change_to_delivery_out_trade_no" property="changeToDeliveryOutTradeNo" jdbcType="VARCHAR" />
+    <result column="change_to_delivery_trade_id" property="changeToDeliveryTradeId" jdbcType="INTEGER" />
+    <result column="platform_extract_ratio" property="platformExtractRatio" jdbcType="DECIMAL" />
+    <result column="platform_extract_price" property="platformExtractPrice" jdbcType="DECIMAL" />
+    <result column="platform_delivery_fee" property="platformDeliveryFee" jdbcType="DECIMAL" />
+    <result column="platform_income" property="platformIncome" jdbcType="DECIMAL" />
+    <result column="merchant_delivery_fee" property="merchantDeliveryFee" jdbcType="DECIMAL" />
+    <result column="courier_income" property="courierIncome" jdbcType="DECIMAL" />
+    <result column="merchant_income" property="merchantIncome" jdbcType="DECIMAL" />
+    <result column="payment_success_time" property="paymentSuccessTime" jdbcType="TIMESTAMP" />
+    <result column="order_completion_time" property="orderCompletionTime" jdbcType="TIMESTAMP" />
+    <result column="paid_order_cancel_reason" property="paidOrderCancelReason" jdbcType="INTEGER" />
+    <result column="limited_price" property="limitedPrice" jdbcType="DECIMAL" />
+    <result column="reduced_price" property="reducedPrice" jdbcType="DECIMAL" />
+    <result column="coupons_discount_price" property="couponsDiscountPrice" jdbcType="DECIMAL" />
+    <result column="delivery_way" property="deliveryWay" jdbcType="INTEGER" />
+    <result column="is_pay_to_merchant" property="isPayToMerchant" jdbcType="BIT" />
+    <result column="before_reduced_delivery_fee" property="beforeReducedDeliveryFee" jdbcType="DECIMAL" />
+    <result column="payment_mode" property="paymentMode" jdbcType="INTEGER" />
+    <result column="contact_house_number" property="contactHouseNumber" jdbcType="VARCHAR" />
+    <result column="contact_longitude" property="contactLongitude" jdbcType="DECIMAL" />
+    <result column="contact_latitude" property="contactLatitude" jdbcType="DECIMAL" />
+    <result column="shop_logo_img" property="shopLogoImg" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="java.util.Map" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="goods_total_quantity" property="goodsTotalQuantity" jdbcType="INTEGER" />
+    <result column="goods_total_price" property="goodsTotalPrice" jdbcType="DECIMAL" />
+    <result column="packing_charges" property="packingCharges" jdbcType="DECIMAL" />
+    <result column="delivery_fee" property="deliveryFee" jdbcType="DECIMAL" />
+    <result column="actual_price" property="actualPrice" jdbcType="DECIMAL" />
+    <result column="shopping_way" property="shoppingWay" jdbcType="INTEGER" />
+    <result column="delivery_address_id" property="deliveryAddressId" jdbcType="INTEGER" />
+    <result column="contact_realname" property="contactRealname" jdbcType="VARCHAR" />
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="contact_province" property="contactProvince" jdbcType="VARCHAR" />
+    <result column="contact_city" property="contactCity" jdbcType="VARCHAR" />
+    <result column="contact_area" property="contactArea" jdbcType="VARCHAR" />
+    <result column="contact_street" property="contactStreet" jdbcType="VARCHAR" />
+    <result column="contact_sex" property="contactSex" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="trade_id" property="tradeId" jdbcType="INTEGER" />
+    <result column="order_logistics_id" property="orderLogisticsId" jdbcType="INTEGER" />
+    <result column="is_invoice" property="isInvoice" jdbcType="BIT" />
+    <result column="invoice_id" property="invoiceId" jdbcType="INTEGER" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_address" property="shopAddress" jdbcType="VARCHAR" />
+    <result column="cancel_reason" property="cancelReason" jdbcType="INTEGER" />
+    <result column="payment_deadline" property="paymentDeadline" jdbcType="TIMESTAMP" />
+    <result column="is_printed" property="isPrinted" jdbcType="BIT" />
+    <result column="queue_no" property="queueNo" jdbcType="INTEGER" />
+    <result column="full_reduction_rule_id" property="fullReductionRuleId" jdbcType="INTEGER" />
+    <result column="full_reduction_rule_description" property="fullReductionRuleDescription" jdbcType="VARCHAR" />
+    <result column="coupons_id" property="couponsId" jdbcType="INTEGER" />
+    <result column="coupons_description" property="couponsDescription" jdbcType="VARCHAR" />
+    <result column="coupons_member_relation_id" property="couponsMemberRelationId" jdbcType="INTEGER" />
+    <result column="is_change_to_delivery" property="isChangeToDelivery" jdbcType="BIT" />
+    <result column="change_to_delivery_out_trade_no" property="changeToDeliveryOutTradeNo" jdbcType="VARCHAR" />
+    <result column="change_to_delivery_trade_id" property="changeToDeliveryTradeId" jdbcType="INTEGER" />
+    <result column="platform_extract_ratio" property="platformExtractRatio" jdbcType="DECIMAL" />
+    <result column="platform_extract_price" property="platformExtractPrice" jdbcType="DECIMAL" />
+    <result column="platform_delivery_fee" property="platformDeliveryFee" jdbcType="DECIMAL" />
+    <result column="platform_income" property="platformIncome" jdbcType="DECIMAL" />
+    <result column="merchant_delivery_fee" property="merchantDeliveryFee" jdbcType="DECIMAL" />
+    <result column="courier_income" property="courierIncome" jdbcType="DECIMAL" />
+    <result column="merchant_income" property="merchantIncome" jdbcType="DECIMAL" />
+    <result column="payment_success_time" property="paymentSuccessTime" jdbcType="TIMESTAMP" />
+    <result column="order_completion_time" property="orderCompletionTime" jdbcType="TIMESTAMP" />
+    <result column="paid_order_cancel_reason" property="paidOrderCancelReason" jdbcType="INTEGER" />
+    <result column="limited_price" property="limitedPrice" jdbcType="DECIMAL" />
+    <result column="reduced_price" property="reducedPrice" jdbcType="DECIMAL" />
+    <result column="coupons_discount_price" property="couponsDiscountPrice" jdbcType="DECIMAL" />
+    <result column="delivery_way" property="deliveryWay" jdbcType="INTEGER" />
+    <result column="is_pay_to_merchant" property="isPayToMerchant" jdbcType="BIT" />
+    <result column="before_reduced_delivery_fee" property="beforeReducedDeliveryFee" jdbcType="DECIMAL" />
+    <result column="payment_mode" property="paymentMode" jdbcType="INTEGER" />
+    <result column="contact_house_number" property="contactHouseNumber" jdbcType="VARCHAR" />
+    <result column="contact_longitude" property="contactLongitude" jdbcType="DECIMAL" />
+    <result column="contact_latitude" property="contactLatitude" jdbcType="DECIMAL" />
+    <result column="shop_logo_img" property="shopLogoImg" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, member_id, order_no, goods_total_quantity, goods_total_price, packing_charges,
+    delivery_fee, actual_price, shopping_way, delivery_address_id, contact_realname,
+    contact_phone, contact_province, contact_city, contact_area, contact_street, contact_sex,
+    remark, description, status, trade_id, order_logistics_id, is_invoice, invoice_id,
+    is_deleted, shop_id, shop_name, shop_address, cancel_reason, payment_deadline, is_printed,
+    queue_no, full_reduction_rule_id, full_reduction_rule_description, coupons_id, coupons_description,
+    coupons_member_relation_id, is_change_to_delivery, change_to_delivery_out_trade_no,
+    change_to_delivery_trade_id, platform_extract_ratio, platform_extract_price, platform_delivery_fee,
+    platform_income, merchant_delivery_fee, courier_income, merchant_income, payment_success_time,
+    order_completion_time, paid_order_cancel_reason, limited_price, reduced_price, coupons_discount_price,
+    delivery_way, is_pay_to_merchant, before_reduced_delivery_fee, payment_mode, contact_house_number,
+    contact_longitude, contact_latitude, shop_logo_img, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.siam.system.modular.package_order.model.example.OrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.siam.system.modular.package_order.model.example.OrderExample" >
+    delete from tb_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.siam.system.modular.package_order.entity.Order" useGeneratedKeys="true" keyProperty="id" >
+    insert into tb_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="goodsTotalQuantity != null" >
+        goods_total_quantity,
+      </if>
+      <if test="goodsTotalPrice != null" >
+        goods_total_price,
+      </if>
+      <if test="packingCharges != null" >
+        packing_charges,
+      </if>
+      <if test="deliveryFee != null" >
+        delivery_fee,
+      </if>
+      <if test="actualPrice != null" >
+        actual_price,
+      </if>
+      <if test="shoppingWay != null" >
+        shopping_way,
+      </if>
+      <if test="deliveryAddressId != null" >
+        delivery_address_id,
+      </if>
+      <if test="contactRealname != null" >
+        contact_realname,
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone,
+      </if>
+      <if test="contactProvince != null" >
+        contact_province,
+      </if>
+      <if test="contactCity != null" >
+        contact_city,
+      </if>
+      <if test="contactArea != null" >
+        contact_area,
+      </if>
+      <if test="contactStreet != null" >
+        contact_street,
+      </if>
+      <if test="contactSex != null" >
+        contact_sex,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="tradeId != null" >
+        trade_id,
+      </if>
+      <if test="orderLogisticsId != null" >
+        order_logistics_id,
+      </if>
+      <if test="isInvoice != null" >
+        is_invoice,
+      </if>
+      <if test="invoiceId != null" >
+        invoice_id,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="shopAddress != null" >
+        shop_address,
+      </if>
+      <if test="cancelReason != null" >
+        cancel_reason,
+      </if>
+      <if test="paymentDeadline != null" >
+        payment_deadline,
+      </if>
+      <if test="isPrinted != null" >
+        is_printed,
+      </if>
+      <if test="queueNo != null" >
+        queue_no,
+      </if>
+      <if test="fullReductionRuleId != null" >
+        full_reduction_rule_id,
+      </if>
+      <if test="fullReductionRuleDescription != null" >
+        full_reduction_rule_description,
+      </if>
+      <if test="couponsId != null" >
+        coupons_id,
+      </if>
+      <if test="couponsDescription != null" >
+        coupons_description,
+      </if>
+      <if test="couponsMemberRelationId != null" >
+        coupons_member_relation_id,
+      </if>
+      <if test="isChangeToDelivery != null" >
+        is_change_to_delivery,
+      </if>
+      <if test="changeToDeliveryOutTradeNo != null" >
+        change_to_delivery_out_trade_no,
+      </if>
+      <if test="changeToDeliveryTradeId != null" >
+        change_to_delivery_trade_id,
+      </if>
+      <if test="platformExtractRatio != null" >
+        platform_extract_ratio,
+      </if>
+      <if test="platformExtractPrice != null" >
+        platform_extract_price,
+      </if>
+      <if test="platformDeliveryFee != null" >
+        platform_delivery_fee,
+      </if>
+      <if test="platformIncome != null" >
+        platform_income,
+      </if>
+      <if test="merchantDeliveryFee != null" >
+        merchant_delivery_fee,
+      </if>
+      <if test="courierIncome != null" >
+        courier_income,
+      </if>
+      <if test="merchantIncome != null" >
+        merchant_income,
+      </if>
+      <if test="paymentSuccessTime != null" >
+        payment_success_time,
+      </if>
+      <if test="orderCompletionTime != null" >
+        order_completion_time,
+      </if>
+      <if test="paidOrderCancelReason != null" >
+        paid_order_cancel_reason,
+      </if>
+      <if test="limitedPrice != null" >
+        limited_price,
+      </if>
+      <if test="reducedPrice != null" >
+        reduced_price,
+      </if>
+      <if test="couponsDiscountPrice != null" >
+        coupons_discount_price,
+      </if>
+      <if test="deliveryWay != null" >
+        delivery_way,
+      </if>
+      <if test="isPayToMerchant != null" >
+        is_pay_to_merchant,
+      </if>
+      <if test="beforeReducedDeliveryFee != null" >
+        before_reduced_delivery_fee,
+      </if>
+      <if test="paymentMode != null" >
+        payment_mode,
+      </if>
+      <if test="contactHouseNumber != null" >
+        contact_house_number,
+      </if>
+      <if test="contactLongitude != null" >
+        contact_longitude,
+      </if>
+      <if test="contactLatitude != null" >
+        contact_latitude,
+      </if>
+      <if test="shopLogoImg != null" >
+        shop_logo_img,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsTotalQuantity != null" >
+        #{goodsTotalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="goodsTotalPrice != null" >
+        #{goodsTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingCharges != null" >
+        #{packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryFee != null" >
+        #{deliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null" >
+        #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shoppingWay != null" >
+        #{shoppingWay,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryAddressId != null" >
+        #{deliveryAddressId,jdbcType=INTEGER},
+      </if>
+      <if test="contactRealname != null" >
+        #{contactRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactProvince != null" >
+        #{contactProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="contactCity != null" >
+        #{contactCity,jdbcType=VARCHAR},
+      </if>
+      <if test="contactArea != null" >
+        #{contactArea,jdbcType=VARCHAR},
+      </if>
+      <if test="contactStreet != null" >
+        #{contactStreet,jdbcType=VARCHAR},
+      </if>
+      <if test="contactSex != null" >
+        #{contactSex,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="tradeId != null" >
+        #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderLogisticsId != null" >
+        #{orderLogisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="isInvoice != null" >
+        #{isInvoice,jdbcType=BIT},
+      </if>
+      <if test="invoiceId != null" >
+        #{invoiceId,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopAddress != null" >
+        #{shopAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelReason != null" >
+        #{cancelReason,jdbcType=INTEGER},
+      </if>
+      <if test="paymentDeadline != null" >
+        #{paymentDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isPrinted != null" >
+        #{isPrinted,jdbcType=BIT},
+      </if>
+      <if test="queueNo != null" >
+        #{queueNo,jdbcType=INTEGER},
+      </if>
+      <if test="fullReductionRuleId != null" >
+        #{fullReductionRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="fullReductionRuleDescription != null" >
+        #{fullReductionRuleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="couponsId != null" >
+        #{couponsId,jdbcType=INTEGER},
+      </if>
+      <if test="couponsDescription != null" >
+        #{couponsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="couponsMemberRelationId != null" >
+        #{couponsMemberRelationId,jdbcType=INTEGER},
+      </if>
+      <if test="isChangeToDelivery != null" >
+        #{isChangeToDelivery,jdbcType=BIT},
+      </if>
+      <if test="changeToDeliveryOutTradeNo != null" >
+        #{changeToDeliveryOutTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="changeToDeliveryTradeId != null" >
+        #{changeToDeliveryTradeId,jdbcType=INTEGER},
+      </if>
+      <if test="platformExtractRatio != null" >
+        #{platformExtractRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="platformExtractPrice != null" >
+        #{platformExtractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="platformDeliveryFee != null" >
+        #{platformDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="platformIncome != null" >
+        #{platformIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantDeliveryFee != null" >
+        #{merchantDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="courierIncome != null" >
+        #{courierIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantIncome != null" >
+        #{merchantIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentSuccessTime != null" >
+        #{paymentSuccessTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderCompletionTime != null" >
+        #{orderCompletionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paidOrderCancelReason != null" >
+        #{paidOrderCancelReason,jdbcType=INTEGER},
+      </if>
+      <if test="limitedPrice != null" >
+        #{limitedPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="reducedPrice != null" >
+        #{reducedPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="couponsDiscountPrice != null" >
+        #{couponsDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryWay != null" >
+        #{deliveryWay,jdbcType=INTEGER},
+      </if>
+      <if test="isPayToMerchant != null" >
+        #{isPayToMerchant,jdbcType=BIT},
+      </if>
+      <if test="beforeReducedDeliveryFee != null" >
+        #{beforeReducedDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMode != null" >
+        #{paymentMode,jdbcType=INTEGER},
+      </if>
+      <if test="contactHouseNumber != null" >
+        #{contactHouseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contactLongitude != null" >
+        #{contactLongitude,jdbcType=DECIMAL},
+      </if>
+      <if test="contactLatitude != null" >
+        #{contactLatitude,jdbcType=DECIMAL},
+      </if>
+      <if test="shopLogoImg != null" >
+        #{shopLogoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.siam.system.modular.package_order.model.example.OrderExample" resultType="java.lang.Integer" >
+    select count(*) from tb_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_order
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.memberId != null" >
+        member_id = #{record.memberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodsTotalQuantity != null" >
+        goods_total_quantity = #{record.goodsTotalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsTotalPrice != null" >
+        goods_total_price = #{record.goodsTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.packingCharges != null" >
+        packing_charges = #{record.packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deliveryFee != null" >
+        delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actualPrice != null" >
+        actual_price = #{record.actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shoppingWay != null" >
+        shopping_way = #{record.shoppingWay,jdbcType=INTEGER},
+      </if>
+      <if test="record.deliveryAddressId != null" >
+        delivery_address_id = #{record.deliveryAddressId,jdbcType=INTEGER},
+      </if>
+      <if test="record.contactRealname != null" >
+        contact_realname = #{record.contactRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactPhone != null" >
+        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactProvince != null" >
+        contact_province = #{record.contactProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactCity != null" >
+        contact_city = #{record.contactCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactArea != null" >
+        contact_area = #{record.contactArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactStreet != null" >
+        contact_street = #{record.contactStreet,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactSex != null" >
+        contact_sex = #{record.contactSex,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.tradeId != null" >
+        trade_id = #{record.tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderLogisticsId != null" >
+        order_logistics_id = #{record.orderLogisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isInvoice != null" >
+        is_invoice = #{record.isInvoice,jdbcType=BIT},
+      </if>
+      <if test="record.invoiceId != null" >
+        invoice_id = #{record.invoiceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId,jdbcType=INTEGER},
+      </if>
+      <if test="record.shopName != null" >
+        shop_name = #{record.shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopAddress != null" >
+        shop_address = #{record.shopAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cancelReason != null" >
+        cancel_reason = #{record.cancelReason,jdbcType=INTEGER},
+      </if>
+      <if test="record.paymentDeadline != null" >
+        payment_deadline = #{record.paymentDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isPrinted != null" >
+        is_printed = #{record.isPrinted,jdbcType=BIT},
+      </if>
+      <if test="record.queueNo != null" >
+        queue_no = #{record.queueNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.fullReductionRuleId != null" >
+        full_reduction_rule_id = #{record.fullReductionRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.fullReductionRuleDescription != null" >
+        full_reduction_rule_description = #{record.fullReductionRuleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponsId != null" >
+        coupons_id = #{record.couponsId,jdbcType=INTEGER},
+      </if>
+      <if test="record.couponsDescription != null" >
+        coupons_description = #{record.couponsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponsMemberRelationId != null" >
+        coupons_member_relation_id = #{record.couponsMemberRelationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isChangeToDelivery != null" >
+        is_change_to_delivery = #{record.isChangeToDelivery,jdbcType=BIT},
+      </if>
+      <if test="record.changeToDeliveryOutTradeNo != null" >
+        change_to_delivery_out_trade_no = #{record.changeToDeliveryOutTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.changeToDeliveryTradeId != null" >
+        change_to_delivery_trade_id = #{record.changeToDeliveryTradeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.platformExtractRatio != null" >
+        platform_extract_ratio = #{record.platformExtractRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="record.platformExtractPrice != null" >
+        platform_extract_price = #{record.platformExtractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.platformDeliveryFee != null" >
+        platform_delivery_fee = #{record.platformDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.platformIncome != null" >
+        platform_income = #{record.platformIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="record.merchantDeliveryFee != null" >
+        merchant_delivery_fee = #{record.merchantDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.courierIncome != null" >
+        courier_income = #{record.courierIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="record.merchantIncome != null" >
+        merchant_income = #{record.merchantIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="record.paymentSuccessTime != null" >
+        payment_success_time = #{record.paymentSuccessTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderCompletionTime != null" >
+        order_completion_time = #{record.orderCompletionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paidOrderCancelReason != null" >
+        paid_order_cancel_reason = #{record.paidOrderCancelReason,jdbcType=INTEGER},
+      </if>
+      <if test="record.limitedPrice != null" >
+        limited_price = #{record.limitedPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.reducedPrice != null" >
+        reduced_price = #{record.reducedPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.couponsDiscountPrice != null" >
+        coupons_discount_price = #{record.couponsDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deliveryWay != null" >
+        delivery_way = #{record.deliveryWay,jdbcType=INTEGER},
+      </if>
+      <if test="record.isPayToMerchant != null" >
+        is_pay_to_merchant = #{record.isPayToMerchant,jdbcType=BIT},
+      </if>
+      <if test="record.beforeReducedDeliveryFee != null" >
+        before_reduced_delivery_fee = #{record.beforeReducedDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.paymentMode != null" >
+        payment_mode = #{record.paymentMode,jdbcType=INTEGER},
+      </if>
+      <if test="record.contactHouseNumber != null" >
+        contact_house_number = #{record.contactHouseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactLongitude != null" >
+        contact_longitude = #{record.contactLongitude,jdbcType=DECIMAL},
+      </if>
+      <if test="record.contactLatitude != null" >
+        contact_latitude = #{record.contactLatitude,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shopLogoImg != null" >
+        shop_logo_img = #{record.shopLogoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_order
+    set id = #{record.id,jdbcType=INTEGER},
+    member_id = #{record.memberId,jdbcType=INTEGER},
+    order_no = #{record.orderNo,jdbcType=VARCHAR},
+    goods_total_quantity = #{record.goodsTotalQuantity,jdbcType=INTEGER},
+    goods_total_price = #{record.goodsTotalPrice,jdbcType=DECIMAL},
+    packing_charges = #{record.packingCharges,jdbcType=DECIMAL},
+    delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
+    actual_price = #{record.actualPrice,jdbcType=DECIMAL},
+    shopping_way = #{record.shoppingWay,jdbcType=INTEGER},
+    delivery_address_id = #{record.deliveryAddressId,jdbcType=INTEGER},
+    contact_realname = #{record.contactRealname,jdbcType=VARCHAR},
+    contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+    contact_province = #{record.contactProvince,jdbcType=VARCHAR},
+    contact_city = #{record.contactCity,jdbcType=VARCHAR},
+    contact_area = #{record.contactArea,jdbcType=VARCHAR},
+    contact_street = #{record.contactStreet,jdbcType=VARCHAR},
+    contact_sex = #{record.contactSex,jdbcType=INTEGER},
+    remark = #{record.remark,jdbcType=VARCHAR},
+    description = #{record.description,jdbcType=VARCHAR},
+    status = #{record.status,jdbcType=INTEGER},
+    trade_id = #{record.tradeId,jdbcType=INTEGER},
+    order_logistics_id = #{record.orderLogisticsId,jdbcType=INTEGER},
+    is_invoice = #{record.isInvoice,jdbcType=BIT},
+    invoice_id = #{record.invoiceId,jdbcType=INTEGER},
+    is_deleted = #{record.isDeleted,jdbcType=BIT},
+    shop_id = #{record.shopId,jdbcType=INTEGER},
+    shop_name = #{record.shopName,jdbcType=VARCHAR},
+    shop_address = #{record.shopAddress,jdbcType=VARCHAR},
+    cancel_reason = #{record.cancelReason,jdbcType=INTEGER},
+    payment_deadline = #{record.paymentDeadline,jdbcType=TIMESTAMP},
+    is_printed = #{record.isPrinted,jdbcType=BIT},
+    queue_no = #{record.queueNo,jdbcType=INTEGER},
+    full_reduction_rule_id = #{record.fullReductionRuleId,jdbcType=INTEGER},
+    full_reduction_rule_description = #{record.fullReductionRuleDescription,jdbcType=VARCHAR},
+    coupons_id = #{record.couponsId,jdbcType=INTEGER},
+    coupons_description = #{record.couponsDescription,jdbcType=VARCHAR},
+    coupons_member_relation_id = #{record.couponsMemberRelationId,jdbcType=INTEGER},
+    is_change_to_delivery = #{record.isChangeToDelivery,jdbcType=BIT},
+    change_to_delivery_out_trade_no = #{record.changeToDeliveryOutTradeNo,jdbcType=VARCHAR},
+    change_to_delivery_trade_id = #{record.changeToDeliveryTradeId,jdbcType=INTEGER},
+    platform_extract_ratio = #{record.platformExtractRatio,jdbcType=DECIMAL},
+    platform_extract_price = #{record.platformExtractPrice,jdbcType=DECIMAL},
+    platform_delivery_fee = #{record.platformDeliveryFee,jdbcType=DECIMAL},
+    platform_income = #{record.platformIncome,jdbcType=DECIMAL},
+    merchant_delivery_fee = #{record.merchantDeliveryFee,jdbcType=DECIMAL},
+    courier_income = #{record.courierIncome,jdbcType=DECIMAL},
+    merchant_income = #{record.merchantIncome,jdbcType=DECIMAL},
+    payment_success_time = #{record.paymentSuccessTime,jdbcType=TIMESTAMP},
+    order_completion_time = #{record.orderCompletionTime,jdbcType=TIMESTAMP},
+    paid_order_cancel_reason = #{record.paidOrderCancelReason,jdbcType=INTEGER},
+    limited_price = #{record.limitedPrice,jdbcType=DECIMAL},
+    reduced_price = #{record.reducedPrice,jdbcType=DECIMAL},
+    coupons_discount_price = #{record.couponsDiscountPrice,jdbcType=DECIMAL},
+    delivery_way = #{record.deliveryWay,jdbcType=INTEGER},
+    is_pay_to_merchant = #{record.isPayToMerchant,jdbcType=BIT},
+    before_reduced_delivery_fee = #{record.beforeReducedDeliveryFee,jdbcType=DECIMAL},
+    payment_mode = #{record.paymentMode,jdbcType=INTEGER},
+    contact_house_number = #{record.contactHouseNumber,jdbcType=VARCHAR},
+    contact_longitude = #{record.contactLongitude,jdbcType=DECIMAL},
+    contact_latitude = #{record.contactLatitude,jdbcType=DECIMAL},
+    shop_logo_img = #{record.shopLogoImg,jdbcType=VARCHAR},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.siam.system.modular.package_order.entity.Order" >
+    update tb_order
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsTotalQuantity != null" >
+        goods_total_quantity = #{goodsTotalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="goodsTotalPrice != null" >
+        goods_total_price = #{goodsTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingCharges != null" >
+        packing_charges = #{packingCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryFee != null" >
+        delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null" >
+        actual_price = #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shoppingWay != null" >
+        shopping_way = #{shoppingWay,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryAddressId != null" >
+        delivery_address_id = #{deliveryAddressId,jdbcType=INTEGER},
+      </if>
+      <if test="contactRealname != null" >
+        contact_realname = #{contactRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactProvince != null" >
+        contact_province = #{contactProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="contactCity != null" >
+        contact_city = #{contactCity,jdbcType=VARCHAR},
+      </if>
+      <if test="contactArea != null" >
+        contact_area = #{contactArea,jdbcType=VARCHAR},
+      </if>
+      <if test="contactStreet != null" >
+        contact_street = #{contactStreet,jdbcType=VARCHAR},
+      </if>
+      <if test="contactSex != null" >
+        contact_sex = #{contactSex,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="tradeId != null" >
+        trade_id = #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderLogisticsId != null" >
+        order_logistics_id = #{orderLogisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="isInvoice != null" >
+        is_invoice = #{isInvoice,jdbcType=BIT},
+      </if>
+      <if test="invoiceId != null" >
+        invoice_id = #{invoiceId,jdbcType=INTEGER},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopAddress != null" >
+        shop_address = #{shopAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelReason != null" >
+        cancel_reason = #{cancelReason,jdbcType=INTEGER},
+      </if>
+      <if test="paymentDeadline != null" >
+        payment_deadline = #{paymentDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isPrinted != null" >
+        is_printed = #{isPrinted,jdbcType=BIT},
+      </if>
+      <if test="queueNo != null" >
+        queue_no = #{queueNo,jdbcType=INTEGER},
+      </if>
+      <if test="fullReductionRuleId != null" >
+        full_reduction_rule_id = #{fullReductionRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="fullReductionRuleDescription != null" >
+        full_reduction_rule_description = #{fullReductionRuleDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="couponsId != null" >
+        coupons_id = #{couponsId,jdbcType=INTEGER},
+      </if>
+      <if test="couponsDescription != null" >
+        coupons_description = #{couponsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="couponsMemberRelationId != null" >
+        coupons_member_relation_id = #{couponsMemberRelationId,jdbcType=INTEGER},
+      </if>
+      <if test="isChangeToDelivery != null" >
+        is_change_to_delivery = #{isChangeToDelivery,jdbcType=BIT},
+      </if>
+      <if test="changeToDeliveryOutTradeNo != null" >
+        change_to_delivery_out_trade_no = #{changeToDeliveryOutTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="changeToDeliveryTradeId != null" >
+        change_to_delivery_trade_id = #{changeToDeliveryTradeId,jdbcType=INTEGER},
+      </if>
+      <if test="platformExtractRatio != null" >
+        platform_extract_ratio = #{platformExtractRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="platformExtractPrice != null" >
+        platform_extract_price = #{platformExtractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="platformDeliveryFee != null" >
+        platform_delivery_fee = #{platformDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="platformIncome != null" >
+        platform_income = #{platformIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantDeliveryFee != null" >
+        merchant_delivery_fee = #{merchantDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="courierIncome != null" >
+        courier_income = #{courierIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantIncome != null" >
+        merchant_income = #{merchantIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentSuccessTime != null" >
+        payment_success_time = #{paymentSuccessTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderCompletionTime != null" >
+        order_completion_time = #{orderCompletionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paidOrderCancelReason != null" >
+        paid_order_cancel_reason = #{paidOrderCancelReason,jdbcType=INTEGER},
+      </if>
+      <if test="limitedPrice != null" >
+        limited_price = #{limitedPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="reducedPrice != null" >
+        reduced_price = #{reducedPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="couponsDiscountPrice != null" >
+        coupons_discount_price = #{couponsDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryWay != null" >
+        delivery_way = #{deliveryWay,jdbcType=INTEGER},
+      </if>
+      <if test="isPayToMerchant != null" >
+        is_pay_to_merchant = #{isPayToMerchant,jdbcType=BIT},
+      </if>
+      <if test="beforeReducedDeliveryFee != null" >
+        before_reduced_delivery_fee = #{beforeReducedDeliveryFee,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMode != null" >
+        payment_mode = #{paymentMode,jdbcType=INTEGER},
+      </if>
+      <if test="contactHouseNumber != null" >
+        contact_house_number = #{contactHouseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contactLongitude != null" >
+        contact_longitude = #{contactLongitude,jdbcType=DECIMAL},
+      </if>
+      <if test="contactLatitude != null" >
+        contact_latitude = #{contactLatitude,jdbcType=DECIMAL},
+      </if>
+      <if test="shopLogoImg != null" >
+        shop_logo_img = #{shopLogoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.siam.system.modular.package_order.entity.Order" >
+    update tb_order
+    set member_id = #{memberId,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      goods_total_quantity = #{goodsTotalQuantity,jdbcType=INTEGER},
+      goods_total_price = #{goodsTotalPrice,jdbcType=DECIMAL},
+      packing_charges = #{packingCharges,jdbcType=DECIMAL},
+      delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+      actual_price = #{actualPrice,jdbcType=DECIMAL},
+      shopping_way = #{shoppingWay,jdbcType=INTEGER},
+      delivery_address_id = #{deliveryAddressId,jdbcType=INTEGER},
+      contact_realname = #{contactRealname,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      contact_province = #{contactProvince,jdbcType=VARCHAR},
+      contact_city = #{contactCity,jdbcType=VARCHAR},
+      contact_area = #{contactArea,jdbcType=VARCHAR},
+      contact_street = #{contactStreet,jdbcType=VARCHAR},
+      contact_sex = #{contactSex,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      trade_id = #{tradeId,jdbcType=INTEGER},
+      order_logistics_id = #{orderLogisticsId,jdbcType=INTEGER},
+      is_invoice = #{isInvoice,jdbcType=BIT},
+      invoice_id = #{invoiceId,jdbcType=INTEGER},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_address = #{shopAddress,jdbcType=VARCHAR},
+      cancel_reason = #{cancelReason,jdbcType=INTEGER},
+      payment_deadline = #{paymentDeadline,jdbcType=TIMESTAMP},
+      is_printed = #{isPrinted,jdbcType=BIT},
+      queue_no = #{queueNo,jdbcType=INTEGER},
+      full_reduction_rule_id = #{fullReductionRuleId,jdbcType=INTEGER},
+      full_reduction_rule_description = #{fullReductionRuleDescription,jdbcType=VARCHAR},
+      coupons_id = #{couponsId,jdbcType=INTEGER},
+      coupons_description = #{couponsDescription,jdbcType=VARCHAR},
+      coupons_member_relation_id = #{couponsMemberRelationId,jdbcType=INTEGER},
+      is_change_to_delivery = #{isChangeToDelivery,jdbcType=BIT},
+      change_to_delivery_out_trade_no = #{changeToDeliveryOutTradeNo,jdbcType=VARCHAR},
+      change_to_delivery_trade_id = #{changeToDeliveryTradeId,jdbcType=INTEGER},
+      platform_extract_ratio = #{platformExtractRatio,jdbcType=DECIMAL},
+      platform_extract_price = #{platformExtractPrice,jdbcType=DECIMAL},
+      platform_delivery_fee = #{platformDeliveryFee,jdbcType=DECIMAL},
+      platform_income = #{platformIncome,jdbcType=DECIMAL},
+      merchant_delivery_fee = #{merchantDeliveryFee,jdbcType=DECIMAL},
+      courier_income = #{courierIncome,jdbcType=DECIMAL},
+      merchant_income = #{merchantIncome,jdbcType=DECIMAL},
+      payment_success_time = #{paymentSuccessTime,jdbcType=TIMESTAMP},
+      order_completion_time = #{orderCompletionTime,jdbcType=TIMESTAMP},
+      paid_order_cancel_reason = #{paidOrderCancelReason,jdbcType=INTEGER},
+      limited_price = #{limitedPrice,jdbcType=DECIMAL},
+      reduced_price = #{reducedPrice,jdbcType=DECIMAL},
+      coupons_discount_price = #{couponsDiscountPrice,jdbcType=DECIMAL},
+      delivery_way = #{deliveryWay,jdbcType=INTEGER},
+      is_pay_to_merchant = #{isPayToMerchant,jdbcType=BIT},
+      before_reduced_delivery_fee = #{beforeReducedDeliveryFee,jdbcType=DECIMAL},
+      payment_mode = #{paymentMode,jdbcType=INTEGER},
+      contact_house_number = #{contactHouseNumber,jdbcType=VARCHAR},
+      contact_longitude = #{contactLongitude,jdbcType=DECIMAL},
+      contact_latitude = #{contactLatitude,jdbcType=DECIMAL},
+      shop_logo_img = #{shopLogoImg,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

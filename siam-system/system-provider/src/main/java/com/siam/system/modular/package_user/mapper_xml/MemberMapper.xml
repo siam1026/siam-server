@@ -1,0 +1,892 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.siam.system.modular.package_user.mapper.MemberMapper" >
+  <resultMap id="BaseResultMap" type="com.siam.system.modular.package_user.entity.Member" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="password_salt" property="passwordSalt" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="login_count" property="loginCount" jdbcType="INTEGER" />
+    <result column="invite_code" property="inviteCode" jdbcType="VARCHAR" />
+    <result column="head_img" property="headImg" jdbcType="VARCHAR" />
+    <result column="roles" property="roles" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="is_disabled" property="isDisabled" jdbcType="BIT" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="is_bind_wx" property="isBindWx" jdbcType="BIT" />
+    <result column="points" property="points" jdbcType="DECIMAL" />
+    <result column="vip_status" property="vipStatus" jdbcType="INTEGER" />
+    <result column="vip_type" property="vipType" jdbcType="INTEGER" />
+    <result column="vip_start_time" property="vipStartTime" jdbcType="TIMESTAMP" />
+    <result column="vip_end_time" property="vipEndTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="vip_no" property="vipNo" jdbcType="VARCHAR" />
+    <result column="is_new_people" property="isNewPeople" jdbcType="BIT" />
+    <result column="is_remind_new_people" property="isRemindNewPeople" jdbcType="BIT" />
+    <result column="last_use_time" property="lastUseTime" jdbcType="TIMESTAMP" />
+    <result column="last_use_address" property="lastUseAddress" jdbcType="VARCHAR" />
+    <result column="register_way" property="registerWay" jdbcType="INTEGER" />
+    <result column="wx_public_platform_open_id" property="wxPublicPlatformOpenId" jdbcType="VARCHAR" />
+    <result column="is_request_wx_notify" property="isRequestWxNotify" jdbcType="BIT" />
+    <result column="last_request_wx_notify_time" property="lastRequestWxNotifyTime" jdbcType="TIMESTAMP" />
+    <result column="invite_reward_amount" property="inviteRewardAmount" jdbcType="DECIMAL" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="total_balance" property="totalBalance" jdbcType="DECIMAL" />
+    <result column="total_consume_balance" property="totalConsumeBalance" jdbcType="DECIMAL" />
+    <result column="total_points" property="totalPoints" jdbcType="DECIMAL" />
+    <result column="total_consume_points" property="totalConsumePoints" jdbcType="DECIMAL" />
+    <result column="total_withdraw_invite_reward_amount" property="totalWithdrawInviteRewardAmount" jdbcType="DECIMAL" />
+    <result column="payment_password" property="paymentPassword" jdbcType="VARCHAR" />
+    <result column="payment_password_salt" property="paymentPasswordSalt" jdbcType="VARCHAR" />
+    <result column="invite_suncode" property="inviteSuncode" jdbcType="VARCHAR" />
+    <result column="unreceived_points" property="unreceivedPoints" jdbcType="DECIMAL" />
+    <result column="unreceived_invite_reward_amount" property="unreceivedInviteRewardAmount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="java.util.Map" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="password_salt" property="passwordSalt" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="login_count" property="loginCount" jdbcType="INTEGER" />
+    <result column="invite_code" property="inviteCode" jdbcType="VARCHAR" />
+    <result column="head_img" property="headImg" jdbcType="VARCHAR" />
+    <result column="roles" property="roles" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="is_disabled" property="isDisabled" jdbcType="BIT" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="is_bind_wx" property="isBindWx" jdbcType="BIT" />
+    <result column="points" property="points" jdbcType="DECIMAL" />
+    <result column="vip_status" property="vipStatus" jdbcType="INTEGER" />
+    <result column="vip_type" property="vipType" jdbcType="INTEGER" />
+    <result column="vip_start_time" property="vipStartTime" jdbcType="TIMESTAMP" />
+    <result column="vip_end_time" property="vipEndTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="vip_no" property="vipNo" jdbcType="VARCHAR" />
+    <result column="is_new_people" property="isNewPeople" jdbcType="BIT" />
+    <result column="is_remind_new_people" property="isRemindNewPeople" jdbcType="BIT" />
+    <result column="last_use_time" property="lastUseTime" jdbcType="TIMESTAMP" />
+    <result column="last_use_address" property="lastUseAddress" jdbcType="VARCHAR" />
+    <result column="register_way" property="registerWay" jdbcType="INTEGER" />
+    <result column="wx_public_platform_open_id" property="wxPublicPlatformOpenId" jdbcType="VARCHAR" />
+    <result column="is_request_wx_notify" property="isRequestWxNotify" jdbcType="BIT" />
+    <result column="last_request_wx_notify_time" property="lastRequestWxNotifyTime" jdbcType="TIMESTAMP" />
+    <result column="invite_reward_amount" property="inviteRewardAmount" jdbcType="DECIMAL" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="total_balance" property="totalBalance" jdbcType="DECIMAL" />
+    <result column="total_consume_balance" property="totalConsumeBalance" jdbcType="DECIMAL" />
+    <result column="total_points" property="totalPoints" jdbcType="DECIMAL" />
+    <result column="total_consume_points" property="totalConsumePoints" jdbcType="DECIMAL" />
+    <result column="total_withdraw_invite_reward_amount" property="totalWithdrawInviteRewardAmount" jdbcType="DECIMAL" />
+    <result column="payment_password" property="paymentPassword" jdbcType="VARCHAR" />
+    <result column="payment_password_salt" property="paymentPasswordSalt" jdbcType="VARCHAR" />
+    <result column="invite_suncode" property="inviteSuncode" jdbcType="VARCHAR" />
+    <result column="unreceived_points" property="unreceivedPoints" jdbcType="DECIMAL" />
+    <result column="unreceived_invite_reward_amount" property="unreceivedInviteRewardAmount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, username, mobile, password, password_salt, nickname, balance, login_count, invite_code,
+    head_img, roles, sex, email, is_disabled, is_deleted, open_id, is_bind_wx, points,
+    vip_status, vip_type, vip_start_time, vip_end_time, type, vip_no, is_new_people,
+    is_remind_new_people, last_use_time, last_use_address, register_way, wx_public_platform_open_id,
+    is_request_wx_notify, last_request_wx_notify_time, invite_reward_amount, real_name,
+    total_balance, total_consume_balance, total_points, total_consume_points, total_withdraw_invite_reward_amount,
+    payment_password, payment_password_salt, invite_suncode, unreceived_points, unreceived_invite_reward_amount,
+    create_time, update_time, last_login_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.siam.system.modular.package_user.model.example.MemberExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_member
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_member
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.siam.system.modular.package_user.model.example.MemberExample" >
+    delete from tb_member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.siam.system.modular.package_user.entity.Member" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="passwordSalt != null" >
+        password_salt,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="loginCount != null" >
+        login_count,
+      </if>
+      <if test="inviteCode != null" >
+        invite_code,
+      </if>
+      <if test="headImg != null" >
+        head_img,
+      </if>
+      <if test="roles != null" >
+        roles,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="isDisabled != null" >
+        is_disabled,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="openId != null" >
+        open_id,
+      </if>
+      <if test="isBindWx != null" >
+        is_bind_wx,
+      </if>
+      <if test="points != null" >
+        points,
+      </if>
+      <if test="vipStatus != null" >
+        vip_status,
+      </if>
+      <if test="vipType != null" >
+        vip_type,
+      </if>
+      <if test="vipStartTime != null" >
+        vip_start_time,
+      </if>
+      <if test="vipEndTime != null" >
+        vip_end_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="vipNo != null" >
+        vip_no,
+      </if>
+      <if test="isNewPeople != null" >
+        is_new_people,
+      </if>
+      <if test="isRemindNewPeople != null" >
+        is_remind_new_people,
+      </if>
+      <if test="lastUseTime != null" >
+        last_use_time,
+      </if>
+      <if test="lastUseAddress != null" >
+        last_use_address,
+      </if>
+      <if test="registerWay != null" >
+        register_way,
+      </if>
+      <if test="wxPublicPlatformOpenId != null" >
+        wx_public_platform_open_id,
+      </if>
+      <if test="isRequestWxNotify != null" >
+        is_request_wx_notify,
+      </if>
+      <if test="lastRequestWxNotifyTime != null" >
+        last_request_wx_notify_time,
+      </if>
+      <if test="inviteRewardAmount != null" >
+        invite_reward_amount,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="totalBalance != null" >
+        total_balance,
+      </if>
+      <if test="totalConsumeBalance != null" >
+        total_consume_balance,
+      </if>
+      <if test="totalPoints != null" >
+        total_points,
+      </if>
+      <if test="totalConsumePoints != null" >
+        total_consume_points,
+      </if>
+      <if test="totalWithdrawInviteRewardAmount != null" >
+        total_withdraw_invite_reward_amount,
+      </if>
+      <if test="paymentPassword != null" >
+        payment_password,
+      </if>
+      <if test="paymentPasswordSalt != null" >
+        payment_password_salt,
+      </if>
+      <if test="inviteSuncode != null" >
+        invite_suncode,
+      </if>
+      <if test="unreceivedPoints != null" >
+        unreceived_points,
+      </if>
+      <if test="unreceivedInviteRewardAmount != null" >
+        unreceived_invite_reward_amount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="passwordSalt != null" >
+        #{passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="loginCount != null" >
+        #{loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null" >
+        #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null" >
+        #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="roles != null" >
+        #{roles,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisabled != null" >
+        #{isDisabled,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="isBindWx != null" >
+        #{isBindWx,jdbcType=BIT},
+      </if>
+      <if test="points != null" >
+        #{points,jdbcType=DECIMAL},
+      </if>
+      <if test="vipStatus != null" >
+        #{vipStatus,jdbcType=INTEGER},
+      </if>
+      <if test="vipType != null" >
+        #{vipType,jdbcType=INTEGER},
+      </if>
+      <if test="vipStartTime != null" >
+        #{vipStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vipEndTime != null" >
+        #{vipEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="vipNo != null" >
+        #{vipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="isNewPeople != null" >
+        #{isNewPeople,jdbcType=BIT},
+      </if>
+      <if test="isRemindNewPeople != null" >
+        #{isRemindNewPeople,jdbcType=BIT},
+      </if>
+      <if test="lastUseTime != null" >
+        #{lastUseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUseAddress != null" >
+        #{lastUseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="registerWay != null" >
+        #{registerWay,jdbcType=INTEGER},
+      </if>
+      <if test="wxPublicPlatformOpenId != null" >
+        #{wxPublicPlatformOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="isRequestWxNotify != null" >
+        #{isRequestWxNotify,jdbcType=BIT},
+      </if>
+      <if test="lastRequestWxNotifyTime != null" >
+        #{lastRequestWxNotifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inviteRewardAmount != null" >
+        #{inviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalBalance != null" >
+        #{totalBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="totalConsumeBalance != null" >
+        #{totalConsumeBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPoints != null" >
+        #{totalPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="totalConsumePoints != null" >
+        #{totalConsumePoints,jdbcType=DECIMAL},
+      </if>
+      <if test="totalWithdrawInviteRewardAmount != null" >
+        #{totalWithdrawInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentPassword != null" >
+        #{paymentPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPasswordSalt != null" >
+        #{paymentPasswordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteSuncode != null" >
+        #{inviteSuncode,jdbcType=VARCHAR},
+      </if>
+      <if test="unreceivedPoints != null" >
+        #{unreceivedPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="unreceivedInviteRewardAmount != null" >
+        #{unreceivedInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginTime != null" >
+        #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.siam.system.modular.package_user.model.example.MemberExample" resultType="java.lang.Integer" >
+    select count(*) from tb_member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_member
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null" >
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.passwordSalt != null" >
+        password_salt = #{record.passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nickname != null" >
+        nickname = #{record.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.balance != null" >
+        balance = #{record.balance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.loginCount != null" >
+        login_count = #{record.loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.inviteCode != null" >
+        invite_code = #{record.inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headImg != null" >
+        head_img = #{record.headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roles != null" >
+        roles = #{record.roles,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=INTEGER},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDisabled != null" >
+        is_disabled = #{record.isDisabled,jdbcType=BIT},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+      <if test="record.openId != null" >
+        open_id = #{record.openId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isBindWx != null" >
+        is_bind_wx = #{record.isBindWx,jdbcType=BIT},
+      </if>
+      <if test="record.points != null" >
+        points = #{record.points,jdbcType=DECIMAL},
+      </if>
+      <if test="record.vipStatus != null" >
+        vip_status = #{record.vipStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.vipType != null" >
+        vip_type = #{record.vipType,jdbcType=INTEGER},
+      </if>
+      <if test="record.vipStartTime != null" >
+        vip_start_time = #{record.vipStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.vipEndTime != null" >
+        vip_end_time = #{record.vipEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.vipNo != null" >
+        vip_no = #{record.vipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isNewPeople != null" >
+        is_new_people = #{record.isNewPeople,jdbcType=BIT},
+      </if>
+      <if test="record.isRemindNewPeople != null" >
+        is_remind_new_people = #{record.isRemindNewPeople,jdbcType=BIT},
+      </if>
+      <if test="record.lastUseTime != null" >
+        last_use_time = #{record.lastUseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUseAddress != null" >
+        last_use_address = #{record.lastUseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registerWay != null" >
+        register_way = #{record.registerWay,jdbcType=INTEGER},
+      </if>
+      <if test="record.wxPublicPlatformOpenId != null" >
+        wx_public_platform_open_id = #{record.wxPublicPlatformOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRequestWxNotify != null" >
+        is_request_wx_notify = #{record.isRequestWxNotify,jdbcType=BIT},
+      </if>
+      <if test="record.lastRequestWxNotifyTime != null" >
+        last_request_wx_notify_time = #{record.lastRequestWxNotifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.inviteRewardAmount != null" >
+        invite_reward_amount = #{record.inviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.realName != null" >
+        real_name = #{record.realName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalBalance != null" >
+        total_balance = #{record.totalBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalConsumeBalance != null" >
+        total_consume_balance = #{record.totalConsumeBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalPoints != null" >
+        total_points = #{record.totalPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalConsumePoints != null" >
+        total_consume_points = #{record.totalConsumePoints,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalWithdrawInviteRewardAmount != null" >
+        total_withdraw_invite_reward_amount = #{record.totalWithdrawInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.paymentPassword != null" >
+        payment_password = #{record.paymentPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentPasswordSalt != null" >
+        payment_password_salt = #{record.paymentPasswordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inviteSuncode != null" >
+        invite_suncode = #{record.inviteSuncode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unreceivedPoints != null" >
+        unreceived_points = #{record.unreceivedPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="record.unreceivedInviteRewardAmount != null" >
+        unreceived_invite_reward_amount = #{record.unreceivedInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastLoginTime != null" >
+        last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_member
+    set id = #{record.id,jdbcType=INTEGER},
+    username = #{record.username,jdbcType=VARCHAR},
+    mobile = #{record.mobile,jdbcType=VARCHAR},
+    password = #{record.password,jdbcType=VARCHAR},
+    password_salt = #{record.passwordSalt,jdbcType=VARCHAR},
+    nickname = #{record.nickname,jdbcType=VARCHAR},
+    balance = #{record.balance,jdbcType=DECIMAL},
+    login_count = #{record.loginCount,jdbcType=INTEGER},
+    invite_code = #{record.inviteCode,jdbcType=VARCHAR},
+    head_img = #{record.headImg,jdbcType=VARCHAR},
+    roles = #{record.roles,jdbcType=VARCHAR},
+    sex = #{record.sex,jdbcType=INTEGER},
+    email = #{record.email,jdbcType=VARCHAR},
+    is_disabled = #{record.isDisabled,jdbcType=BIT},
+    is_deleted = #{record.isDeleted,jdbcType=BIT},
+    open_id = #{record.openId,jdbcType=VARCHAR},
+    is_bind_wx = #{record.isBindWx,jdbcType=BIT},
+    points = #{record.points,jdbcType=DECIMAL},
+    vip_status = #{record.vipStatus,jdbcType=INTEGER},
+    vip_type = #{record.vipType,jdbcType=INTEGER},
+    vip_start_time = #{record.vipStartTime,jdbcType=TIMESTAMP},
+    vip_end_time = #{record.vipEndTime,jdbcType=TIMESTAMP},
+    type = #{record.type,jdbcType=INTEGER},
+    vip_no = #{record.vipNo,jdbcType=VARCHAR},
+    is_new_people = #{record.isNewPeople,jdbcType=BIT},
+    is_remind_new_people = #{record.isRemindNewPeople,jdbcType=BIT},
+    last_use_time = #{record.lastUseTime,jdbcType=TIMESTAMP},
+    last_use_address = #{record.lastUseAddress,jdbcType=VARCHAR},
+    register_way = #{record.registerWay,jdbcType=INTEGER},
+    wx_public_platform_open_id = #{record.wxPublicPlatformOpenId,jdbcType=VARCHAR},
+    is_request_wx_notify = #{record.isRequestWxNotify,jdbcType=BIT},
+    last_request_wx_notify_time = #{record.lastRequestWxNotifyTime,jdbcType=TIMESTAMP},
+    invite_reward_amount = #{record.inviteRewardAmount,jdbcType=DECIMAL},
+    real_name = #{record.realName,jdbcType=VARCHAR},
+    total_balance = #{record.totalBalance,jdbcType=DECIMAL},
+    total_consume_balance = #{record.totalConsumeBalance,jdbcType=DECIMAL},
+    total_points = #{record.totalPoints,jdbcType=DECIMAL},
+    total_consume_points = #{record.totalConsumePoints,jdbcType=DECIMAL},
+    total_withdraw_invite_reward_amount = #{record.totalWithdrawInviteRewardAmount,jdbcType=DECIMAL},
+    payment_password = #{record.paymentPassword,jdbcType=VARCHAR},
+    payment_password_salt = #{record.paymentPasswordSalt,jdbcType=VARCHAR},
+    invite_suncode = #{record.inviteSuncode,jdbcType=VARCHAR},
+    unreceived_points = #{record.unreceivedPoints,jdbcType=DECIMAL},
+    unreceived_invite_reward_amount = #{record.unreceivedInviteRewardAmount,jdbcType=DECIMAL},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+    last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.siam.system.modular.package_user.entity.Member" >
+    update tb_member
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="passwordSalt != null" >
+        password_salt = #{passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="loginCount != null" >
+        login_count = #{loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null" >
+        invite_code = #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null" >
+        head_img = #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="roles != null" >
+        roles = #{roles,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisabled != null" >
+        is_disabled = #{isDisabled,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="isBindWx != null" >
+        is_bind_wx = #{isBindWx,jdbcType=BIT},
+      </if>
+      <if test="points != null" >
+        points = #{points,jdbcType=DECIMAL},
+      </if>
+      <if test="vipStatus != null" >
+        vip_status = #{vipStatus,jdbcType=INTEGER},
+      </if>
+      <if test="vipType != null" >
+        vip_type = #{vipType,jdbcType=INTEGER},
+      </if>
+      <if test="vipStartTime != null" >
+        vip_start_time = #{vipStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vipEndTime != null" >
+        vip_end_time = #{vipEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="vipNo != null" >
+        vip_no = #{vipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="isNewPeople != null" >
+        is_new_people = #{isNewPeople,jdbcType=BIT},
+      </if>
+      <if test="isRemindNewPeople != null" >
+        is_remind_new_people = #{isRemindNewPeople,jdbcType=BIT},
+      </if>
+      <if test="lastUseTime != null" >
+        last_use_time = #{lastUseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUseAddress != null" >
+        last_use_address = #{lastUseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="registerWay != null" >
+        register_way = #{registerWay,jdbcType=INTEGER},
+      </if>
+      <if test="wxPublicPlatformOpenId != null" >
+        wx_public_platform_open_id = #{wxPublicPlatformOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="isRequestWxNotify != null" >
+        is_request_wx_notify = #{isRequestWxNotify,jdbcType=BIT},
+      </if>
+      <if test="lastRequestWxNotifyTime != null" >
+        last_request_wx_notify_time = #{lastRequestWxNotifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inviteRewardAmount != null" >
+        invite_reward_amount = #{inviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalBalance != null" >
+        total_balance = #{totalBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="totalConsumeBalance != null" >
+        total_consume_balance = #{totalConsumeBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPoints != null" >
+        total_points = #{totalPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="totalConsumePoints != null" >
+        total_consume_points = #{totalConsumePoints,jdbcType=DECIMAL},
+      </if>
+      <if test="totalWithdrawInviteRewardAmount != null" >
+        total_withdraw_invite_reward_amount = #{totalWithdrawInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentPassword != null" >
+        payment_password = #{paymentPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPasswordSalt != null" >
+        payment_password_salt = #{paymentPasswordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteSuncode != null" >
+        invite_suncode = #{inviteSuncode,jdbcType=VARCHAR},
+      </if>
+      <if test="unreceivedPoints != null" >
+        unreceived_points = #{unreceivedPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="unreceivedInviteRewardAmount != null" >
+        unreceived_invite_reward_amount = #{unreceivedInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.siam.system.modular.package_user.entity.Member" >
+    update tb_member
+    set username = #{username,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      password_salt = #{passwordSalt,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=DECIMAL},
+      login_count = #{loginCount,jdbcType=INTEGER},
+      invite_code = #{inviteCode,jdbcType=VARCHAR},
+      head_img = #{headImg,jdbcType=VARCHAR},
+      roles = #{roles,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      is_disabled = #{isDisabled,jdbcType=BIT},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      open_id = #{openId,jdbcType=VARCHAR},
+      is_bind_wx = #{isBindWx,jdbcType=BIT},
+      points = #{points,jdbcType=DECIMAL},
+      vip_status = #{vipStatus,jdbcType=INTEGER},
+      vip_type = #{vipType,jdbcType=INTEGER},
+      vip_start_time = #{vipStartTime,jdbcType=TIMESTAMP},
+      vip_end_time = #{vipEndTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=INTEGER},
+      vip_no = #{vipNo,jdbcType=VARCHAR},
+      is_new_people = #{isNewPeople,jdbcType=BIT},
+      is_remind_new_people = #{isRemindNewPeople,jdbcType=BIT},
+      last_use_time = #{lastUseTime,jdbcType=TIMESTAMP},
+      last_use_address = #{lastUseAddress,jdbcType=VARCHAR},
+      register_way = #{registerWay,jdbcType=INTEGER},
+      wx_public_platform_open_id = #{wxPublicPlatformOpenId,jdbcType=VARCHAR},
+      is_request_wx_notify = #{isRequestWxNotify,jdbcType=BIT},
+      last_request_wx_notify_time = #{lastRequestWxNotifyTime,jdbcType=TIMESTAMP},
+      invite_reward_amount = #{inviteRewardAmount,jdbcType=DECIMAL},
+      real_name = #{realName,jdbcType=VARCHAR},
+      total_balance = #{totalBalance,jdbcType=DECIMAL},
+      total_consume_balance = #{totalConsumeBalance,jdbcType=DECIMAL},
+      total_points = #{totalPoints,jdbcType=DECIMAL},
+      total_consume_points = #{totalConsumePoints,jdbcType=DECIMAL},
+      total_withdraw_invite_reward_amount = #{totalWithdrawInviteRewardAmount,jdbcType=DECIMAL},
+      payment_password = #{paymentPassword,jdbcType=VARCHAR},
+      payment_password_salt = #{paymentPasswordSalt,jdbcType=VARCHAR},
+      invite_suncode = #{inviteSuncode,jdbcType=VARCHAR},
+      unreceived_points = #{unreceivedPoints,jdbcType=DECIMAL},
+      unreceived_invite_reward_amount = #{unreceivedInviteRewardAmount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

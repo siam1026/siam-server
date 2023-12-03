@@ -1,0 +1,10 @@
+---
+lowercaseOutputLabelNames: true
+lowercaseOutputName: true
+whitelistObjectNames: ["java.lang:type=OperatingSystem"]
+rules:
+ - pattern: 'java.lang<type=OperatingSystem><>((?!process_cpu_time)\w+):'
+   name: os_$1
+   type: GAUGE
+   attrNameSnakeCase: true
+

@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.siam.system.modular.package_goods.mapper.SettingMapper" >
+  <resultMap id="BaseResultMap" type="com.siam.system.modular.package_goods.entity.Setting" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="purchase_reward_points" property="purchaseRewardPoints" jdbcType="DECIMAL" />
+    <result column="registration_reward_points" property="registrationRewardPoints" jdbcType="DECIMAL" />
+    <result column="new_member_coupons_id" property="newMemberCouponsId" jdbcType="INTEGER" />
+    <result column="default_shop_id" property="defaultShopId" jdbcType="INTEGER" />
+    <result column="merchant_withdraw_fee" property="merchantWithdrawFee" jdbcType="DECIMAL" />
+    <result column="start_delivery_price" property="startDeliveryPrice" jdbcType="DECIMAL" />
+    <result column="delivery_starting_distance" property="deliveryStartingDistance" jdbcType="DECIMAL" />
+    <result column="delivery_starting_price" property="deliveryStartingPrice" jdbcType="DECIMAL" />
+    <result column="delivery_kilometer_price" property="deliveryKilometerPrice" jdbcType="DECIMAL" />
+    <result column="delivery_distance_limit" property="deliveryDistanceLimit" jdbcType="DECIMAL" />
+    <result column="order_system_extraction_ratio" property="orderSystemExtractionRatio" jdbcType="DECIMAL" />
+    <result column="merchant_meal_preparation_time" property="merchantMealPreparationTime" jdbcType="DECIMAL" />
+    <result column="member_withdraw_fee" property="memberWithdrawFee" jdbcType="DECIMAL" />
+    <result column="registration_reward_invite_reward_amount" property="registrationRewardInviteRewardAmount" jdbcType="DECIMAL" />
+    <result column="member_withdraw_meet_amount" property="memberWithdrawMeetAmount" jdbcType="DECIMAL" />
+    <result column="member_withdraw_audit_threshold" property="memberWithdrawAuditThreshold" jdbcType="DECIMAL" />
+    <result column="customer_service_phone" property="customerServicePhone" jdbcType="VARCHAR" />
+    <result column="customer_service_wechat" property="customerServiceWechat" jdbcType="VARCHAR" />
+    <result column="customer_service_wechat_qrcode" property="customerServiceWechatQrcode" jdbcType="VARCHAR" />
+    <result column="freight_insurance_paid_amount" property="freightInsurancePaidAmount" jdbcType="DECIMAL" />
+    <result column="invitee_consume_commission" property="inviteeConsumeCommission" jdbcType="DECIMAL" />
+    <result column="caseone_own_commission" property="caseoneOwnCommission" jdbcType="DECIMAL" />
+    <result column="casetwo_own_commission" property="casetwoOwnCommission" jdbcType="DECIMAL" />
+    <result column="casetwo_first_level_inviter_commission" property="casetwoFirstLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="casethree_own_commission" property="casethreeOwnCommission" jdbcType="DECIMAL" />
+    <result column="casethree_first_level_inviter_commission" property="casethreeFirstLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="casethree_second_level_inviter_commission" property="casethreeSecondLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_invitee_consume_commission" property="pointsMallInviteeConsumeCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_caseone_own_commission" property="pointsMallCaseoneOwnCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casetwo_own_commission" property="pointsMallCasetwoOwnCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casetwo_first_level_inviter_commission" property="pointsMallCasetwoFirstLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casethree_own_commission" property="pointsMallCasethreeOwnCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casethree_first_level_inviter_commission" property="pointsMallCasethreeFirstLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casethree_second_level_inviter_commission" property="pointsMallCasethreeSecondLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="invite_friends_activity_rule" property="inviteFriendsActivityRule" jdbcType="VARCHAR" />
+    <result column="commission_rule" property="commissionRule" jdbcType="VARCHAR" />
+    <result column="vip_rule" property="vipRule" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="java.util.Map" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="purchase_reward_points" property="purchaseRewardPoints" jdbcType="DECIMAL" />
+    <result column="registration_reward_points" property="registrationRewardPoints" jdbcType="DECIMAL" />
+    <result column="new_member_coupons_id" property="newMemberCouponsId" jdbcType="INTEGER" />
+    <result column="default_shop_id" property="defaultShopId" jdbcType="INTEGER" />
+    <result column="merchant_withdraw_fee" property="merchantWithdrawFee" jdbcType="DECIMAL" />
+    <result column="start_delivery_price" property="startDeliveryPrice" jdbcType="DECIMAL" />
+    <result column="delivery_starting_distance" property="deliveryStartingDistance" jdbcType="DECIMAL" />
+    <result column="delivery_starting_price" property="deliveryStartingPrice" jdbcType="DECIMAL" />
+    <result column="delivery_kilometer_price" property="deliveryKilometerPrice" jdbcType="DECIMAL" />
+    <result column="delivery_distance_limit" property="deliveryDistanceLimit" jdbcType="DECIMAL" />
+    <result column="order_system_extraction_ratio" property="orderSystemExtractionRatio" jdbcType="DECIMAL" />
+    <result column="merchant_meal_preparation_time" property="merchantMealPreparationTime" jdbcType="DECIMAL" />
+    <result column="member_withdraw_fee" property="memberWithdrawFee" jdbcType="DECIMAL" />
+    <result column="registration_reward_invite_reward_amount" property="registrationRewardInviteRewardAmount" jdbcType="DECIMAL" />
+    <result column="member_withdraw_meet_amount" property="memberWithdrawMeetAmount" jdbcType="DECIMAL" />
+    <result column="member_withdraw_audit_threshold" property="memberWithdrawAuditThreshold" jdbcType="DECIMAL" />
+    <result column="customer_service_phone" property="customerServicePhone" jdbcType="VARCHAR" />
+    <result column="customer_service_wechat" property="customerServiceWechat" jdbcType="VARCHAR" />
+    <result column="customer_service_wechat_qrcode" property="customerServiceWechatQrcode" jdbcType="VARCHAR" />
+    <result column="freight_insurance_paid_amount" property="freightInsurancePaidAmount" jdbcType="DECIMAL" />
+    <result column="invitee_consume_commission" property="inviteeConsumeCommission" jdbcType="DECIMAL" />
+    <result column="caseone_own_commission" property="caseoneOwnCommission" jdbcType="DECIMAL" />
+    <result column="casetwo_own_commission" property="casetwoOwnCommission" jdbcType="DECIMAL" />
+    <result column="casetwo_first_level_inviter_commission" property="casetwoFirstLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="casethree_own_commission" property="casethreeOwnCommission" jdbcType="DECIMAL" />
+    <result column="casethree_first_level_inviter_commission" property="casethreeFirstLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="casethree_second_level_inviter_commission" property="casethreeSecondLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_invitee_consume_commission" property="pointsMallInviteeConsumeCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_caseone_own_commission" property="pointsMallCaseoneOwnCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casetwo_own_commission" property="pointsMallCasetwoOwnCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casetwo_first_level_inviter_commission" property="pointsMallCasetwoFirstLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casethree_own_commission" property="pointsMallCasethreeOwnCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casethree_first_level_inviter_commission" property="pointsMallCasethreeFirstLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="points_mall_casethree_second_level_inviter_commission" property="pointsMallCasethreeSecondLevelInviterCommission" jdbcType="DECIMAL" />
+    <result column="invite_friends_activity_rule" property="inviteFriendsActivityRule" jdbcType="VARCHAR" />
+    <result column="commission_rule" property="commissionRule" jdbcType="VARCHAR" />
+    <result column="vip_rule" property="vipRule" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, purchase_reward_points, registration_reward_points, new_member_coupons_id, default_shop_id,
+    merchant_withdraw_fee, start_delivery_price, delivery_starting_distance, delivery_starting_price,
+    delivery_kilometer_price, delivery_distance_limit, order_system_extraction_ratio,
+    merchant_meal_preparation_time, member_withdraw_fee, registration_reward_invite_reward_amount,
+    member_withdraw_meet_amount, member_withdraw_audit_threshold, customer_service_phone,
+    customer_service_wechat, customer_service_wechat_qrcode, freight_insurance_paid_amount,
+    invitee_consume_commission, caseone_own_commission, casetwo_own_commission, casetwo_first_level_inviter_commission,
+    casethree_own_commission, casethree_first_level_inviter_commission, casethree_second_level_inviter_commission,
+    points_mall_invitee_consume_commission, points_mall_caseone_own_commission, points_mall_casetwo_own_commission,
+    points_mall_casetwo_first_level_inviter_commission, points_mall_casethree_own_commission,
+    points_mall_casethree_first_level_inviter_commission, points_mall_casethree_second_level_inviter_commission,
+    invite_friends_activity_rule, commission_rule, vip_rule, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.siam.system.modular.package_goods.model.example.SettingExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_setting
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.siam.system.modular.package_goods.model.example.SettingExample" >
+    delete from tb_setting
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.siam.system.modular.package_goods.entity.Setting" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_setting
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="purchaseRewardPoints != null" >
+        purchase_reward_points,
+      </if>
+      <if test="registrationRewardPoints != null" >
+        registration_reward_points,
+      </if>
+      <if test="newMemberCouponsId != null" >
+        new_member_coupons_id,
+      </if>
+      <if test="defaultShopId != null" >
+        default_shop_id,
+      </if>
+      <if test="merchantWithdrawFee != null" >
+        merchant_withdraw_fee,
+      </if>
+      <if test="startDeliveryPrice != null" >
+        start_delivery_price,
+      </if>
+      <if test="deliveryStartingDistance != null" >
+        delivery_starting_distance,
+      </if>
+      <if test="deliveryStartingPrice != null" >
+        delivery_starting_price,
+      </if>
+      <if test="deliveryKilometerPrice != null" >
+        delivery_kilometer_price,
+      </if>
+      <if test="deliveryDistanceLimit != null" >
+        delivery_distance_limit,
+      </if>
+      <if test="orderSystemExtractionRatio != null" >
+        order_system_extraction_ratio,
+      </if>
+      <if test="merchantMealPreparationTime != null" >
+        merchant_meal_preparation_time,
+      </if>
+      <if test="memberWithdrawFee != null" >
+        member_withdraw_fee,
+      </if>
+      <if test="registrationRewardInviteRewardAmount != null" >
+        registration_reward_invite_reward_amount,
+      </if>
+      <if test="memberWithdrawMeetAmount != null" >
+        member_withdraw_meet_amount,
+      </if>
+      <if test="memberWithdrawAuditThreshold != null" >
+        member_withdraw_audit_threshold,
+      </if>
+      <if test="customerServicePhone != null" >
+        customer_service_phone,
+      </if>
+      <if test="customerServiceWechat != null" >
+        customer_service_wechat,
+      </if>
+      <if test="customerServiceWechatQrcode != null" >
+        customer_service_wechat_qrcode,
+      </if>
+      <if test="freightInsurancePaidAmount != null" >
+        freight_insurance_paid_amount,
+      </if>
+      <if test="inviteeConsumeCommission != null" >
+        invitee_consume_commission,
+      </if>
+      <if test="caseoneOwnCommission != null" >
+        caseone_own_commission,
+      </if>
+      <if test="casetwoOwnCommission != null" >
+        casetwo_own_commission,
+      </if>
+      <if test="casetwoFirstLevelInviterCommission != null" >
+        casetwo_first_level_inviter_commission,
+      </if>
+      <if test="casethreeOwnCommission != null" >
+        casethree_own_commission,
+      </if>
+      <if test="casethreeFirstLevelInviterCommission != null" >
+        casethree_first_level_inviter_commission,
+      </if>
+      <if test="casethreeSecondLevelInviterCommission != null" >
+        casethree_second_level_inviter_commission,
+      </if>
+      <if test="pointsMallInviteeConsumeCommission != null" >
+        points_mall_invitee_consume_commission,
+      </if>
+      <if test="pointsMallCaseoneOwnCommission != null" >
+        points_mall_caseone_own_commission,
+      </if>
+      <if test="pointsMallCasetwoOwnCommission != null" >
+        points_mall_casetwo_own_commission,
+      </if>
+      <if test="pointsMallCasetwoFirstLevelInviterCommission != null" >
+        points_mall_casetwo_first_level_inviter_commission,
+      </if>
+      <if test="pointsMallCasethreeOwnCommission != null" >
+        points_mall_casethree_own_commission,
+      </if>
+      <if test="pointsMallCasethreeFirstLevelInviterCommission != null" >
+        points_mall_casethree_first_level_inviter_commission,
+      </if>
+      <if test="pointsMallCasethreeSecondLevelInviterCommission != null" >
+        points_mall_casethree_second_level_inviter_commission,
+      </if>
+      <if test="inviteFriendsActivityRule != null" >
+        invite_friends_activity_rule,
+      </if>
+      <if test="commissionRule != null" >
+        commission_rule,
+      </if>
+      <if test="vipRule != null" >
+        vip_rule,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseRewardPoints != null" >
+        #{purchaseRewardPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="registrationRewardPoints != null" >
+        #{registrationRewardPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="newMemberCouponsId != null" >
+        #{newMemberCouponsId,jdbcType=INTEGER},
+      </if>
+      <if test="defaultShopId != null" >
+        #{defaultShopId,jdbcType=INTEGER},
+      </if>
+      <if test="merchantWithdrawFee != null" >
+        #{merchantWithdrawFee,jdbcType=DECIMAL},
+      </if>
+      <if test="startDeliveryPrice != null" >
+        #{startDeliveryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryStartingDistance != null" >
+        #{deliveryStartingDistance,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryStartingPrice != null" >
+        #{deliveryStartingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryKilometerPrice != null" >
+        #{deliveryKilometerPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryDistanceLimit != null" >
+        #{deliveryDistanceLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="orderSystemExtractionRatio != null" >
+        #{orderSystemExtractionRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantMealPreparationTime != null" >
+        #{merchantMealPreparationTime,jdbcType=DECIMAL},
+      </if>
+      <if test="memberWithdrawFee != null" >
+        #{memberWithdrawFee,jdbcType=DECIMAL},
+      </if>
+      <if test="registrationRewardInviteRewardAmount != null" >
+        #{registrationRewardInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memberWithdrawMeetAmount != null" >
+        #{memberWithdrawMeetAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memberWithdrawAuditThreshold != null" >
+        #{memberWithdrawAuditThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="customerServicePhone != null" >
+        #{customerServicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerServiceWechat != null" >
+        #{customerServiceWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="customerServiceWechatQrcode != null" >
+        #{customerServiceWechatQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="freightInsurancePaidAmount != null" >
+        #{freightInsurancePaidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="inviteeConsumeCommission != null" >
+        #{inviteeConsumeCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="caseoneOwnCommission != null" >
+        #{caseoneOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casetwoOwnCommission != null" >
+        #{casetwoOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casetwoFirstLevelInviterCommission != null" >
+        #{casetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casethreeOwnCommission != null" >
+        #{casethreeOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casethreeFirstLevelInviterCommission != null" >
+        #{casethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casethreeSecondLevelInviterCommission != null" >
+        #{casethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallInviteeConsumeCommission != null" >
+        #{pointsMallInviteeConsumeCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCaseoneOwnCommission != null" >
+        #{pointsMallCaseoneOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasetwoOwnCommission != null" >
+        #{pointsMallCasetwoOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasetwoFirstLevelInviterCommission != null" >
+        #{pointsMallCasetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasethreeOwnCommission != null" >
+        #{pointsMallCasethreeOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasethreeFirstLevelInviterCommission != null" >
+        #{pointsMallCasethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasethreeSecondLevelInviterCommission != null" >
+        #{pointsMallCasethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="inviteFriendsActivityRule != null" >
+        #{inviteFriendsActivityRule,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionRule != null" >
+        #{commissionRule,jdbcType=VARCHAR},
+      </if>
+      <if test="vipRule != null" >
+        #{vipRule,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.siam.system.modular.package_goods.model.example.SettingExample" resultType="java.lang.Integer" >
+    select count(*) from tb_setting
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_setting
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.purchaseRewardPoints != null" >
+        purchase_reward_points = #{record.purchaseRewardPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="record.registrationRewardPoints != null" >
+        registration_reward_points = #{record.registrationRewardPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="record.newMemberCouponsId != null" >
+        new_member_coupons_id = #{record.newMemberCouponsId,jdbcType=INTEGER},
+      </if>
+      <if test="record.defaultShopId != null" >
+        default_shop_id = #{record.defaultShopId,jdbcType=INTEGER},
+      </if>
+      <if test="record.merchantWithdrawFee != null" >
+        merchant_withdraw_fee = #{record.merchantWithdrawFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.startDeliveryPrice != null" >
+        start_delivery_price = #{record.startDeliveryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deliveryStartingDistance != null" >
+        delivery_starting_distance = #{record.deliveryStartingDistance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deliveryStartingPrice != null" >
+        delivery_starting_price = #{record.deliveryStartingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deliveryKilometerPrice != null" >
+        delivery_kilometer_price = #{record.deliveryKilometerPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deliveryDistanceLimit != null" >
+        delivery_distance_limit = #{record.deliveryDistanceLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderSystemExtractionRatio != null" >
+        order_system_extraction_ratio = #{record.orderSystemExtractionRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="record.merchantMealPreparationTime != null" >
+        merchant_meal_preparation_time = #{record.merchantMealPreparationTime,jdbcType=DECIMAL},
+      </if>
+      <if test="record.memberWithdrawFee != null" >
+        member_withdraw_fee = #{record.memberWithdrawFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.registrationRewardInviteRewardAmount != null" >
+        registration_reward_invite_reward_amount = #{record.registrationRewardInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.memberWithdrawMeetAmount != null" >
+        member_withdraw_meet_amount = #{record.memberWithdrawMeetAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.memberWithdrawAuditThreshold != null" >
+        member_withdraw_audit_threshold = #{record.memberWithdrawAuditThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="record.customerServicePhone != null" >
+        customer_service_phone = #{record.customerServicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerServiceWechat != null" >
+        customer_service_wechat = #{record.customerServiceWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerServiceWechatQrcode != null" >
+        customer_service_wechat_qrcode = #{record.customerServiceWechatQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.freightInsurancePaidAmount != null" >
+        freight_insurance_paid_amount = #{record.freightInsurancePaidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inviteeConsumeCommission != null" >
+        invitee_consume_commission = #{record.inviteeConsumeCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.caseoneOwnCommission != null" >
+        caseone_own_commission = #{record.caseoneOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.casetwoOwnCommission != null" >
+        casetwo_own_commission = #{record.casetwoOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.casetwoFirstLevelInviterCommission != null" >
+        casetwo_first_level_inviter_commission = #{record.casetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.casethreeOwnCommission != null" >
+        casethree_own_commission = #{record.casethreeOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.casethreeFirstLevelInviterCommission != null" >
+        casethree_first_level_inviter_commission = #{record.casethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.casethreeSecondLevelInviterCommission != null" >
+        casethree_second_level_inviter_commission = #{record.casethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pointsMallInviteeConsumeCommission != null" >
+        points_mall_invitee_consume_commission = #{record.pointsMallInviteeConsumeCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pointsMallCaseoneOwnCommission != null" >
+        points_mall_caseone_own_commission = #{record.pointsMallCaseoneOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pointsMallCasetwoOwnCommission != null" >
+        points_mall_casetwo_own_commission = #{record.pointsMallCasetwoOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pointsMallCasetwoFirstLevelInviterCommission != null" >
+        points_mall_casetwo_first_level_inviter_commission = #{record.pointsMallCasetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pointsMallCasethreeOwnCommission != null" >
+        points_mall_casethree_own_commission = #{record.pointsMallCasethreeOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pointsMallCasethreeFirstLevelInviterCommission != null" >
+        points_mall_casethree_first_level_inviter_commission = #{record.pointsMallCasethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pointsMallCasethreeSecondLevelInviterCommission != null" >
+        points_mall_casethree_second_level_inviter_commission = #{record.pointsMallCasethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inviteFriendsActivityRule != null" >
+        invite_friends_activity_rule = #{record.inviteFriendsActivityRule,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commissionRule != null" >
+        commission_rule = #{record.commissionRule,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vipRule != null" >
+        vip_rule = #{record.vipRule,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_setting
+    set id = #{record.id,jdbcType=INTEGER},
+    purchase_reward_points = #{record.purchaseRewardPoints,jdbcType=DECIMAL},
+    registration_reward_points = #{record.registrationRewardPoints,jdbcType=DECIMAL},
+    new_member_coupons_id = #{record.newMemberCouponsId,jdbcType=INTEGER},
+    default_shop_id = #{record.defaultShopId,jdbcType=INTEGER},
+    merchant_withdraw_fee = #{record.merchantWithdrawFee,jdbcType=DECIMAL},
+    start_delivery_price = #{record.startDeliveryPrice,jdbcType=DECIMAL},
+    delivery_starting_distance = #{record.deliveryStartingDistance,jdbcType=DECIMAL},
+    delivery_starting_price = #{record.deliveryStartingPrice,jdbcType=DECIMAL},
+    delivery_kilometer_price = #{record.deliveryKilometerPrice,jdbcType=DECIMAL},
+    delivery_distance_limit = #{record.deliveryDistanceLimit,jdbcType=DECIMAL},
+    order_system_extraction_ratio = #{record.orderSystemExtractionRatio,jdbcType=DECIMAL},
+    merchant_meal_preparation_time = #{record.merchantMealPreparationTime,jdbcType=DECIMAL},
+    member_withdraw_fee = #{record.memberWithdrawFee,jdbcType=DECIMAL},
+    registration_reward_invite_reward_amount = #{record.registrationRewardInviteRewardAmount,jdbcType=DECIMAL},
+    member_withdraw_meet_amount = #{record.memberWithdrawMeetAmount,jdbcType=DECIMAL},
+    member_withdraw_audit_threshold = #{record.memberWithdrawAuditThreshold,jdbcType=DECIMAL},
+    customer_service_phone = #{record.customerServicePhone,jdbcType=VARCHAR},
+    customer_service_wechat = #{record.customerServiceWechat,jdbcType=VARCHAR},
+    customer_service_wechat_qrcode = #{record.customerServiceWechatQrcode,jdbcType=VARCHAR},
+    freight_insurance_paid_amount = #{record.freightInsurancePaidAmount,jdbcType=DECIMAL},
+    invitee_consume_commission = #{record.inviteeConsumeCommission,jdbcType=DECIMAL},
+    caseone_own_commission = #{record.caseoneOwnCommission,jdbcType=DECIMAL},
+    casetwo_own_commission = #{record.casetwoOwnCommission,jdbcType=DECIMAL},
+    casetwo_first_level_inviter_commission = #{record.casetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+    casethree_own_commission = #{record.casethreeOwnCommission,jdbcType=DECIMAL},
+    casethree_first_level_inviter_commission = #{record.casethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+    casethree_second_level_inviter_commission = #{record.casethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+    points_mall_invitee_consume_commission = #{record.pointsMallInviteeConsumeCommission,jdbcType=DECIMAL},
+    points_mall_caseone_own_commission = #{record.pointsMallCaseoneOwnCommission,jdbcType=DECIMAL},
+    points_mall_casetwo_own_commission = #{record.pointsMallCasetwoOwnCommission,jdbcType=DECIMAL},
+    points_mall_casetwo_first_level_inviter_commission = #{record.pointsMallCasetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+    points_mall_casethree_own_commission = #{record.pointsMallCasethreeOwnCommission,jdbcType=DECIMAL},
+    points_mall_casethree_first_level_inviter_commission = #{record.pointsMallCasethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+    points_mall_casethree_second_level_inviter_commission = #{record.pointsMallCasethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+    invite_friends_activity_rule = #{record.inviteFriendsActivityRule,jdbcType=VARCHAR},
+    commission_rule = #{record.commissionRule,jdbcType=VARCHAR},
+    vip_rule = #{record.vipRule,jdbcType=VARCHAR},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.siam.system.modular.package_goods.entity.Setting" >
+    update tb_setting
+    <set >
+      <if test="purchaseRewardPoints != null" >
+        purchase_reward_points = #{purchaseRewardPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="registrationRewardPoints != null" >
+        registration_reward_points = #{registrationRewardPoints,jdbcType=DECIMAL},
+      </if>
+      <if test="newMemberCouponsId != null" >
+        new_member_coupons_id = #{newMemberCouponsId,jdbcType=INTEGER},
+      </if>
+      <if test="defaultShopId != null" >
+        default_shop_id = #{defaultShopId,jdbcType=INTEGER},
+      </if>
+      <if test="merchantWithdrawFee != null" >
+        merchant_withdraw_fee = #{merchantWithdrawFee,jdbcType=DECIMAL},
+      </if>
+      <if test="startDeliveryPrice != null" >
+        start_delivery_price = #{startDeliveryPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryStartingDistance != null" >
+        delivery_starting_distance = #{deliveryStartingDistance,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryStartingPrice != null" >
+        delivery_starting_price = #{deliveryStartingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryKilometerPrice != null" >
+        delivery_kilometer_price = #{deliveryKilometerPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryDistanceLimit != null" >
+        delivery_distance_limit = #{deliveryDistanceLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="orderSystemExtractionRatio != null" >
+        order_system_extraction_ratio = #{orderSystemExtractionRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="merchantMealPreparationTime != null" >
+        merchant_meal_preparation_time = #{merchantMealPreparationTime,jdbcType=DECIMAL},
+      </if>
+      <if test="memberWithdrawFee != null" >
+        member_withdraw_fee = #{memberWithdrawFee,jdbcType=DECIMAL},
+      </if>
+      <if test="registrationRewardInviteRewardAmount != null" >
+        registration_reward_invite_reward_amount = #{registrationRewardInviteRewardAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memberWithdrawMeetAmount != null" >
+        member_withdraw_meet_amount = #{memberWithdrawMeetAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memberWithdrawAuditThreshold != null" >
+        member_withdraw_audit_threshold = #{memberWithdrawAuditThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="customerServicePhone != null" >
+        customer_service_phone = #{customerServicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerServiceWechat != null" >
+        customer_service_wechat = #{customerServiceWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="customerServiceWechatQrcode != null" >
+        customer_service_wechat_qrcode = #{customerServiceWechatQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="freightInsurancePaidAmount != null" >
+        freight_insurance_paid_amount = #{freightInsurancePaidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="inviteeConsumeCommission != null" >
+        invitee_consume_commission = #{inviteeConsumeCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="caseoneOwnCommission != null" >
+        caseone_own_commission = #{caseoneOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casetwoOwnCommission != null" >
+        casetwo_own_commission = #{casetwoOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casetwoFirstLevelInviterCommission != null" >
+        casetwo_first_level_inviter_commission = #{casetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casethreeOwnCommission != null" >
+        casethree_own_commission = #{casethreeOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casethreeFirstLevelInviterCommission != null" >
+        casethree_first_level_inviter_commission = #{casethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="casethreeSecondLevelInviterCommission != null" >
+        casethree_second_level_inviter_commission = #{casethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallInviteeConsumeCommission != null" >
+        points_mall_invitee_consume_commission = #{pointsMallInviteeConsumeCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCaseoneOwnCommission != null" >
+        points_mall_caseone_own_commission = #{pointsMallCaseoneOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasetwoOwnCommission != null" >
+        points_mall_casetwo_own_commission = #{pointsMallCasetwoOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasetwoFirstLevelInviterCommission != null" >
+        points_mall_casetwo_first_level_inviter_commission = #{pointsMallCasetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasethreeOwnCommission != null" >
+        points_mall_casethree_own_commission = #{pointsMallCasethreeOwnCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasethreeFirstLevelInviterCommission != null" >
+        points_mall_casethree_first_level_inviter_commission = #{pointsMallCasethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="pointsMallCasethreeSecondLevelInviterCommission != null" >
+        points_mall_casethree_second_level_inviter_commission = #{pointsMallCasethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+      </if>
+      <if test="inviteFriendsActivityRule != null" >
+        invite_friends_activity_rule = #{inviteFriendsActivityRule,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionRule != null" >
+        commission_rule = #{commissionRule,jdbcType=VARCHAR},
+      </if>
+      <if test="vipRule != null" >
+        vip_rule = #{vipRule,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.siam.system.modular.package_goods.entity.Setting" >
+    update tb_setting
+    set purchase_reward_points = #{purchaseRewardPoints,jdbcType=DECIMAL},
+      registration_reward_points = #{registrationRewardPoints,jdbcType=DECIMAL},
+      new_member_coupons_id = #{newMemberCouponsId,jdbcType=INTEGER},
+      default_shop_id = #{defaultShopId,jdbcType=INTEGER},
+      merchant_withdraw_fee = #{merchantWithdrawFee,jdbcType=DECIMAL},
+      start_delivery_price = #{startDeliveryPrice,jdbcType=DECIMAL},
+      delivery_starting_distance = #{deliveryStartingDistance,jdbcType=DECIMAL},
+      delivery_starting_price = #{deliveryStartingPrice,jdbcType=DECIMAL},
+      delivery_kilometer_price = #{deliveryKilometerPrice,jdbcType=DECIMAL},
+      delivery_distance_limit = #{deliveryDistanceLimit,jdbcType=DECIMAL},
+      order_system_extraction_ratio = #{orderSystemExtractionRatio,jdbcType=DECIMAL},
+      merchant_meal_preparation_time = #{merchantMealPreparationTime,jdbcType=DECIMAL},
+      member_withdraw_fee = #{memberWithdrawFee,jdbcType=DECIMAL},
+      registration_reward_invite_reward_amount = #{registrationRewardInviteRewardAmount,jdbcType=DECIMAL},
+      member_withdraw_meet_amount = #{memberWithdrawMeetAmount,jdbcType=DECIMAL},
+      member_withdraw_audit_threshold = #{memberWithdrawAuditThreshold,jdbcType=DECIMAL},
+      customer_service_phone = #{customerServicePhone,jdbcType=VARCHAR},
+      customer_service_wechat = #{customerServiceWechat,jdbcType=VARCHAR},
+      customer_service_wechat_qrcode = #{customerServiceWechatQrcode,jdbcType=VARCHAR},
+      freight_insurance_paid_amount = #{freightInsurancePaidAmount,jdbcType=DECIMAL},
+      invitee_consume_commission = #{inviteeConsumeCommission,jdbcType=DECIMAL},
+      caseone_own_commission = #{caseoneOwnCommission,jdbcType=DECIMAL},
+      casetwo_own_commission = #{casetwoOwnCommission,jdbcType=DECIMAL},
+      casetwo_first_level_inviter_commission = #{casetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+      casethree_own_commission = #{casethreeOwnCommission,jdbcType=DECIMAL},
+      casethree_first_level_inviter_commission = #{casethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+      casethree_second_level_inviter_commission = #{casethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+      points_mall_invitee_consume_commission = #{pointsMallInviteeConsumeCommission,jdbcType=DECIMAL},
+      points_mall_caseone_own_commission = #{pointsMallCaseoneOwnCommission,jdbcType=DECIMAL},
+      points_mall_casetwo_own_commission = #{pointsMallCasetwoOwnCommission,jdbcType=DECIMAL},
+      points_mall_casetwo_first_level_inviter_commission = #{pointsMallCasetwoFirstLevelInviterCommission,jdbcType=DECIMAL},
+      points_mall_casethree_own_commission = #{pointsMallCasethreeOwnCommission,jdbcType=DECIMAL},
+      points_mall_casethree_first_level_inviter_commission = #{pointsMallCasethreeFirstLevelInviterCommission,jdbcType=DECIMAL},
+      points_mall_casethree_second_level_inviter_commission = #{pointsMallCasethreeSecondLevelInviterCommission,jdbcType=DECIMAL},
+      invite_friends_activity_rule = #{inviteFriendsActivityRule,jdbcType=VARCHAR},
+      commission_rule = #{commissionRule,jdbcType=VARCHAR},
+      vip_rule = #{vipRule,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

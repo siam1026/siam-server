@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.siam.system.modular.package_user.mapper.MemberWithdrawRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.siam.system.modular.package_user.entity.MemberWithdrawRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="coin_type" property="coinType" jdbcType="INTEGER" />
+    <result column="withdraw_amount" property="withdrawAmount" jdbcType="DECIMAL" />
+    <result column="platform_fee" property="platformFee" jdbcType="DECIMAL" />
+    <result column="actual_amount" property="actualAmount" jdbcType="DECIMAL" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="audit_reason" property="auditReason" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="payment_mode" property="paymentMode" jdbcType="INTEGER" />
+    <result column="opening_bank_address" property="openingBankAddress" jdbcType="VARCHAR" />
+    <result column="opening_bank_name" property="openingBankName" jdbcType="VARCHAR" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="alipay_account" property="alipayAccount" jdbcType="VARCHAR" />
+    <result column="wechat_account" property="wechatAccount" jdbcType="VARCHAR" />
+    <result column="trade_id" property="tradeId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="java.util.Map" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="coin_type" property="coinType" jdbcType="INTEGER" />
+    <result column="withdraw_amount" property="withdrawAmount" jdbcType="DECIMAL" />
+    <result column="platform_fee" property="platformFee" jdbcType="DECIMAL" />
+    <result column="actual_amount" property="actualAmount" jdbcType="DECIMAL" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="audit_reason" property="auditReason" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="payment_mode" property="paymentMode" jdbcType="INTEGER" />
+    <result column="opening_bank_address" property="openingBankAddress" jdbcType="VARCHAR" />
+    <result column="opening_bank_name" property="openingBankName" jdbcType="VARCHAR" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="alipay_account" property="alipayAccount" jdbcType="VARCHAR" />
+    <result column="wechat_account" property="wechatAccount" jdbcType="VARCHAR" />
+    <result column="trade_id" property="tradeId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, member_id, order_no, coin_type, withdraw_amount, platform_fee, actual_amount,
+    audit_status, audit_reason, audit_time, payment_mode, opening_bank_address, opening_bank_name,
+    bank_card, alipay_account, wechat_account, trade_id, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.siam.system.modular.package_user.model.example.MemberWithdrawRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_member_withdraw_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_member_withdraw_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_member_withdraw_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.siam.system.modular.package_user.model.example.MemberWithdrawRecordExample" >
+    delete from tb_member_withdraw_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.siam.system.modular.package_user.entity.MemberWithdrawRecord" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_member_withdraw_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="coinType != null" >
+        coin_type,
+      </if>
+      <if test="withdrawAmount != null" >
+        withdraw_amount,
+      </if>
+      <if test="platformFee != null" >
+        platform_fee,
+      </if>
+      <if test="actualAmount != null" >
+        actual_amount,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditReason != null" >
+        audit_reason,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="paymentMode != null" >
+        payment_mode,
+      </if>
+      <if test="openingBankAddress != null" >
+        opening_bank_address,
+      </if>
+      <if test="openingBankName != null" >
+        opening_bank_name,
+      </if>
+      <if test="bankCard != null" >
+        bank_card,
+      </if>
+      <if test="alipayAccount != null" >
+        alipay_account,
+      </if>
+      <if test="wechatAccount != null" >
+        wechat_account,
+      </if>
+      <if test="tradeId != null" >
+        trade_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="coinType != null" >
+        #{coinType,jdbcType=INTEGER},
+      </if>
+      <if test="withdrawAmount != null" >
+        #{withdrawAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="platformFee != null" >
+        #{platformFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualAmount != null" >
+        #{actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditReason != null" >
+        #{auditReason,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentMode != null" >
+        #{paymentMode,jdbcType=INTEGER},
+      </if>
+      <if test="openingBankAddress != null" >
+        #{openingBankAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBankName != null" >
+        #{openingBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null" >
+        #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayAccount != null" >
+        #{alipayAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatAccount != null" >
+        #{wechatAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeId != null" >
+        #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.siam.system.modular.package_user.model.example.MemberWithdrawRecordExample" resultType="java.lang.Integer" >
+    select count(*) from tb_member_withdraw_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_member_withdraw_record
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.memberId != null" >
+        member_id = #{record.memberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinType != null" >
+        coin_type = #{record.coinType,jdbcType=INTEGER},
+      </if>
+      <if test="record.withdrawAmount != null" >
+        withdraw_amount = #{record.withdrawAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.platformFee != null" >
+        platform_fee = #{record.platformFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actualAmount != null" >
+        actual_amount = #{record.actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.auditStatus != null" >
+        audit_status = #{record.auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.auditReason != null" >
+        audit_reason = #{record.auditReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.auditTime != null" >
+        audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paymentMode != null" >
+        payment_mode = #{record.paymentMode,jdbcType=INTEGER},
+      </if>
+      <if test="record.openingBankAddress != null" >
+        opening_bank_address = #{record.openingBankAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openingBankName != null" >
+        opening_bank_name = #{record.openingBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankCard != null" >
+        bank_card = #{record.bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alipayAccount != null" >
+        alipay_account = #{record.alipayAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wechatAccount != null" >
+        wechat_account = #{record.wechatAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tradeId != null" >
+        trade_id = #{record.tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_member_withdraw_record
+    set id = #{record.id,jdbcType=INTEGER},
+    member_id = #{record.memberId,jdbcType=INTEGER},
+    order_no = #{record.orderNo,jdbcType=VARCHAR},
+    coin_type = #{record.coinType,jdbcType=INTEGER},
+    withdraw_amount = #{record.withdrawAmount,jdbcType=DECIMAL},
+    platform_fee = #{record.platformFee,jdbcType=DECIMAL},
+    actual_amount = #{record.actualAmount,jdbcType=DECIMAL},
+    audit_status = #{record.auditStatus,jdbcType=INTEGER},
+    audit_reason = #{record.auditReason,jdbcType=VARCHAR},
+    audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+    payment_mode = #{record.paymentMode,jdbcType=INTEGER},
+    opening_bank_address = #{record.openingBankAddress,jdbcType=VARCHAR},
+    opening_bank_name = #{record.openingBankName,jdbcType=VARCHAR},
+    bank_card = #{record.bankCard,jdbcType=VARCHAR},
+    alipay_account = #{record.alipayAccount,jdbcType=VARCHAR},
+    wechat_account = #{record.wechatAccount,jdbcType=VARCHAR},
+    trade_id = #{record.tradeId,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.siam.system.modular.package_user.entity.MemberWithdrawRecord" >
+    update tb_member_withdraw_record
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="coinType != null" >
+        coin_type = #{coinType,jdbcType=INTEGER},
+      </if>
+      <if test="withdrawAmount != null" >
+        withdraw_amount = #{withdrawAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="platformFee != null" >
+        platform_fee = #{platformFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualAmount != null" >
+        actual_amount = #{actualAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditReason != null" >
+        audit_reason = #{auditReason,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentMode != null" >
+        payment_mode = #{paymentMode,jdbcType=INTEGER},
+      </if>
+      <if test="openingBankAddress != null" >
+        opening_bank_address = #{openingBankAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBankName != null" >
+        opening_bank_name = #{openingBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null" >
+        bank_card = #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayAccount != null" >
+        alipay_account = #{alipayAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatAccount != null" >
+        wechat_account = #{wechatAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeId != null" >
+        trade_id = #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.siam.system.modular.package_user.entity.MemberWithdrawRecord" >
+    update tb_member_withdraw_record
+    set member_id = #{memberId,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      coin_type = #{coinType,jdbcType=INTEGER},
+      withdraw_amount = #{withdrawAmount,jdbcType=DECIMAL},
+      platform_fee = #{platformFee,jdbcType=DECIMAL},
+      actual_amount = #{actualAmount,jdbcType=DECIMAL},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      audit_reason = #{auditReason,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      payment_mode = #{paymentMode,jdbcType=INTEGER},
+      opening_bank_address = #{openingBankAddress,jdbcType=VARCHAR},
+      opening_bank_name = #{openingBankName,jdbcType=VARCHAR},
+      bank_card = #{bankCard,jdbcType=VARCHAR},
+      alipay_account = #{alipayAccount,jdbcType=VARCHAR},
+      wechat_account = #{wechatAccount,jdbcType=VARCHAR},
+      trade_id = #{tradeId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

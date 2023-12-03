@@ -1,24 +1,42 @@
-# Compiled class file
-*.class
+﻿HELP.md
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
 
-# Log file
-*.log
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# BlueJ files
-*.ctxt
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+### VS Code ###
+.vscode/
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+### Maven����Ŀ¼ ###
+target
+logs/debug.log
+logs/error.log
+logs/warn.log
+logs/info.log
+
+logs
+log.path_IS_UNDEFINED
+
+application-test.yml

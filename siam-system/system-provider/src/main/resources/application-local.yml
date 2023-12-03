@@ -1,0 +1,227 @@
+#端口配置
+server:
+  port: 9202
+  servlet:
+    context-path: /siam-server
+
+spring:
+  #mysql
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/siam_db?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
+    username: root
+    password: siam1026@163.com
+
+  #thymeleaf
+  thymeleaf:
+    mode: LEGACYHTML5
+    encoding: utf-8
+    servlet:
+      content-type: text/html
+    #开发时关闭缓存,不然没法看到实时页面
+    cache: false
+
+  #redis单例模式
+  redis:
+    host: 127.0.0.1
+    password: siam1026@163.com
+    port: 6379
+    jedis:
+      pool:
+        # 连接池中的最大空闲连接个数
+        max-idle: 8
+        # 连接池中的最小空闲连接个数
+        min-idle: 0
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+    # 连接超时时间（毫秒）
+    timeout: 600000ms
+
+  #  #rabbitmq
+  #  rabbitmq:
+  #    host: 127.0.0.1
+  #    port: 5672
+  #    username: root
+  #    password: rabbitmq123
+  #    # 消息发送到交换机确认机制,是否确认回调
+  #    publisher-confirms: true
+  #    # 消息发送到交换机确认机制,是否返回回馈
+  #    publisher-returns: true
+
+  #允许bean重复定义/允许bean覆盖
+  main:
+    allow-bean-definition-overriding: true
+
+  jackson:
+    #时间戳统一转换为指定格式
+    date-format: yyyy/MM/dd HH:mm:ss
+    #时区修改为东8区
+    time-zone: GMT+8
+
+  #服务别名，注册到注册中心上的名字
+  application:
+    name: siam-server
+
+  #配置文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+  #邮件相关配置
+  mail:
+    host: smtp.126.com
+    password: siam1026@163.com
+    username: siam1026@163.com
+    properties:
+      mail:
+        smtp:
+          #非必要参数
+          auth: true
+          port: 465
+          ssl.enable: true
+          starttls.enable: true
+          #必要参数
+          timeout: 25000
+          socketFactory.class: javax.net.ssl.SSLSocketFactory
+          socketFactory.port: 465
+
+  shardingsphere:
+    datasource:
+      names: ds0,ds1
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/siam_db_0?characterEncoding=utf-8&useUnicode=true&useSSL=true
+        username: root
+        password: siam1026@163.com
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/siam_db_1?characterEncoding=utf-8&useUnicode=true&useSSL=true
+        username: root
+        password: siam1026@163.com
+    props:
+      sql:
+        show: true #是否显示sharding-jdbc的sql路由
+    sharding:
+      tables:
+        tb_points_mall_order:
+          actual-data-nodes: ds$->{0..1}.tb_points_mall_order_$->{0..1}
+          database-strategy:
+            inline:
+              algorithm-expression: ds$->{member_id % 2}
+              sharding-column: member_id
+          key-generator:
+            column: id
+            props:
+              worker:
+                id: 1
+            type: SNOWFLAKE
+          table-strategy:
+            inline:
+              algorithm-expression: tb_points_mall_order_$->{id % 2}
+              sharding-column: id
+
+#支付宝支付
+alipay:
+  # 应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号
+  appId: siam1026@163.com
+  # 商户私钥，您的PKCS8格式RSA2私钥
+  privateKey: siam1026@163.com
+  # 支付宝公钥,查看地址：https://openhome.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
+  publicKey: siam1026@163.com
+  # 服务器异步通知页面路径需http://格式的完整路径，不能加?id=123这类自定义参数
+  notifyUrl: http://127.0.0.1:8080/siam-multi-brand-server/rest/pay/alipayCallback
+  # 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数
+  returnUrl: http://127.0.0.1:8080/siam-multi-brand-server/swagger-ui.html
+  # 签名方式
+  signType: RSA2
+  # 字符编码格式
+  charset: utf-8
+  # 支付宝网关
+  gatewayUrl: https://openapi.alipaydev.com/gateway.do
+  # 支付宝网关
+  logPath: "C:\\"
+
+#微信支付
+wxpay:
+  #小程序appid
+  appId: siam1026@163.com
+  #微信支付的商户id
+  mchId: siam1026@163.com
+  #微信支付的商户密钥
+  mchKey: siam1026@163.com
+  #签名方式
+  signType: MD5
+  #交易类型
+  tradeType: JSAPI
+  #微信统一下单接口地址
+  payUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
+  #支付成功后的服务器回调url
+  #  notifyUrl: https://deerspotapi.siam.cn/rest/member/wxPay/notify
+  notifyUrl: https://test-api.siam.shop/rest/member/wxPay/notify
+  #微信退款接口地址
+  refundUrl: https://api.mch.weixin.qq.com/secapi/pay/refund
+  #退款成功后的服务器回调url
+  refundSuccessNotifyUrl: https://test-api.siam.shop/rest/member/wxPay/refundSuccessNotify
+  #企业付款到零钱接口地址
+  payToBalanceUrl: https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers
+
+wxPublicPlatform:
+  appId: siam1026@163.com
+  secret: siam1026@163.com
+
+#mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath*:com/siam/**/*Mapper.xml
+  #  type-aliases-package: com.mht.springbootmybatisplus.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#rocketmq配置
+rocketmq:
+  #消息通道
+  name-server: 127.0.0.1:9876
+  producer:
+    group: orderProducerGroup
+
+#springboot admin相关配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" #'prometheus,health'
+        exclude: "shutdown"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: ALWAYS
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        step: 1ms
+        descriptions: true
+    tags:
+      # 为指标设置一个Tag，这里设置为应用名，Tag是Prometheus提供的一种能力，从而实现更加灵活的筛选
+      application: ${spring.application.name}
+  # 禁止Actuator监控以下组件连接
+  health:
+    rabbit:
+      enabled: false
+    mongo:
+      enabled: false
+    elasticsearch:
+      enabled: false
+
+#日志配置
+logging:
+  file:
+    name: ./logs/${spring.application.name}/log_info.log
+path:
+  log: ./logs/${spring.application.name}/

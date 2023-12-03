@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+  <mapper namespace="com.siam.system.modular.package_goods.mapper.internal.VipRechargeRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.siam.system.modular.package_goods.entity.internal.VipRechargeRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="channel" property="channel" jdbcType="INTEGER" />
+    <result column="denomination_id" property="denominationId" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="denomination_name" property="denominationName" jdbcType="VARCHAR" />
+    <result column="denomination_price" property="denominationPrice" jdbcType="DECIMAL" />
+    <result column="denomination_is_sale" property="denominationIsSale" jdbcType="BIT" />
+    <result column="denomination_sale_price" property="denominationSalePrice" jdbcType="DECIMAL" />
+    <result column="denomination_is_give_balance" property="denominationIsGiveBalance" jdbcType="BIT" />
+    <result column="denomination_give_balance" property="denominationGiveBalance" jdbcType="DECIMAL" />
+    <result column="denomination_is_give_coupons" property="denominationIsGiveCoupons" jdbcType="BIT" />
+    <result column="denomination_give_coupons_description" property="denominationGiveCouponsDescription" jdbcType="VARCHAR" />
+    <result column="denomination_give_coupons_json" property="denominationGiveCouponsJson" jdbcType="VARCHAR" />
+    <result column="trade_id" property="tradeId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="java.util.Map" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="channel" property="channel" jdbcType="INTEGER" />
+    <result column="denomination_id" property="denominationId" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="denomination_name" property="denominationName" jdbcType="VARCHAR" />
+    <result column="denomination_price" property="denominationPrice" jdbcType="DECIMAL" />
+    <result column="denomination_is_sale" property="denominationIsSale" jdbcType="BIT" />
+    <result column="denomination_sale_price" property="denominationSalePrice" jdbcType="DECIMAL" />
+    <result column="denomination_is_give_balance" property="denominationIsGiveBalance" jdbcType="BIT" />
+    <result column="denomination_give_balance" property="denominationGiveBalance" jdbcType="DECIMAL" />
+    <result column="denomination_is_give_coupons" property="denominationIsGiveCoupons" jdbcType="BIT" />
+    <result column="denomination_give_coupons_description" property="denominationGiveCouponsDescription" jdbcType="VARCHAR" />
+    <result column="denomination_give_coupons_json" property="denominationGiveCouponsJson" jdbcType="VARCHAR" />
+    <result column="trade_id" property="tradeId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, member_id, order_no, channel, denomination_id, amount, denomination_name, denomination_price,
+    denomination_is_sale, denomination_sale_price, denomination_is_give_balance, denomination_give_balance,
+    denomination_is_give_coupons, denomination_give_coupons_description, denomination_give_coupons_json,
+    trade_id, status, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.siam.system.modular.package_goods.model.example.internal.VipRechargeRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_vip_recharge_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_vip_recharge_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_vip_recharge_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.siam.system.modular.package_goods.model.example.internal.VipRechargeRecordExample" >
+    delete from tb_vip_recharge_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.siam.system.modular.package_goods.entity.internal.VipRechargeRecord" useGeneratedKeys="true" keyProperty="id" >
+    insert into tb_vip_recharge_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="channel != null" >
+        channel,
+      </if>
+      <if test="denominationId != null" >
+        denomination_id,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="denominationName != null" >
+        denomination_name,
+      </if>
+      <if test="denominationPrice != null" >
+        denomination_price,
+      </if>
+      <if test="denominationIsSale != null" >
+        denomination_is_sale,
+      </if>
+      <if test="denominationSalePrice != null" >
+        denomination_sale_price,
+      </if>
+      <if test="denominationIsGiveBalance != null" >
+        denomination_is_give_balance,
+      </if>
+      <if test="denominationGiveBalance != null" >
+        denomination_give_balance,
+      </if>
+      <if test="denominationIsGiveCoupons != null" >
+        denomination_is_give_coupons,
+      </if>
+      <if test="denominationGiveCouponsDescription != null" >
+        denomination_give_coupons_description,
+      </if>
+      <if test="denominationGiveCouponsJson != null" >
+        denomination_give_coupons_json,
+      </if>
+      <if test="tradeId != null" >
+        trade_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=INTEGER},
+      </if>
+      <if test="denominationId != null" >
+        #{denominationId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="denominationName != null" >
+        #{denominationName,jdbcType=VARCHAR},
+      </if>
+      <if test="denominationPrice != null" >
+        #{denominationPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="denominationIsSale != null" >
+        #{denominationIsSale,jdbcType=BIT},
+      </if>
+      <if test="denominationSalePrice != null" >
+        #{denominationSalePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="denominationIsGiveBalance != null" >
+        #{denominationIsGiveBalance,jdbcType=BIT},
+      </if>
+      <if test="denominationGiveBalance != null" >
+        #{denominationGiveBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="denominationIsGiveCoupons != null" >
+        #{denominationIsGiveCoupons,jdbcType=BIT},
+      </if>
+      <if test="denominationGiveCouponsDescription != null" >
+        #{denominationGiveCouponsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="denominationGiveCouponsJson != null" >
+        #{denominationGiveCouponsJson,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeId != null" >
+        #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.siam.system.modular.package_goods.model.example.internal.VipRechargeRecordExample" resultType="java.lang.Integer" >
+    select count(*) from tb_vip_recharge_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_vip_recharge_record
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.memberId != null" >
+        member_id = #{record.memberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channel != null" >
+        channel = #{record.channel,jdbcType=INTEGER},
+      </if>
+      <if test="record.denominationId != null" >
+        denomination_id = #{record.denominationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.denominationName != null" >
+        denomination_name = #{record.denominationName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.denominationPrice != null" >
+        denomination_price = #{record.denominationPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.denominationIsSale != null" >
+        denomination_is_sale = #{record.denominationIsSale,jdbcType=BIT},
+      </if>
+      <if test="record.denominationSalePrice != null" >
+        denomination_sale_price = #{record.denominationSalePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.denominationIsGiveBalance != null" >
+        denomination_is_give_balance = #{record.denominationIsGiveBalance,jdbcType=BIT},
+      </if>
+      <if test="record.denominationGiveBalance != null" >
+        denomination_give_balance = #{record.denominationGiveBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.denominationIsGiveCoupons != null" >
+        denomination_is_give_coupons = #{record.denominationIsGiveCoupons,jdbcType=BIT},
+      </if>
+      <if test="record.denominationGiveCouponsDescription != null" >
+        denomination_give_coupons_description = #{record.denominationGiveCouponsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.denominationGiveCouponsJson != null" >
+        denomination_give_coupons_json = #{record.denominationGiveCouponsJson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tradeId != null" >
+        trade_id = #{record.tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_vip_recharge_record
+    set id = #{record.id,jdbcType=INTEGER},
+    member_id = #{record.memberId,jdbcType=INTEGER},
+    order_no = #{record.orderNo,jdbcType=VARCHAR},
+    channel = #{record.channel,jdbcType=INTEGER},
+    denomination_id = #{record.denominationId,jdbcType=INTEGER},
+    amount = #{record.amount,jdbcType=DECIMAL},
+    denomination_name = #{record.denominationName,jdbcType=VARCHAR},
+    denomination_price = #{record.denominationPrice,jdbcType=DECIMAL},
+    denomination_is_sale = #{record.denominationIsSale,jdbcType=BIT},
+    denomination_sale_price = #{record.denominationSalePrice,jdbcType=DECIMAL},
+    denomination_is_give_balance = #{record.denominationIsGiveBalance,jdbcType=BIT},
+    denomination_give_balance = #{record.denominationGiveBalance,jdbcType=DECIMAL},
+    denomination_is_give_coupons = #{record.denominationIsGiveCoupons,jdbcType=BIT},
+    denomination_give_coupons_description = #{record.denominationGiveCouponsDescription,jdbcType=VARCHAR},
+    denomination_give_coupons_json = #{record.denominationGiveCouponsJson,jdbcType=VARCHAR},
+    trade_id = #{record.tradeId,jdbcType=INTEGER},
+    status = #{record.status,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.siam.system.modular.package_goods.entity.internal.VipRechargeRecord" >
+    update tb_vip_recharge_record
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=INTEGER},
+      </if>
+      <if test="denominationId != null" >
+        denomination_id = #{denominationId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="denominationName != null" >
+        denomination_name = #{denominationName,jdbcType=VARCHAR},
+      </if>
+      <if test="denominationPrice != null" >
+        denomination_price = #{denominationPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="denominationIsSale != null" >
+        denomination_is_sale = #{denominationIsSale,jdbcType=BIT},
+      </if>
+      <if test="denominationSalePrice != null" >
+        denomination_sale_price = #{denominationSalePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="denominationIsGiveBalance != null" >
+        denomination_is_give_balance = #{denominationIsGiveBalance,jdbcType=BIT},
+      </if>
+      <if test="denominationGiveBalance != null" >
+        denomination_give_balance = #{denominationGiveBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="denominationIsGiveCoupons != null" >
+        denomination_is_give_coupons = #{denominationIsGiveCoupons,jdbcType=BIT},
+      </if>
+      <if test="denominationGiveCouponsDescription != null" >
+        denomination_give_coupons_description = #{denominationGiveCouponsDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="denominationGiveCouponsJson != null" >
+        denomination_give_coupons_json = #{denominationGiveCouponsJson,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeId != null" >
+        trade_id = #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.siam.system.modular.package_goods.entity.internal.VipRechargeRecord" >
+    update tb_vip_recharge_record
+    set member_id = #{memberId,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      channel = #{channel,jdbcType=INTEGER},
+      denomination_id = #{denominationId,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      denomination_name = #{denominationName,jdbcType=VARCHAR},
+      denomination_price = #{denominationPrice,jdbcType=DECIMAL},
+      denomination_is_sale = #{denominationIsSale,jdbcType=BIT},
+      denomination_sale_price = #{denominationSalePrice,jdbcType=DECIMAL},
+      denomination_is_give_balance = #{denominationIsGiveBalance,jdbcType=BIT},
+      denomination_give_balance = #{denominationGiveBalance,jdbcType=DECIMAL},
+      denomination_is_give_coupons = #{denominationIsGiveCoupons,jdbcType=BIT},
+      denomination_give_coupons_description = #{denominationGiveCouponsDescription,jdbcType=VARCHAR},
+      denomination_give_coupons_json = #{denominationGiveCouponsJson,jdbcType=VARCHAR},
+      trade_id = #{tradeId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

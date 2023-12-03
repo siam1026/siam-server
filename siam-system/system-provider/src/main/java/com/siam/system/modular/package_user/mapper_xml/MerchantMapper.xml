@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.siam.system.modular.package_user.mapper.MerchantMapper" >
+  <resultMap id="BaseResultMap" type="com.siam.system.modular.package_user.entity.Merchant" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="password_salt" property="passwordSalt" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="roles" property="roles" jdbcType="VARCHAR" />
+    <result column="head_img" property="headImg" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="certificate_type" property="certificateType" jdbcType="VARCHAR" />
+    <result column="certificate_img" property="certificateImg" jdbcType="VARCHAR" />
+    <result column="is_disabled" property="isDisabled" jdbcType="BIT" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="opening_bank_address" property="openingBankAddress" jdbcType="VARCHAR" />
+    <result column="opening_bank_name" property="openingBankName" jdbcType="VARCHAR" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="alipay_account" property="alipayAccount" jdbcType="VARCHAR" />
+    <result column="wechat_account" property="wechatAccount" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="withdrawable_balance" property="withdrawableBalance" jdbcType="DECIMAL" />
+    <result column="frozen_balance" property="frozenBalance" jdbcType="DECIMAL" />
+    <result column="order_frozen_balance" property="orderFrozenBalance" jdbcType="DECIMAL" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="java.util.Map" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="password_salt" property="passwordSalt" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="roles" property="roles" jdbcType="VARCHAR" />
+    <result column="head_img" property="headImg" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="certificate_type" property="certificateType" jdbcType="VARCHAR" />
+    <result column="certificate_img" property="certificateImg" jdbcType="VARCHAR" />
+    <result column="is_disabled" property="isDisabled" jdbcType="BIT" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="opening_bank_address" property="openingBankAddress" jdbcType="VARCHAR" />
+    <result column="opening_bank_name" property="openingBankName" jdbcType="VARCHAR" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="alipay_account" property="alipayAccount" jdbcType="VARCHAR" />
+    <result column="wechat_account" property="wechatAccount" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="withdrawable_balance" property="withdrawableBalance" jdbcType="DECIMAL" />
+    <result column="frozen_balance" property="frozenBalance" jdbcType="DECIMAL" />
+    <result column="order_frozen_balance" property="orderFrozenBalance" jdbcType="DECIMAL" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, shop_id, username, mobile, PASSWORD, password_salt, nickname, roles, head_img,
+    sex, email, certificate_type, certificate_img, is_disabled, is_deleted, audit_status,
+    real_name, id_card, opening_bank_address, opening_bank_name, bank_card, alipay_account,
+    wechat_account, balance, withdrawable_balance, frozen_balance, order_frozen_balance,
+    member_id, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.siam.system.modular.package_user.model.example.MerchantExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_merchant
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_merchant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_merchant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.siam.system.modular.package_user.model.example.MerchantExample" >
+    delete from tb_merchant
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.siam.system.modular.package_user.entity.Merchant" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_merchant
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="passwordSalt != null" >
+        password_salt,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="roles != null" >
+        roles,
+      </if>
+      <if test="headImg != null" >
+        head_img,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="certificateType != null" >
+        certificate_type,
+      </if>
+      <if test="certificateImg != null" >
+        certificate_img,
+      </if>
+      <if test="isDisabled != null" >
+        is_disabled,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="realName != null" >
+        real_name,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="openingBankAddress != null" >
+        opening_bank_address,
+      </if>
+      <if test="openingBankName != null" >
+        opening_bank_name,
+      </if>
+      <if test="bankCard != null" >
+        bank_card,
+      </if>
+      <if test="alipayAccount != null" >
+        alipay_account,
+      </if>
+      <if test="wechatAccount != null" >
+        wechat_account,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="withdrawableBalance != null" >
+        withdrawable_balance,
+      </if>
+      <if test="frozenBalance != null" >
+        frozen_balance,
+      </if>
+      <if test="orderFrozenBalance != null" >
+        order_frozen_balance,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="passwordSalt != null" >
+        #{passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="roles != null" >
+        #{roles,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null" >
+        #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateType != null" >
+        #{certificateType,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateImg != null" >
+        #{certificateImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisabled != null" >
+        #{isDisabled,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBankAddress != null" >
+        #{openingBankAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBankName != null" >
+        #{openingBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null" >
+        #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayAccount != null" >
+        #{alipayAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatAccount != null" >
+        #{wechatAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawableBalance != null" >
+        #{withdrawableBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="frozenBalance != null" >
+        #{frozenBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="orderFrozenBalance != null" >
+        #{orderFrozenBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.siam.system.modular.package_user.model.example.MerchantExample" resultType="java.lang.Integer" >
+    select count(*) from tb_merchant
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_merchant
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.shopId != null" >
+        shop_id = #{record.shopId,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null" >
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        PASSWORD = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.passwordSalt != null" >
+        password_salt = #{record.passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nickname != null" >
+        nickname = #{record.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roles != null" >
+        roles = #{record.roles,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headImg != null" >
+        head_img = #{record.headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=INTEGER},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certificateType != null" >
+        certificate_type = #{record.certificateType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certificateImg != null" >
+        certificate_img = #{record.certificateImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDisabled != null" >
+        is_disabled = #{record.isDisabled,jdbcType=BIT},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+      <if test="record.auditStatus != null" >
+        audit_status = #{record.auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.realName != null" >
+        real_name = #{record.realName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCard != null" >
+        id_card = #{record.idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openingBankAddress != null" >
+        opening_bank_address = #{record.openingBankAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openingBankName != null" >
+        opening_bank_name = #{record.openingBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankCard != null" >
+        bank_card = #{record.bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alipayAccount != null" >
+        alipay_account = #{record.alipayAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wechatAccount != null" >
+        wechat_account = #{record.wechatAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.balance != null" >
+        balance = #{record.balance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.withdrawableBalance != null" >
+        withdrawable_balance = #{record.withdrawableBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.frozenBalance != null" >
+        frozen_balance = #{record.frozenBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderFrozenBalance != null" >
+        order_frozen_balance = #{record.orderFrozenBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.memberId != null" >
+        member_id = #{record.memberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_merchant
+    set id = #{record.id,jdbcType=INTEGER},
+    shop_id = #{record.shopId,jdbcType=INTEGER},
+    username = #{record.username,jdbcType=VARCHAR},
+    mobile = #{record.mobile,jdbcType=VARCHAR},
+    PASSWORD = #{record.password,jdbcType=VARCHAR},
+    password_salt = #{record.passwordSalt,jdbcType=VARCHAR},
+    nickname = #{record.nickname,jdbcType=VARCHAR},
+    roles = #{record.roles,jdbcType=VARCHAR},
+    head_img = #{record.headImg,jdbcType=VARCHAR},
+    sex = #{record.sex,jdbcType=INTEGER},
+    email = #{record.email,jdbcType=VARCHAR},
+    certificate_type = #{record.certificateType,jdbcType=VARCHAR},
+    certificate_img = #{record.certificateImg,jdbcType=VARCHAR},
+    is_disabled = #{record.isDisabled,jdbcType=BIT},
+    is_deleted = #{record.isDeleted,jdbcType=BIT},
+    audit_status = #{record.auditStatus,jdbcType=INTEGER},
+    real_name = #{record.realName,jdbcType=VARCHAR},
+    id_card = #{record.idCard,jdbcType=VARCHAR},
+    opening_bank_address = #{record.openingBankAddress,jdbcType=VARCHAR},
+    opening_bank_name = #{record.openingBankName,jdbcType=VARCHAR},
+    bank_card = #{record.bankCard,jdbcType=VARCHAR},
+    alipay_account = #{record.alipayAccount,jdbcType=VARCHAR},
+    wechat_account = #{record.wechatAccount,jdbcType=VARCHAR},
+    balance = #{record.balance,jdbcType=DECIMAL},
+    withdrawable_balance = #{record.withdrawableBalance,jdbcType=DECIMAL},
+    frozen_balance = #{record.frozenBalance,jdbcType=DECIMAL},
+    order_frozen_balance = #{record.orderFrozenBalance,jdbcType=DECIMAL},
+    member_id = #{record.memberId,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.siam.system.modular.package_user.entity.Merchant" >
+    update tb_merchant
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="passwordSalt != null" >
+        password_salt = #{passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="roles != null" >
+        roles = #{roles,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null" >
+        head_img = #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateType != null" >
+        certificate_type = #{certificateType,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateImg != null" >
+        certificate_img = #{certificateImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisabled != null" >
+        is_disabled = #{isDisabled,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBankAddress != null" >
+        opening_bank_address = #{openingBankAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBankName != null" >
+        opening_bank_name = #{openingBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null" >
+        bank_card = #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayAccount != null" >
+        alipay_account = #{alipayAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatAccount != null" >
+        wechat_account = #{wechatAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawableBalance != null" >
+        withdrawable_balance = #{withdrawableBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="frozenBalance != null" >
+        frozen_balance = #{frozenBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="orderFrozenBalance != null" >
+        order_frozen_balance = #{orderFrozenBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.siam.system.modular.package_user.entity.Merchant" >
+    update tb_merchant
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      password_salt = #{passwordSalt,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      roles = #{roles,jdbcType=VARCHAR},
+      head_img = #{headImg,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      certificate_type = #{certificateType,jdbcType=VARCHAR},
+      certificate_img = #{certificateImg,jdbcType=VARCHAR},
+      is_disabled = #{isDisabled,jdbcType=BIT},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      real_name = #{realName,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      opening_bank_address = #{openingBankAddress,jdbcType=VARCHAR},
+      opening_bank_name = #{openingBankName,jdbcType=VARCHAR},
+      bank_card = #{bankCard,jdbcType=VARCHAR},
+      alipay_account = #{alipayAccount,jdbcType=VARCHAR},
+      wechat_account = #{wechatAccount,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=DECIMAL},
+      withdrawable_balance = #{withdrawableBalance,jdbcType=DECIMAL},
+      frozen_balance = #{frozenBalance,jdbcType=DECIMAL},
+      order_frozen_balance = #{orderFrozenBalance,jdbcType=DECIMAL},
+      member_id = #{memberId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

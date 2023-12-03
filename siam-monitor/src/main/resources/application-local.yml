@@ -1,0 +1,57 @@
+#端口配置
+server:
+  port: 9100
+
+spring:
+  #服务别名，注册到注册中心上的名字
+  application:
+    name: actuator-monitor
+
+  security:
+    user:
+      name: admin
+      password: admin
+
+  boot:
+    admin:
+      notify:
+        mail:
+          to: siam1026@163.com
+          from: siam1026@163.com
+          subject: Spring Boot Admin Alert
+          text: Application ${spring.boot.admin.notify.instance.name} (${spring.boot.admin.notify.instance.id}) is ${spring.boot.admin.notify.status} at ${spring.boot.admin.notify.last.status.timestamp}
+
+  #邮件相关配置
+  mail:
+    host: smtp.126.com
+    password: siam1026@163.com
+    username: siam1026@163.com
+    properties:
+      mail:
+        smtp:
+          #非必要参数
+          auth: true
+          port: 465
+          ssl.enable: true
+          starttls.enable: true
+          #必要参数
+          timeout: 25000
+          socketFactory.class: javax.net.ssl.SSLSocketFactory
+          socketFactory.port: 465
+
+#eureka配置
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9600/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    #配置使用ip地址来注册(默认是主机名称)
+    prefer-ip-address: true
+    #心跳检测暂时不配置
+
+#  boot:
+#    admin:
+#      monitor:
+#        default-timeout: 30000
