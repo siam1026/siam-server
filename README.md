@@ -8,7 +8,7 @@
 <h4 align="center">基于SpringBoot开发的餐饮点餐系统</h4>
 
 <p align="center">
-<a target="_blank" href="https://gitee.com/siam1026/siam-server">
+<a target="_blank" href="https://github.com/siam1026/siam-server">
     	<img src="https://img.shields.io/hexpm/l/plug.svg" ></img>
 		<img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
         <img src="https://img.shields.io/badge/nodejs-14.x-green" ></img>
@@ -21,7 +21,7 @@
 
 ##  前言
 
-**微信公众号【[暹罗siam](https://gitee.com/siam1026/siam-server/raw/master/doc/images/wechat/公众号.jpg)】**，未来将会在公众号上持续性的输出很多原创小知识以及学习资源，欢迎各位小伙伴关注我，和我一起共同学习，同时我也希望各位小伙伴能够给**暹罗点餐**项目多多 **Star** 支持，您的**点赞**就是我维护的动力！
+**微信公众号【[暹罗siam](https://github.com/siam1026/siam-server/raw/master/doc/images/wechat/公众号.jpg)】**，未来将会在公众号上持续性的输出很多原创小知识以及学习资源，欢迎各位小伙伴关注我，和我一起共同学习，同时我也希望各位小伙伴能够给**暹罗点餐**项目多多 **Star** 支持，您的**点赞**就是我维护的动力！
 
 <p align=center>
     <img src="./doc/images/wechat/公众号.jpg" width="500" />
@@ -29,7 +29,7 @@
 
 项目已有较详细的  [系统功能清单](https://docs.qq.com/sheet/DYWxmUkpPdkNha0pa?tab=BB08J2) 和 [项目搭建文档](https://gitee.com/siam1026/siam-server/wikis/pages) ，同时包括了 **Windows**、**Linux** 以及 **Docker** 环境下暹罗点餐的搭建。在使用过程中遇到问题时，首先认真阅读**项目搭建文档**~
 
-【提问】推荐使用 [Gitee issue](https://gitee.com/siam1026/siam-server/issues) 进行提问，因为issue解决后能够保留解决记录，帮助其它小伙伴避坑。其次可以使用 <a href="https://gitee.com/siam1026/siam-server#关注和交流">QQ群 </a>  或者 <a href="https://gitee.com/siam1026/siam-server#关注和交流">微信群 </a> 进行提问。群里提问注意提问的时间，把遇到**问题的详细过程都描述清楚**，最好**配上图文信息**，这样能有利于更高效的解决问题。
+【提问】推荐使用 [Gitee issue](https://github.com/siam1026/siam-server/issues) 进行提问，因为issue解决后能够保留解决记录，帮助其它小伙伴避坑。其次可以使用 <a href="https://github.com/siam1026/siam-server#关注和交流">QQ群 </a>  或者 <a href="https://github.com/siam1026/siam-server#关注和交流">微信群 </a> 进行提问。群里提问注意提问的时间，把遇到**问题的详细过程都描述清楚**，最好**配上图文信息**，这样能有利于更高效的解决问题。
 
 ## 项目介绍
 
@@ -42,7 +42,7 @@
 * 搜索引擎使用ElasticSearch，日志中心使用ELK。
 * 监控服务选型SpringBoot Admin。
 
-#### 友情链接 [暹罗/siam-cloud](https://gitee.com/siam1026/siam-cloud) 微服务版本。
+#### 友情链接 [暹罗/siam-cloud](https://github.com/siam1026/siam-cloud) 微服务版本。
 
 ## 系统模块
 
@@ -90,7 +90,7 @@ com.siam
 >
 > 【演示调度后台】：https://spa.show.siamit.cn/server-admin
 >
-> 【演示账号】：[点击获取](https://gitee.com/siam1026/siam-server/raw/master/doc/images/wechat/公众号_演示账号.png)
+> 【演示账号】：[点击获取](https://github.com/siam1026/siam-server/raw/master/doc/images/wechat/公众号_演示账号.png)
 >
 > 【小程序】暹罗点餐的移动端版本，可以扫码体验。
 
@@ -124,7 +124,7 @@ com.siam
 
 |                   微信群【备注：加群】                   | QQ群（备注：`暹罗点餐`）                       |
 | :------------------------------------------------------: | :------------------------------------------------------: |
-| <img src="https://gitee.com/siam1026/siam-server/raw/master/doc/images/wechat/添加暹罗.jpg" width="200" /> | <img src="https://gitee.com/siam1026/siam-server/raw/master/doc/images/qq/qqGroup2.jpg" width="200" /> |
+| <img src="https://github.com/siam1026/siam-server/raw/master/doc/images/wechat/添加暹罗.jpg" width="200" /> | <img src="https://github.com/siam1026/siam-server/raw/master/doc/images/qq/qqGroup2.jpg" width="200" /> |
 
 
 ## 微信小程序截图
