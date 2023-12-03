@@ -13,5 +13,5 @@ ENV JAVA_SW_AGENT="-javaagent:/opt/apache-skywalking-apm-bin/agent/skywalking-ag
 EXPOSE 9041
 
 # ENTRYPOINT ["sh", "-c", "java $JAVA_JMX_PROMETHEUS $JAVA_SW_AGENT -jar /app.jar"]
-# ENTRYPOINT ["sh", "-c", "java -Xms256m -Xmx512m $JAVA_SW_AGENT -jar /app.jar"]
-ENTRYPOINT ["sh", "-c", "java -Xms256m -Xmx256m -jar /app.jar"]
+# ENTRYPOINT ["sh", "-c", "java -Xms128m -Xmx256m $JAVA_SW_AGENT -jar /app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Xms128m -Xmx256m -jar /app.jar"]

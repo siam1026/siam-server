@@ -6,4 +6,4 @@ COPY target/*.jar /app.jar
 # 应用端口
 EXPOSE 9041
 
-ENTRYPOINT ["sh", "-c", "java -Xms256m -Xmx256m -jar /app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Xms128m -Xmx256m -jar /app.jar"]

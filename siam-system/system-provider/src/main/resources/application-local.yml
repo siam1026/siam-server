@@ -1,6 +1,6 @@
 #端口配置
 server:
-  port: 9202
+  port: 9200
   servlet:
     context-path: /siam-server
 
