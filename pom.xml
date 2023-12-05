@@ -16,7 +16,7 @@
     </modules>
 
     <name>siam-parent</name>
-    <!-- 将其更改为项目的网站 -->
+    <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
     <properties>
