@@ -40,3 +40,4 @@ logs
 log.path_IS_UNDEFINED
 
 application-test.yml
+application-show.yml
