@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.siam</groupId>
-    <artifactId>siam-parent</artifactId>
+    <artifactId>siam-server</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
@@ -15,8 +15,8 @@
         <module>./siam-monitor</module>
     </modules>
 
-    <name>siam-parent</name>
-    <!-- FIXME change it to the project's website -->
+    <name>siam-server</name>
+    <!-- 将其更改为项目的网站 -->
     <url>http://www.example.com</url>
 
     <properties>
