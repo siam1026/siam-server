@@ -72,9 +72,8 @@
 
 ~~~
 com.siam     
-├── vue-siam-admin          // 前端-调度后台 [80]
 ├── vue-siam-shop           // 前端-商家后台 [80]
-├── wxapplet-siam-system    // 前端-微信小程序
+├── vue-siam-admin          // 前端-调度后台 [80]
 ├── siam-system             // web服务 [9200]
 ├── siam-monitor            // 监控服务 [9100]
 ├── siam-common             // 通用模块
