@@ -90,7 +90,7 @@ com.siam
 >
 > 【演示账号】：[点击获取](https://github.com/siam1026/siam-server/raw/master/doc/images/wechat/公众号_演示账号.png)
 >
-> 【小程序】暹罗点餐的移动端版本，微信上架审核未通过，[请加入QQ群或微信群获取体验版本](https://github.com/siam1026/siam-server#关注和交流)
+> 【小程序】暹罗点餐的移动端版本，微信上架审核中，[请加入QQ群或微信群获取体验版本](https://github.com/siam1026/siam-server#关注和交流)
 
 |                                                          |
 | :------------------------------------------------------: |
