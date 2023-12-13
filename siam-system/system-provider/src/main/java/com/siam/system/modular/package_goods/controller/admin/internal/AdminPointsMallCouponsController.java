@@ -44,7 +44,7 @@ public class AdminPointsMallCouponsController {
     public BasicResult update(@RequestBody @Validated(value = {}) PointsMallCoupons coupons){
         BasicResult basicResult = new BasicResult();
 
-        //todo jiangyang
+        //todo 暹罗
         pointsMallCouponsService.updateByPrimaryKeySelective(coupons);
 
         basicResult.setSuccess(true);

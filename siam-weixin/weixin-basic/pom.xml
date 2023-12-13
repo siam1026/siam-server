@@ -5,15 +5,14 @@
     <parent>
         <artifactId>siam-weixin</artifactId>
         <groupId>com.siam</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>weixin-basic</artifactId>
 
     <name>weixin-basic</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>https://www.siamit.cn</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,6 +27,5 @@
             <artifactId>weixin-java-pay</artifactId>
             <version>3.4.0</version>
         </dependency>
-
     </dependencies>
 </project>

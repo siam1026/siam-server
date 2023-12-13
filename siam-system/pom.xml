@@ -5,7 +5,7 @@
     <parent>
         <artifactId>siam-server</artifactId>
         <groupId>com.siam</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,26 +14,19 @@
     <packaging>pom</packaging>
 
     <name>siam-system</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>https://www.siamit.cn</url>
+
     <modules>
         <module>system-api</module>
         <module>system-provider</module>
     </modules>
 
     <dependencies>
-        <!-- 引入暹罗-公共配置模块API -->
+        <!-- 引入公共配置模块API -->
         <dependency>
             <groupId>com.siam</groupId>
             <artifactId>siam-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <!-- 引入暹罗-微信支付模块API -->
-        <dependency>
-            <groupId>com.siam</groupId>
-            <artifactId>weixin-pay</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 
@@ -42,5 +35,4 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
-
 </project>

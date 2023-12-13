@@ -645,7 +645,7 @@ export default {
       let vue = this;
       vue.$http.post(
         vue,
-        "/api-goods/rest/merchant/shop/getLoginMerchantShopInfo",
+        "/rest/merchant/shop/getLoginMerchantShopInfo",
         {},
         (vue, data) => {
           let obj = data.data;
@@ -845,7 +845,7 @@ export default {
 
           vue.$http.post(
             vue,
-            "/api-goods/rest/merchant/shop/apply",
+            "/rest/merchant/shop/apply",
             param,
             (vue, data) => {
               vue.$message({
@@ -914,7 +914,7 @@ export default {
       formData.append("file", value);
       vue.$http.postupload(
         vue,
-        "/api-goods/rest/merchant/uploadSingleImage",
+        "/rest/merchant/uploadSingleImage",
         formData,
         function (vue, data) {
           option.onSuccess();

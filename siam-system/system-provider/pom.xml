@@ -5,15 +5,14 @@
     <parent>
         <artifactId>siam-system</artifactId>
         <groupId>com.siam</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>system-provider</artifactId>
 
     <name>system-provider</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>https://www.siamit.cn</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,168 +21,46 @@
     </properties>
 
     <dependencies>
-        <!-- 引入暹罗-公共配置模块API -->
-        <dependency>
-            <groupId>com.siam</groupId>
-            <artifactId>siam-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <!-- 引入暹罗-用户模块API -->
+        <!-- 引入系统模块API -->
         <dependency>
             <groupId>com.siam</groupId>
             <artifactId>system-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- 引入微信支付模块API -->
+        <dependency>
+            <groupId>com.siam</groupId>
+            <artifactId>weixin-pay</artifactId>
+            <version>1.0</version>
         </dependency>
 
         <!-- 引入redis配置模块API -->
         <!--<dependency>-->
         <!--<groupId>com.siam</groupId>-->
         <!--<artifactId>siam-redis</artifactId>-->
-        <!--<version>1.0-SNAPSHOT</version>-->
+        <!--<version>1.0</version>-->
         <!--</dependency>-->
 
         <!-- 引入mongodb配置模块API -->
         <!--<dependency>-->
         <!--<groupId>com.siam</groupId>-->
         <!--<artifactId>siam-mongodb</artifactId>-->
-        <!--<version>1.0-SNAPSHOT</version>-->
+        <!--<version>1.0</version>-->
         <!--</dependency>-->
 
-        <!-- 整合springmvc web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!--&lt;!&ndash; 整合mybatis（需要手动指定版本，springboot未分配） &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.mybatis.spring.boot</groupId>-->
-        <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
-        <!--<version>1.3.2</version>-->
-        <!--</dependency>-->
-
-        <!--&lt;!&ndash; 整合pagehelper &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>com.github.pagehelper</groupId>-->
-        <!--<artifactId>pagehelper-spring-boot-starter</artifactId>-->
-        <!--<version>1.2.10</version>-->
-        <!--</dependency>-->
-
-        <!-- 整合mysql（非springboot，需要手动指定5.x版本，否则下载的8.x版本，版本过高会包错） -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <!-- 整合swagger2 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.7.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-
-        <!-- 整合google guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
-        </dependency>
-
-        <!-- 整合google gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.5</version>
-        </dependency>
-
-        <!-- 整合junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- 整合springboot-test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
-
-        <!-- 整合lombok，便于打印日志 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
-        </dependency>
-
-        <!-- 整合mongodb(默认跟随springboot的版本) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-
-        <!-- 整合redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
-        <!-- 整合rabbitmq(amqp代表一种协议) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-            <version>2.1.4.RELEASE</version>
-        </dependency>
-
-        <!-- 整合spring-data-elasticsearch -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-            <version>2.1.4.RELEASE</version>
-        </dependency>
-
-        <!-- 整合apache poi -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.17</version>
-        </dependency>
-
-        <!-- 整合poi-ooxml，因为这个包里面有XSSFWorkbook -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>3.17</version>
-        </dependency>
-
-        <!-- 引入Actuator监控依赖 -->
+        <!-- 整合Actuator监控依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>2.3.3.RELEASE</version>
         </dependency>
-        <!--这个包是作图形化服务端监控客户端：如果不用图形化客户端就不要导这个包-->
-        <!--<dependency>-->
-        <!--<groupId>de.codecentric</groupId>-->
-        <!--<artifactId>spring-boot-admin-starter-client</artifactId>-->
-        <!--<version>2.3.0</version>-->
-        <!--</dependency>-->
+
+        <!-- 整合prometheus -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.5.4</version>
         </dependency>
 
         <!-- 整合logstash -->
@@ -192,7 +69,6 @@
             <artifactId>logstash-logback-encoder</artifactId>
             <version>6.6</version>
         </dependency>
-
     </dependencies>
 
     <!--build内容也需要做替换，因为默认的spring-boot-maven-plugin这种方式，等到后期打包的时候他会一直提示你，你引入的依赖不存在！-->
@@ -201,6 +77,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.2</version>
                 <configuration>
                     <!--  指定该Main Class为全局的唯一入口 -->
                     <mainClass>com.siam.system.SiamApplication</mainClass>

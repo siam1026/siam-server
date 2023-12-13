@@ -124,6 +124,42 @@ spring:
               algorithm-expression: tb_points_mall_order_$->{id % 2}
               sharding-column: id
 
+  boot:
+    admin:
+      client:
+        #连接监控服务端的地址，也就是actuator的服务端的运行ip 端口
+        url: http://127.0.0.1:9100
+        username: admin
+        password: admin
+        instance:
+          prefer-ip: true
+
+#阿里云配置
+aliyun:
+  #短信服务
+  dysms:
+    accessKeyId: siam1026@163.com
+    secret: siam1026@163.com
+    signName: 暹罗外卖
+    templateCode: SMS_164681243
+    templateCode_verificationCode: SMS_177547102
+    templateCode_fatalError: SMS_187746991
+    templateCode_pickUpOrderComplete: SMS_193245384
+    templateCode_takeOutOrderDelivery: SMS_193235459
+    templateCode_couponsDistributeReminder: SMS_189032218
+    templateCode_couponsOverdueReminder: SMS_190270439
+
+  #OSS存储
+  oss:
+    accessKeyId: siam1026@163.com
+    secret: siam1026@163.com
+    endpoint: http://oss-cn-hangzhou.aliyuncs.com
+    bucketName: siam-hangzhou
+
+  #全国快递物流查询
+  express:
+    appCode: siam1026@163.com
+
 #支付宝支付
 alipay:
   # 应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号
@@ -168,6 +204,10 @@ wxpay:
   refundSuccessNotifyUrl: https://test-api.siam.shop/rest/member/wxPay/refundSuccessNotify
   #企业付款到零钱接口地址
   payToBalanceUrl: https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers
+
+wxlogin:
+  appId: siam1026@163.com
+  secret: siam1026@163.com
 
 wxPublicPlatform:
   appId: siam1026@163.com

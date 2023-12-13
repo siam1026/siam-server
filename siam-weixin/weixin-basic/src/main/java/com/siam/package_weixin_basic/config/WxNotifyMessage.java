@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * @author jiangyang
+ * @author 暹罗
  * @className SubscribeDataBean
  * @Description 订阅消息具体内容对象 根据对象不同key不同
  * @Date 2020/2/24-11:23

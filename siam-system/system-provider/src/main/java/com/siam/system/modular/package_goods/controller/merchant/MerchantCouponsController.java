@@ -128,7 +128,7 @@ public class MerchantCouponsController {
     public BasicResult update(@RequestBody @Validated(value = {}) Coupons coupons, HttpServletRequest request){
         BasicResult basicResult = new BasicResult();
 
-        //todo jiangyang
+        //todo 暹罗
         couponsService.updateByPrimaryKeySelective(coupons);
 
         basicResult.setSuccess(true);

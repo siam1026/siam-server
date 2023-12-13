@@ -464,8 +464,8 @@ export default {
           // delete param.detailImagesFile
           let url = "";
           param.id
-            ? (url = "/api-goods/rest/merchant/goods/update")
-            : (url = "/api-goods/rest/merchant/goods/insert");
+            ? (url = "/rest/merchant/goods/update")
+            : (url = "/rest/merchant/goods/insert");
           vue.$http.post(
             vue,
             url,
@@ -517,7 +517,7 @@ export default {
       let vue = this;
       vue.$http.post(
         vue,
-        "/api-goods/rest/merchant/goods/getById",
+        "/rest/merchant/goods/getById",
         { id },
         (vue, data) => {
           let obj = data.data;
@@ -565,7 +565,7 @@ export default {
       };
       vue.$http.post(
         vue,
-        "/api-goods/rest/merchant/menu/list",
+        "/rest/merchant/menu/list",
         param,
         (vue, data) => {
           vue.menuList = data.data.records;
@@ -668,7 +668,7 @@ export default {
       console.log(formData);
       _this.$http.postupload(
         _this,
-        "/api-goods/rest/merchant/uploadSingleImage",
+        "/rest/merchant/uploadSingleImage",
         formData,
         function (_this, data) {
           if (data.success) {
@@ -783,7 +783,7 @@ export default {
       console.log(formData);
       vue.$http.postupload(
         vue,
-        "/api-goods/rest/merchant/uploadSingleImage",
+        "/rest/merchant/uploadSingleImage",
         formData,
         function (vue, data) {
           if (data.success) {
@@ -922,7 +922,7 @@ export default {
         formData.append("file", file_);
         _this.$http.postupload(
           _this,
-          "/api-goods/rest/merchant/uploadSingleImage",
+          "/rest/merchant/uploadSingleImage",
           formData,
           function (_this, data) {
             console.log("============== data ==============");

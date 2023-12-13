@@ -2,4 +2,4 @@
 spring:
   profiles:
     #默认连接测试环境
-    active: local
+    active: @spring.active@

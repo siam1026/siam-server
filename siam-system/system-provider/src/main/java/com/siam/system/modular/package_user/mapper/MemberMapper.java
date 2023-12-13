@@ -75,7 +75,7 @@ public interface MemberMapper extends BaseMapper<Member> {
             "</script>")
     Page<Map<String, Object>> getListByPage(@Param("page") Page page, @Param("member") MemberParam member);
 
-    //add by chenqu 微信OpenId快捷登录,必须绑定了微信才可以快捷登录
+    //add by 暹罗 微信OpenId快捷登录,必须绑定了微信才可以快捷登录
     @Select("SELECT id FROM tb_member  WHERE open_id=#{openId} AND is_deleted = 0 and is_bind_wx='1'")
     Integer  findMemberByOpenId(@Param("openId") String openId);
 
@@ -83,7 +83,7 @@ public interface MemberMapper extends BaseMapper<Member> {
     @Select("SELECT id FROM tb_member  WHERE mobile=#{mobile} AND is_deleted = 0 and is_bind_wx=1 ")
     Integer  findMemberByMobile(@Param("mobile") String mobile);
 
-    //add by chenqu 微信OpenId快捷登录
+    //add by 暹罗 微信OpenId快捷登录
     @Update("update tb_member set is_bind_wx='1' WHERE mobile=#{mobile} AND is_deleted = 0")
     Integer  updateMemberByMobile(@Param("mobile") String mobile);
 

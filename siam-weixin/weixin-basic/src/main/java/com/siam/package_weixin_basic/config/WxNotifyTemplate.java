@@ -3,7 +3,7 @@ package com.siam.package_weixin_basic.config;
 import lombok.Data;
 
 /**
- * @author jiangyang
+ * @author 暹罗
  * @className SubscribeBean
  * @Description 发送订阅消息对象
  * @Date 2020/2/24-11:23

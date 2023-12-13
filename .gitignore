@@ -41,3 +41,5 @@ log.path_IS_UNDEFINED
 
 application-test.yml
 application-show.yml
+application-siamcloud-test.yml
+application-siamcloud-show.yml

@@ -39,18 +39,6 @@ spring:
           socketFactory.class: javax.net.ssl.SSLSocketFactory
           socketFactory.port: 465
 
-#eureka配置
-eureka:
-  client:
-    service-url:
-      defaultZone: http://127.0.0.1:9600/eureka/
-    register-with-eureka: true
-    fetch-registry: true
-  instance:
-    #配置使用ip地址来注册(默认是主机名称)
-    prefer-ip-address: true
-    #心跳检测暂时不配置
-
 #  boot:
 #    admin:
 #      monitor:

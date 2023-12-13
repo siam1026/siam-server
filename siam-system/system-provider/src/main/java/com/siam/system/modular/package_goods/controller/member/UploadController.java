@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/rest/member/upload")
+@RequestMapping(value = "/rest/member")
 @Transactional(rollbackFor = Exception.class)
 @Api(tags = "用户上传图片模块相关接口", description = "AdminUploadController")
 public class UploadController {

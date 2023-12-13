@@ -5,7 +5,7 @@
     <parent>
         <artifactId>siam-server</artifactId>
         <groupId>com.siam</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,8 +13,7 @@
     <artifactId>siam-common</artifactId>
 
     <name>siam-common</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>https://www.siamit.cn</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,31 +22,18 @@
     </properties>
 
     <dependencies>
-
         <!-- 整合springmvc web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.3.3.RELEASE</version>
         </dependency>
-
-        <!--&lt;!&ndash; 整合mybatis（需要手动指定版本，springboot未分配） &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.mybatis.spring.boot</groupId>-->
-            <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
-            <!--<version>1.3.2</version>-->
-        <!--</dependency>-->
-
-        <!--&lt;!&ndash; 整合pagehelper &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>com.github.pagehelper</groupId>-->
-            <!--<artifactId>pagehelper-spring-boot-starter</artifactId>-->
-            <!--<version>1.2.10</version>-->
-        <!--</dependency>-->
 
         <!-- 整合mysql（非springboot，需要手动指定5.x版本，否则下载的8.x版本，版本过高会包错） -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.21</version>
         </dependency>
 
         <!-- 整合swagger2 -->
@@ -88,13 +74,13 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- 整合springboot-test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.3.3.RELEASE</version>
         </dependency>
 
         <!-- 整合lombok，便于打印日志 -->
@@ -108,6 +94,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>2.3.3.RELEASE</version>
         </dependency>
 
         <!-- 整合redis(附加) -->
@@ -124,22 +111,7 @@
             <version>3.1.0</version>
         </dependency>
 
-        <!-- 整合第三方支付SDK -->
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-pay</artifactId>
-            <version>3.4.0</version>
-        </dependency>
-
-        <!-- 整合lombok，便于打印日志 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
-            <!--<scope>provided</scope>-->
-        </dependency>
-
-        <!-- String转JSONObject    JSONObject.parseObject-->
+        <!-- 整合fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -153,97 +125,11 @@
             <version>2.8.3</version>
         </dependency>
 
-        <!-- 整合junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- 整合springmvc web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
         <!-- 整合AOP切面 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-
-        <!--&lt;!&ndash; 整合mybatis（需要手动指定版本，springboot未分配） &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.mybatis.spring.boot</groupId>-->
-            <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
-            <!--<version>1.3.2</version>-->
-        <!--</dependency>-->
-
-        <!--&lt;!&ndash; 整合pagehelper &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>com.github.pagehelper</groupId>-->
-            <!--<artifactId>pagehelper-spring-boot-starter</artifactId>-->
-            <!--<version>1.2.10</version>-->
-        <!--</dependency>-->
-
-        <!-- 整合mysql（非springboot，需要手动指定5.x版本，否则下载的8.x版本，版本过高会包错） -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <!-- 整合google guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
-        </dependency>
-
-        <!-- 整合google gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.5</version>
-        </dependency>
-
-        <!-- 整合apache httpclient -->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.httpcomponents</groupId>-->
-            <!--<artifactId>httpclient</artifactId>-->
-            <!--<version>4.5.2</version>-->
-        <!--</dependency>-->
-
-        <!-- 整合swagger2 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.7.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-
-        <!--&lt;!&ndash; 整合mybatis-generator 逆向生成&ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.mybatis.generator</groupId>-->
-            <!--<artifactId>mybatis-generator-core</artifactId>-->
-            <!--<version>1.3.2</version>-->
-        <!--</dependency>-->
-
-        <!-- 整合springboot-test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.3.3.RELEASE</version>
         </dependency>
 
         <!-- 整合阿里云SDK -->
@@ -253,13 +139,6 @@
             <version>4.0.3</version>
         </dependency>
 
-        <!-- 整合阿里云OSS存储 -->
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>2.8.3</version>
-        </dependency>
-
         <!-- 整合apache commons-fileupload -->
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -267,31 +146,11 @@
             <version>1.3.3</version>
         </dependency>
 
-        <!-- 整合redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
         <!-- 整合rabbitmq(amqp代表一种协议) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
             <version>2.1.4.RELEASE</version>
-        </dependency>
-
-        <!-- 整合alipay支付宝支付 -->
-        <dependency>
-            <groupId>com.alipay.sdk</groupId>
-            <artifactId>alipay-sdk-java</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
-        <!-- 整合第三方支付SDK -->
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-pay</artifactId>
-            <version>3.4.0</version>
         </dependency>
 
         <!-- 整合apache poi -->
@@ -308,19 +167,6 @@
             <version>3.17</version>
         </dependency>
 
-        <!-- 整合lombok，便于打印日志 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
-        </dependency>
-        <!-- String转JSONObject    JSONObject.parseObject-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.60</version>
-        </dependency>
-
         <!-- 整合HttpClient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -328,61 +174,27 @@
             <version>4.5.5</version>
         </dependency>
 
-        <!-- 整合WebSocket-1 -->
-        <!--<dependency>
-          <groupId>javax.websocket</groupId>
-          <artifactId>javax.websocket-api</artifactId>
-          <version>1.1</version>
-          <scope>provided</scope>
-        </dependency>-->
-
-        <!--<dependency>
-          <groupId>javax</groupId>
-          <artifactId>javaee-api</artifactId>
-          <version>7.0</version>
-          <scope>provided</scope>
-        </dependency>-->
-
+        <!-- 整合Websocket -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>2.3.3.RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-server</artifactId>
             <version>9.4.7.v20170914</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- 整合redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
         <!-- 整合mongodb(默认跟随springboot的版本) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <version>2.3.3.RELEASE</version>
         </dependency>
 
-        <!-- 整合rabbitmq(amqp代表一种协议) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-            <version>2.1.4.RELEASE</version>
-        </dependency>
-
-        <!-- 整合lombok，便于打印日志 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
-            <!--<scope>provided</scope>-->
-        </dependency>
-
-        <!--mybatis plus-->
+        <!-- 整合mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -395,17 +207,18 @@
             <version>3.3.0</version>
         </dependency>
 
-        <!-- 集成RocketMQ -->
+        <!-- 整合RocketMQ -->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-spring-boot-starter</artifactId>
             <version>2.1.1</version>
         </dependency>
 
-        <!--添加 mail 依赖-->
+        <!-- 整合mail依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
+            <version>2.3.3.RELEASE</version>
         </dependency>
 
         <!-- 整合redisson -->
@@ -415,17 +228,11 @@
             <version>3.16.8</version>
         </dependency>
 
+        <!-- 整合hutool -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.6.3</version>
         </dependency>
-
-        <!-- security -->
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>-->
-
     </dependencies>
 </project>

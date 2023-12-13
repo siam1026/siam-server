@@ -67,7 +67,7 @@ public class AdminCouponsController {
     public BasicResult update(@RequestBody @Validated(value = {}) Coupons param) {
         BasicResult basicResult = new BasicResult();
 
-        //todo jiangyang
+        //todo 暹罗
         couponsService.updateByPrimaryKeySelective(param);
 
         return BasicResult.success();
