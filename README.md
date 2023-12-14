@@ -72,6 +72,7 @@
 
 ~~~
 com.siam     
+├── wxapplet-siam-user      // 前端-用户端微信小程序
 ├── vue-siam-shop           // 前端-商家后台 [80]
 ├── vue-siam-admin          // 前端-调度后台 [80]
 ├── siam-system             // web服务 [9200]
