@@ -36,7 +36,7 @@ import java.util.Date;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/rest/member/platformPay")
+@RequestMapping(value = "/rest/member/pointsMall/platformPay")
 @Transactional(rollbackFor = Exception.class)
 @Api(tags = "平台支付模块相关接口", description = "PointsMallPlatformPayController")
 public class PointsMallPlatformPayController {
