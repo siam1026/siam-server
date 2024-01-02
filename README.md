@@ -72,9 +72,12 @@
 ~~~
 com.siam     
 ├── wxapplet-siam-user      // 前端-用户端微信小程序
-├── vue-siam-shop           // 前端-商家后台 [80]
-├── vue-siam-admin          // 前端-调度后台 [80]
-├── siam-system             // web服务 [9200]
+├── wxapplet-siam-shop      // 前端-商家端微信小程序
+├── wxapplet-siam-rider     // 前端-骑手端微信小程序
+├── vue-siam-shop           // 前端-商家管理后台 [80]
+├── vue-siam-rider          // 前端-骑手管理后台 [80]
+├── vue-siam-admin          // 前端-超管调度后台 [80]
+├── siam-system             // web接口服务 [9200]
 ├── siam-monitor            // 监控服务 [9100]
 ├── siam-common             // 通用模块
 ├── siam-weixin             // 微信模块
