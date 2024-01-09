@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${table.daoPackageName}.${table.className}Mapper">
+
+  <resultMap id="BaseResultMap" type="${table.modelPackageName}.${table.className}">
+<%
+	for(column in table.columns) {
+		if(column.isPrimaryKey) {
+%>	
+	<id column="${column.name}" jdbcType="${column.jdbcType}" property="${column.fieldName}" />
+<%
+		} else {
+%>
+	<result column="${column.name}" jdbcType="${column.jdbcType}" property="${column.fieldName}" />
+<%
+		}
+	}
+%>
+  </resultMap>
+
+  <select id="page" resultMap="BaseResultMap">
+    select * from ${table.name} as t
+    where 1 = 1
+<%
+	for(column in table.columns) {
+	    if(column.jdbcType != 'VARCHAR') {
+%>
+    <if test="param.${column.fieldName} != null"> and t.${column.name} = #{param.${column.fieldName}} </if>
+<%
+        }
+        if(column.jdbcType == 'VARCHAR') {
+%>
+    <if test="param.${column.fieldName} != null and param.${column.fieldName} != ''"> and t.${column.name} like CONCAT('%',#{param.${column.fieldName}},'%') </if>
+<%
+        }
+	}
+%>
+  </select>
+  
+</mapper>

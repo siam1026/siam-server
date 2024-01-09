@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<database name="Oracle">
+	<driver>com.mysql.jdbc.Driver</driver>
+	<url>jdbc:mysql://%s:%d/%s</url>
+	<select name="query_table" t="缺少tablespace" >
+		<![CDATA[ 
+		SELECT  
+			table_name TABLE_NAME, 
+    		table_comment DESCRIPTION 
+		FROM information_schema.TABLES 
+		WHERE table_schema = ?   
+			AND table_type = 'BASE TABLE' 
+		ORDER BY table_name
+		]]> 
+	</select>
+	<select name="query_column" >
+		<![CDATA[ 
+		SELECT 
+			column_name COLUMN_NAME, 
+			table_name TABLE_NAME,
+			data_type DATA_TYPE, 
+			character_maximum_length DATA_LENGTH,
+    		numeric_precision DATA_PRECISION,
+    		numeric_scale DATA_SCALE, 
+			is_nullable NULLABLE, 
+			column_default DEFAULT_VALUE,
+			column_comment DESCRIPTION 
+		FROM information_schema.columns 
+		WHERE table_schema = ? 
+			AND table_name = ? 
+		ORDER BY ordinal_position 
+		]]> 
+	</select>
+	<select name="query_primary_key" t="column_name缺失">
+		<![CDATA[ 
+		SELECT  
+			t.constraint_name CONSTRAINT_NAME, 
+			t.table_name TABLE_NAME, 
+			c.column_name COLUMN_NAME 
+		FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS t,  
+			 INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS c 
+		WHERE t.table_schema = c.table_schema
+			AND t.table_name = c.table_name 
+			AND t.constraint_name = c.constraint_name 
+			AND t.constraint_type = 'PRIMARY KEY' 
+			AND t.table_schema = ?  
+			AND t.table_name = ? 
+		ORDER BY t.constraint_name
+		]]> 		
+	</select>
+	<select name="query_foreign_key">
+		<![CDATA[ 
+		SELECT
+			kcu.constraint_name FK_NAME, 
+			kcu.table_name PK_TABLE_NAME, 
+			kcu.column_name PK_COLUMN_NAME, 
+			kcu.referenced_table_name FK_TABLE_NAME, 
+			kcu.referenced_column_name FK_COLUMN_NAME 
+		FROM information_schema.key_column_usage kcu 
+		WHERE table_schema = ?  
+			AND table_name = ? 
+			AND constraint_name in (
+				SELECT constraint_name 
+				FROM information_schema.table_constraints tc  
+				WHERE tc.table_schema = kcu.table_schema
+					AND tc.table_name = kcu.table_name
+					AND tc.constraint_type = 'FOREIGN KEY') 
+		ORDER BY ORDINAL_POSITION 
+		]]> 
+	</select>
+	<select name="query_index" >
+		<![CDATA[ 
+		SELECT 
+    		index_name INDEX_NAME,  
+    		index_type INDEX_TYPE, 
+    		table_name TABLE_NAME, 
+    		column_name COLUMN_NAME, 
+    		non_unique NON_UNIQUE   
+		FROM information_schema.statistics  
+		WHERE table_schema = ? 
+			AND table_name = ? 
+		ORDER BY index_name
+		]]> 
+	</select>
+	<select name="query_trigger" t="description缺失">
+		<![CDATA[ 
+		SELECT
+			trigger_name TRIGGER_NAME, 
+			action_timing TRIGGER_TYPE, 
+			event_manipulation EVENT_TYPE, 
+			action_statement TRIGGER_BODY 
+		FROM information_schema
+		WHERE table_schema = ?  
+			AND table_name = ?
+		]]> 
+	</select>
+</database>

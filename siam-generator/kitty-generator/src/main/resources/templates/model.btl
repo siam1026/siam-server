@@ -1,0 +1,39 @@
+package ${table.modelPackageName};
+
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+/**
+ * ---------------------------
+ * ${table.description} (${table.className})         
+ * ---------------------------
+ * 作者：  暹罗
+ * 时间：  ${strutil.formatDate(date(),'yyyy-MM-dd HH:mm:ss')}
+ * ---------------------------
+ */
+@Data
+@TableName("${table.name}")
+public class ${table.className} {
+
+<%
+	for(column in table.columns) {
+	    if(column.fieldName == 'id') {
+%>
+	/** ${column.description} */
+	@TableId(type = IdType.AUTO)
+	private ${column.javaType} ${column.fieldName};
+
+<%
+	    }
+	    if(column.fieldName != 'id') {
+%>
+	/** ${column.description} */
+	private ${column.javaType} ${column.fieldName};
+
+<%
+        }
+	}
+%>
+}

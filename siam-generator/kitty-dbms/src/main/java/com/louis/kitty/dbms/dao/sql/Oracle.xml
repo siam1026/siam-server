@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<database name="Oracle">
+	<driver>oracle.jdbc.driver.OracleDriver</driver>
+	<url>jdbc:oracle:thin:@%s:%d:%s</url>
+	<select name="query_table">
+		<![CDATA[ 
+		SELECT  t.table_name TABLE_NAME, 
+				t.tablespace_name TABLESPACE, 
+				c.comments DESCRIPTION  
+		FROM user_tables t, user_tab_comments c  
+		WHERE t.table_name=c.table_name 
+		ORDER BY t.table_name
+		]]> 
+	</select>
+	<select name="query_column" t="NONUNIQUE字段，查询时转换为true/false">
+		<![CDATA[ 
+		SELECT  
+				t.COLUMN_NAME COLUMN_NAME, 
+				t.TABLE_NAME TABLE_NAME, 
+				t.DATA_TYPE DATA_TYPE, 
+				t.CHAR_LENGTH CHAR_LENGTH, 
+				t.DATA_LENGTH DATA_LENGTH, 
+				t.DATA_PRECISION DATA_PRECISION, 
+				t.DATA_SCALE DATA_SCALE, 
+				t.NULLABLE NULLABLE, 
+				c.COMMENTS DESCRIPTION, 
+				t.DATA_DEFAULT DEFAULT_VALUE 
+		FROM USER_TAB_COLUMNS t, USER_COL_COMMENTS c 
+		WHERE t.TABLE_NAME = c.TABLE_NAME 
+			AND t.COLUMN_NAME = c.COLUMN_NAME 
+			AND t.TABLE_NAME = ? 
+		ORDER BY t.COLUMN_ID
+		]]> 
+	</select>
+	
+	<select name="query_primary_key">
+		<![CDATA[ 
+		SELECT  ucc.constraint_name CONSTRAINT_NAME,  
+				ucc.TABLE_NAME TABLE_NAME, 
+				ucc.COLUMN_NAME COLUMN_NAME  
+		FROM user_cons_columns ucc, user_constraints uc 
+		WHERE ucc.constraint_name=uc.constraint_name 
+			AND uc.constraint_type='P' 
+			AND ucc.table_name=? 
+		ORDER BY ucc.constraint_name
+		]]> 		
+	</select>
+	<select name="query_foreign_key">
+		<![CDATA[ 
+		SELECT 
+       			fkt.constraint_name FK_NAME,  
+				pkt.table_name PK_TABLE_NAME, 
+				pkc.column_name PK_COLUMN_NAME, 
+				fkt.table_name FK_TABLE_NAME, 
+				fkc.column_name FK_COLUMN_NAME 
+		FROM user_constraints fkt, user_constraints pkt, user_cons_columns fkc, user_cons_columns pkc 
+		WHERE fkt.r_constraint_name=pkt.constraint_name 
+			AND fkt.constraint_type='R' 
+			AND pkt.constraint_type='P' 
+			AND fkt.r_owner=pkt.owner 
+			AND fkt.constraint_name=fkc.constraint_name 
+			AND pkt.constraint_name=pkc.constraint_name 
+			AND fkt.owner=fkc.owner 
+			AND fkt.table_name=fkc.table_name 
+			AND pkt.owner=pkc.owner 
+			AND pkt.table_name=pkc.table_name
+			AND pkt.table_name=? 
+		ORDER BY fkt.constraint_name
+			]]> 
+	</select>
+	<select name="query_index">
+		<![CDATA[ 
+		SELECT 	uic.index_name INDEX_NAME, 
+				ui.index_type INDEX_TYPE, 
+				uic.table_name TABLE_NAME, 
+				uic.column_name COLUMN_NAME, 
+				ui.uniqueness IS_UNIQUE    
+		FROM user_ind_columns uic, user_indexes ui 
+		WHERE uic.index_name = ui.index_name 
+			AND uic.table_name = ui.table_name 
+			AND uic.table_name = ? 
+		ORDER BY uic.index_name
+		]]> 
+	</select>
+	<select name="query_trigger">
+		<![CDATA[ 
+		SELECT trigger_name TRIGGER_NAME, 
+				trigger_type TRIGGER_TYPE, 
+				triggering_event EVENT_TYPE, 
+				trigger_body TRIGGER_BODY, 
+				description DESCRIPTION 
+		FROM user_triggers 
+		WHERE table_name=? 
+		ORDER BY TRIGGER_NAME
+		]]> 
+	</select>
+</database>

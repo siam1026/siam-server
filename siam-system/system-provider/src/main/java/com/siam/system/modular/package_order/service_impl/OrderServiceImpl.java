@@ -282,7 +282,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             CouponsMemberRelation dbCouponsMemberRelation = couponsMemberRelationService.selectCouponsMemberRelationByPrimaryKey(couponsMemberRelationId);
             Integer couponsId = dbCouponsMemberRelation.getCouponsId();
             Map couponsMap = couponsService.selectCouponsAndGoodsByPrimaryKey(couponsId);
-            Coupons dbCoupons = BeanUtil.mapToBean((Map) couponsMap.get("coupons"), Coupons.class, false);
+            Coupons dbCoupons = (Coupons) couponsMap.get("coupons");
             if(Coupons.TYPE_DISCOUNT.equals(dbCoupons.getPreferentialType())){
                 //折扣优惠券
                 //如果是商家中心发放的优惠券，则需要判断关联商品

@@ -1,0 +1,42 @@
+{
+    "common": {
+        "home": "Home",
+        "login": "Login",
+        "logout": "Logout",
+        "doc": "Document",
+        "blog": "Blog",
+        "projectRepo": "Project",
+        "myMsg": "My Message",
+        "config": "Config",
+        "backup": "Backup",  
+        "restore": "Restore",  
+        "datasource": "Datasource",  
+        "versionName": "Version",  
+        "exit": "Exit"
+    },
+    "action": {
+        "operation": "Operation",
+        "add": "Add",
+        "edit": "Edit",
+        "delete": "Delete",
+        "batchDelete": "Batch Delete",
+        "search": "Search",
+        "loading": "loading",
+        "submit": "Submit",
+        "save": "Save",
+        "test": "test",
+        "comfirm": "Comfirm",
+        "cancel": "Cancel",
+        "reset": "Reset"
+    },
+    "navMenu": {
+        "singleTable": "single table",
+        "masterTable": "master table",
+        "userMng": "User Manage",
+        "deptMng": "Dept Manage",
+        "roleMng": "Role Manage",
+        "menuMng": "Menu Manage",
+        "logMng": "Log Manage",
+        "sysMonitor": "System Monitor"
+    }
+}

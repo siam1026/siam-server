@@ -1,0 +1,17 @@
+package ${table.servicePackageName};
+
+import ${table.modelPackageName}.${table.className};
+import ${table.modelParamPackageName}.${table.className}Param;
+import com.siam.package_common.service.CurdService;
+
+/**
+ * ---------------------------
+ * ${table.description} (${table.className}Service)         
+ * ---------------------------
+ * 作者：  暹罗
+ * 时间：  ${strutil.formatDate(date(),'yyyy-MM-dd HH:mm:ss')}
+ * ---------------------------
+ */
+public interface ${table.className}Service extends CurdService<${table.className}, ${table.className}Param> {
+
+}

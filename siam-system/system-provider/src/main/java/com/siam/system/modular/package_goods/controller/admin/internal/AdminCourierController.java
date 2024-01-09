@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/rest/admin/courier")
+@RequestMapping(value = "/rest/admin/rider")
 @Transactional(rollbackFor = Exception.class)
 @Api(tags = "后台商家自配送骑手信息模块相关接口", description = "AdminCourierController")
 public class AdminCourierController {

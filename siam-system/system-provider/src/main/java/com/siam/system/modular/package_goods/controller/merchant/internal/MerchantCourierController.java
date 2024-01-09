@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @RestController
-@RequestMapping(value = "/rest/merchant/courier")
+@RequestMapping(value = "/rest/merchant/rider")
 @Transactional(rollbackFor = Exception.class)
 @Api(tags = "商家端商家自配送骑手信息模块相关接口", description = "MerchantCourierController")
 public class MerchantCourierController {

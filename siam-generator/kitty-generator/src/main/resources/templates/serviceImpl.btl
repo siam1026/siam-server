@@ -1,0 +1,60 @@
+package ${table.serviceImplPackageName};
+
+import java.util.List;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ${table.modelPackageName}.${table.className};
+import ${table.daoPackageName}.${table.className}Mapper;
+import ${table.servicePackageName}.${table.className}Service;
+
+/**
+ * ---------------------------
+ * ${table.description} (${table.className}ServiceImpl)         
+ * ---------------------------
+ * 作者：  暹罗
+ * 时间：  ${strutil.formatDate(date(),'yyyy-MM-dd HH:mm:ss')}
+ * ---------------------------
+ */
+@Service
+public class ${table.className}ServiceImpl extends ServiceImpl<${table.className}Mapper, ${table.className}> implements ${table.className}Service {
+
+	@Autowired
+	private ${table.className}Mapper ${table.objectName}Mapper;
+
+	@Override
+	public int insert(${table.className}Param param) {
+		${table.className} record = new ${table.className}();
+		BeanUtils.copyProperties(param, record);
+        return ${table.objectName}Mapper.insert(record);
+	}
+
+	@Override
+	public int delete(${table.primaryKey.javaType} id) {
+		return ${table.objectName}Mapper.deleteById(id);
+	}
+
+	@Override
+	public int batchDelete(List<${table.primaryKey.javaType}> idList) {
+		return ${table.objectName}Mapper.deleteBatchIds(idList);
+	}
+
+	@Override
+	public int update(${table.className}Param param) {
+		${table.className} record = new ${table.className}();
+		BeanUtils.copyProperties(param, record);
+		return ${table.objectName}Mapper.updateById(record);
+	}
+
+	@Override
+	public Page<${table.className}> page(${table.className}Param param) {
+        Page<${table.className}> page = ${table.objectName}Mapper.page(new Page(param.getPageNo(), param.getPageSize()), param);
+        return page;
+	}
+
+	@Override
+	public ${table.className} findById(${table.primaryKey.javaType} id) {
+		return ${table.objectName}Mapper.selectById(id);
+	}
+}

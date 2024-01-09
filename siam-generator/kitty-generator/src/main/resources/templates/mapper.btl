@@ -1,0 +1,28 @@
+package ${table.daoPackageName};
+
+import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
+
+import ${table.modelPackageName}.${table.className};
+import ${table.modelParamPackageName}.${table.className}Param;
+
+/**
+ * ---------------------------
+ * ${table.description} (${table.className}Mapper)         
+ * ---------------------------
+ * 作者：  暹罗
+ * 时间：  ${strutil.formatDate(date(),'yyyy-MM-dd HH:mm:ss')}
+ * ---------------------------
+ */
+public interface ${table.className}Mapper extends BaseMapper<${table.className}> {
+
+    /**
+     * 基础分页查询
+     * @param param
+     * @return
+     */    
+    Page<${table.className}> page(@Param("page") Page page, @Param("param") ${table.className}Param param);
+    
+}

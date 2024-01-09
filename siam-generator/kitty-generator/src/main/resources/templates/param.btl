@@ -1,0 +1,30 @@
+package ${table.modelPackageName};
+
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import ${table.modelPackageName}.${table.className};
+import com.siam.package_common.entity.BaseParam;
+
+/**
+ * ---------------------------
+ * ${table.description} (${table.className}Param)
+ * ---------------------------
+ * 作者：  暹罗
+ * 时间：  ${strutil.formatDate(date(),'yyyy-MM-dd HH:mm:ss')}
+ * ---------------------------
+ */
+@Data
+public class ${table.className}Param extends BaseParam {
+
+<%
+	for(column in table.columns) {
+%>
+	/** ${column.description} */
+	private ${column.javaType} ${column.fieldName};
+
+<%
+	}
+%>
+}

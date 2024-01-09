@@ -1,0 +1,97 @@
+package ${table.controllerPackageName};
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.siam.package_common.entity.BasicResult;
+
+import ${table.modelPackageName}.${table.className};
+import ${table.servicePackageName}.${table.className}Service;
+import ${table.modelParamPackageName}.${table.className}Param;
+
+/**
+ * ---------------------------
+ * ${table.description} (${table.className}Controller)         
+ * ---------------------------
+ * 作者：  暹罗
+ * 时间：  ${strutil.formatDate(date(),'yyyy-MM-dd HH:mm:ss')}
+ * ---------------------------
+ */
+@RestController
+@RequestMapping("/rest/${table.objectName}")
+public class ${table.className}Controller {
+
+	@Autowired
+	private ${table.className}Service ${table.objectName}Service;
+
+	/**
+	 * 保存${table.description}
+	 * @param param
+	 * @return
+	 */	
+	@PostMapping(value="/insert")
+	public BasicResult insert(@RequestBody ${table.className}Param param) {
+		${table.objectName}Service.insert(param);
+		return BasicResult.success();
+	}
+
+    /**
+     * 删除${table.description}
+     * @param ${table.primaryKey.fieldName}
+     * @return
+     */
+	@GetMapping(value="/delete")
+	public BasicResult delete(@RequestParam ${table.primaryKey.javaType} ${table.primaryKey.fieldName}) {
+		${table.objectName}Service.delete(${table.primaryKey.fieldName}));
+		return BasicResult.success();
+	}
+
+    /**
+     * 批量删除${table.description}
+     * @param ${table.primaryKey.fieldName}List
+     * @return
+     */
+	@PostMapping(value="/batchDelete")
+	public BasicResult batchDelete(@RequestBody List<${table.primaryKey.javaType}> ${table.primaryKey.fieldName}List) {
+		${table.objectName}Service.batchDelete(${table.primaryKey.fieldName}List));
+		return BasicResult.success();
+	}
+
+	/**
+	 * 修改${table.description}
+	 * @param param
+	 * @return
+	 */
+	@PostMapping(value="/update")
+	public BasicResult update(@RequestBody ${table.className}Param param) {
+		${table.objectName}Service.update(param);
+		return BasicResult.success();
+	}
+
+    /**
+     * 基础分页查询
+     * @param param
+     * @return
+     */    
+	@PostMapping(value="/page")
+	public BasicResult page(@RequestBody ${table.className}Param param) {
+		return BasicResult.success(${table.objectName}Service.page(param));
+	}
+	
+    /**
+     * 根据主键查询
+     * @param ${table.primaryKey.fieldName}
+     * @return
+     */ 	
+	@GetMapping(value="/findById")
+	public BasicResult findById(@RequestParam ${table.primaryKey.javaType} ${table.primaryKey.fieldName}) {
+		return BasicResult.success(${table.objectName}Service.findById(${table.primaryKey.fieldName}));
+	}
+}
