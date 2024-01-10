@@ -78,6 +78,7 @@ com.siam
 ├── vue-siam-admin          // 前端-超管调度后台 [80]
 ├── siam-system             // web接口服务 [9200]
 ├── siam-monitor            // 监控服务 [9100]
+├── siam-generator          // 代码生成框架
 ├── siam-common             // 通用模块
 ├── siam-weixin             // 微信模块
 ├── pom.xml                 // 父工程模块
