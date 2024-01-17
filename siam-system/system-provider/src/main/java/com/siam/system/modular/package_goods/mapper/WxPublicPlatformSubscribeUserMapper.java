@@ -1,7 +1,7 @@
 package com.siam.system.modular.package_goods.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.siam.package_weixin_basic.config.WxPublicPlatformSubscribeUser;
+import com.siam.system.modular.package_goods.entity.WxPublicPlatformSubscribeUser;
 import com.siam.system.modular.package_goods.model.example.WxPublicPlatformSubscribeUserExample;
 import org.apache.ibatis.annotations.Param;
 
