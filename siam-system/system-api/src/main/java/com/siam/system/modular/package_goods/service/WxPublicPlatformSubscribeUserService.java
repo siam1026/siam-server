@@ -1,12 +1,12 @@
 package com.siam.system.modular.package_goods.service;
 
+import com.siam.system.modular.package_goods.entity.WxPublicPlatformSubscribeUser;
 import com.siam.system.modular.package_goods.model.example.WxPublicPlatformSubscribeUserExample;
-import com.siam.package_weixin_basic.config.WxPublicPlatformSubscribeUser;
 
 import java.util.List;
 
 /**
- *  jianyang
+ * jianyang
  */
 public interface WxPublicPlatformSubscribeUserService {
 

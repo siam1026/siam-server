@@ -1,5 +1,6 @@
 package com.siam.package_common.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -26,11 +27,15 @@ public class RedissonConfig {
     private String password;
 
     @Bean()
-    public RedissonClient redissonClient(){
+    public RedissonClient redissonClient() {
         //1、创建配置
         String address = "redis://" + host + ":" + port;
         Config config = new Config();
-        config.useSingleServer().setAddress(address).setPassword(password);
+        config.useSingleServer().setAddress(address);
+        // 1.1 如果password不为空，则set密码
+        if (StringUtils.isNotEmpty(password)) {
+            config.useSingleServer().setPassword(password);
+        }
 
         //2、根据配置创建出RedissonClient实例
         RedissonClient redissonClient = Redisson.create(config);
