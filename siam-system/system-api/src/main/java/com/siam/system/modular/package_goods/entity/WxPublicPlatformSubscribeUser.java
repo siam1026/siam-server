@@ -1,4 +1,4 @@
-package com.siam.package_weixin_basic.config;
+package com.siam.system.modular.package_goods.entity;
 
 import java.util.Date;
 

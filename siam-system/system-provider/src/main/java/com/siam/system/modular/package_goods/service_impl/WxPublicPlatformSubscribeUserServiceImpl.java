@@ -3,10 +3,7 @@ package com.siam.system.modular.package_goods.service_impl;
 import com.siam.system.modular.package_goods.mapper.WxPublicPlatformSubscribeUserMapper;
 import com.siam.system.modular.package_goods.model.example.WxPublicPlatformSubscribeUserExample;
 import com.siam.system.modular.package_goods.service.WxPublicPlatformSubscribeUserService;
-import com.siam.package_weixin_basic.config.WxPublicPlatformSubscribeUser;
-import com.siam.system.modular.package_goods.model.example.WxPublicPlatformSubscribeUserExample;
-import com.siam.system.modular.package_goods.mapper.WxPublicPlatformSubscribeUserMapper;
-import com.siam.system.modular.package_goods.service.WxPublicPlatformSubscribeUserService;
+import com.siam.system.modular.package_goods.entity.WxPublicPlatformSubscribeUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

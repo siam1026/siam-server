@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/siam_db?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
     username: root
-    password: siam1026@163.com
+    password: root
 
   #thymeleaf
   thymeleaf:
@@ -23,7 +23,7 @@ spring:
   #redis单例模式
   redis:
     host: 127.0.0.1
-    password: siam1026@163.com
+    password:
     port: 6379
     jedis:
       pool:
@@ -95,13 +95,13 @@ spring:
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/siam_db_0?characterEncoding=utf-8&useUnicode=true&useSSL=true
         username: root
-        password: siam1026@163.com
+        password: root
       ds1:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/siam_db_1?characterEncoding=utf-8&useUnicode=true&useSSL=true
         username: root
-        password: siam1026@163.com
+        password: root
     props:
       sql:
         show: true #是否显示sharding-jdbc的sql路由
