@@ -22,6 +22,12 @@
 ### VS Code ###
 .vscode/
 
+### uniapp ###
+node_modules/
+uni_modules/
+unpackage/
+wxcomponents/
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

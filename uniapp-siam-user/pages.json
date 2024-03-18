@@ -1,0 +1,398 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "暹罗外卖",
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/index/index",
+			"style": {
+				"navigationBarTitleText": "订单",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+		{
+			"path": "pages/order/detail/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/order/evaluate/evaluate",
+			"style": {
+				"navigationBarTitleText": "评价"
+			}
+		},
+		{
+			"path": "pages/order/refund/apply/apply",
+			"style": {
+				"navigationBarTitleText": "申请退款"
+			}
+		},
+		{
+			"path": "pages/order/refund/progress/progress",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "退款进度"
+			}
+		},
+		{
+			"path": "pages/mine/index/index",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/mine/userinfo/userinfo",
+			"style": {
+				"navigationBarTitleText": "个人资料"
+			}
+		},
+		{
+			"path": "pages/mine/coupons/coupons",
+			"style": {
+				"navigationBarTitleText": "我的优惠券"
+			}
+		},
+		{
+			"path": "pages/mine/integral/integral",
+			"style": {
+				"navigationBarTitleText": "我的积分",
+				"navigationBarBackgroundColor": "#004ca0",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/mine/balance/index/index",
+			"style": {
+				"navigationBarTitleText": "我的余额",
+				"navigationBarBackgroundColor": "#004ca0",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/mine/member/index/index",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "会员中心",
+				"navigationBarBackgroundColor": "#11110f",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/mine/member/recharge/recharge",
+			"style": {
+				"navigationBarTitleText": "会员充值"
+			}
+		},
+		{
+			"path": "pages/mine/member/record/record",
+			"style": {
+				"navigationBarTitleText": "充值记录"
+			}
+		},
+		{
+			"path": "pages/mine/member/detail/detail",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "账单详情"
+			}
+		},
+		{
+			"path": "pages/mine/share/index/index",
+			"style": {
+				"navigationBarTitleText": "全民参与 · 邀请好友",
+				"navigationBarBackgroundColor": "#feefd0"
+			}
+		},
+		{
+			"path": "pages/mine/share/reward/reward",
+			"style": {
+				"navigationBarTitleText": "我的奖励",
+				"navigationBarBackgroundColor": "#004ca0",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/menu/index/index",
+			"style": {
+				"navigationBarTitleText": "菜单"
+			}
+		},
+		{
+			"path": "pages/menu/detail/detail",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
+		},
+		{
+			"path": "pages/menu/pay/pay",
+			"style": {
+				"navigationBarTitleText": "确认订单"
+			}
+		},
+		{
+			"path": "pages/menu/search/search",
+			"style": {
+				"navigationBarBackgroundColor": "#004ca0",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/address/index/index",
+			"style": {
+				"navigationBarTitleText": "收货地址",
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+		{
+			"path": "pages/address/choose/choose",
+			"style": {
+				"navigationBarTitleText": "配送方式"
+			}
+		},
+		{
+			"path": "pages/address/insert/insert",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "添加地址"
+			}
+		},
+		{
+			"path": "pages/address/edit/edit",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "修改地址"
+			}
+		},
+		{
+			"path": "pages/address/replace/replace",
+			"style": {
+				"navigationBarTitleText": "选择地址"
+			}
+		},
+		{
+			"path": "pages/address/search/search",
+			"style": {
+				"navigationBarTitleText": "选择地址"
+			}
+		},
+		{
+			"path": "pages/internal/login/authorization/authorization",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/internal/login/choose/choose",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/internal/login/code/code",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/mine/share/withdrawal/index/index",
+			"style": {
+				"navigationBarTitleText": "奖励提现"
+			}
+		},
+		{
+			"path": "pages/mine/share/withdrawal/detail/detail",
+			"style": {
+				"navigationBarTitleText": "提现记录"
+			}
+		},
+		{
+			"path": "pages/mine/security/index/index",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "账号安全"
+			}
+		},
+		{
+			"path": "pages/mine/security/reset/reset",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "设置密码"
+			}
+		},
+		{
+			"path": "pages/mine/security/verify/verify",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "重置密码"
+			}
+		},
+		{
+			"path": "pages/internal/mall/index/index",
+			"style": {
+				"navigationBarTitleText": "积分商城",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/internal/mall/menu/menu",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/internal/mall/car/car",
+			"style": {
+				"navigationBarTitleText": "购物车",
+				"disableScroll": true
+			}
+		},
+		{
+			"path": "pages/internal/mall/detail/detail",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
+		},
+		{
+			"path": "pages/internal/mall/pay/pay",
+			"style": {
+				"navigationBarTitleText": "确认订单"
+			}
+		},
+		{
+			"path": "pages/internal/mall/order/detail/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/internal/mall/order/refund/apply/apply",
+			"style": {
+				"navigationBarTitleText": "申请退款"
+			}
+		},
+		{
+			"path": "pages/internal/mall/order/refund/progress/progress",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "退款进度"
+			}
+		},
+		{
+			"path": "pages/internal/mall/order/logistics/logistics",
+			"style": {
+				"usingComponents": {},
+				"navigationBarTitleText": "查看物流"
+			}
+		},
+		{
+			"path": "pages/mine/unreceived/integral/list/list",
+			"style": {
+				"navigationBarTitleText": "未到账积分"
+			}
+		},
+		{
+			"path": "pages/mine/collect/index/index",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/mine/unreceived/reward/list/list",
+			"style": {
+				"navigationBarTitleText": "未到账余额"
+			}
+		}
+	],
+	"tabBar": {
+		"color": "#bebebe",
+		"selectedColor": "#004ca0",
+		"borderStyle": "white",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/assets/tabbar/Icon/index.png",
+				"selectedIconPath": "static/assets/tabbar/SelectedIcon/blue/index.png"
+			},
+			{
+				"pagePath": "pages/menu/index/index",
+				"text": "点餐",
+				"iconPath": "static/assets/tabbar/Icon/order.png",
+				"selectedIconPath": "static/assets/tabbar/SelectedIcon/blue/order.png"
+			},
+			{
+				"pagePath": "pages/internal/mall/index/index",
+				"text": "商城",
+				"iconPath": "static/assets/tabbar/Icon/store.png",
+				"selectedIconPath": "static/assets/tabbar/SelectedIcon/blue/store.png"
+			},
+			{
+				"pagePath": "pages/internal/mall/car/car",
+				"text": "购物车",
+				"iconPath": "static/assets/tabbar/Icon/car.png",
+				"selectedIconPath": "static/assets/tabbar/SelectedIcon/blue/car.png"
+			},
+			{
+				"pagePath": "pages/mine/index/index",
+				"text": "我的",
+				"iconPath": "static/assets/tabbar/Icon/mine.png",
+				"selectedIconPath": "static/assets/tabbar/SelectedIcon/blue/mine.png"
+			}
+		]
+	},
+	"style": "v2",
+	"sitemapLocation": "sitemap.json",
+	"plugins": {
+		"chooseLocation": {
+			"version": "1.0.2",
+			"provider": "wx63ffb7b7894e99ae"
+		}
+	},
+	"requiredBackgroundModes": [
+	    "location"
+	  ],
+	  "permission": {
+	    "scope.userLocation": {
+	      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+	    }
+	  },
+	"globalStyle": {
+		"backgroundTextStyle": "dark",
+		"navigationBarBackgroundColor": "#fff",
+		"navigationBarTitleText": "暹罗外卖",
+		"navigationBarTextStyle": "black",
+		"usingComponents": {
+			"van-row":"/wxcomponents/vant/dist/row/index",
+			"van-loading":"/wxcomponents/vant/dist/loading/index",
+			"van-tabs":"/wxcomponents/vant/dist/tabs/index",
+			"van-tab":"/wxcomponents/vant/dist/tab/index",
+			"van-action-sheet":"/wxcomponents/vant/dist/action-sheet/index",
+			"van-tree-select":"/wxcomponents/vant/dist/tree-select/index",
+			"van-sticky":"/wxcomponents/vant/dist/sticky/index",
+			"van-icon":"/wxcomponents/vant/dist/icon/index",
+			"van-empty":"/wxcomponents/vant/dist/empty/index",
+			"van-button":"/wxcomponents/vant/dist/button/index",
+			"van-sidebar":"/wxcomponents/vant/dist/sidebar/index",
+			"van-sidebar-item":"/wxcomponents/vant/dist/sidebar-item/index",
+			"van-cell":"/wxcomponents/vant/dist/cell/index",
+			"van-dialog":"/wxcomponents/vant/dist/dialog/index",
+			"van-overlay":"/wxcomponents/vant/dist/overlay/index",
+			"van-search":"/wxcomponents/vant/dist/search/index",
+			"van-grid":"/wxcomponents/vant/dist/grid/index",
+			"van-grid-item":"/wxcomponents/vant/dist/grid-item/index",
+			"van-swipe-cell":"/wxcomponents/vant/dist/swipe-cell/index",
+			"van-divider":"/wxcomponents/vant/dist/divider/index",
+			"van-area":"/wxcomponents/vant/dist/area/index",
+			"van-popup":"/wxcomponents/vant/dist/popup/index"
+		}
+	},
+	"subPackages": []
+}

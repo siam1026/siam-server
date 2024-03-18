@@ -1,0 +1,182 @@
+{
+  "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+  "projectname": "(server) uniapp-siam-user",
+  "setting": {
+    "compileHotReLoad": true
+  },
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "商家店铺",
+          "pathName": "pages/menu/index/index",
+          "query": "id=15",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "菜单",
+          "pathName": "pages/menu/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "配送方式",
+          "pathName": "pages/address/choose/choose",
+          "query": "radioIndex=0",
+          "scene": null
+        },
+        {
+          "name": "商品详情",
+          "pathName": "pages/menu/detail/detail",
+          "query": "id=6",
+          "scene": null
+        },
+        {
+          "name": "支付",
+          "pathName": "pages/menu/pay/pay",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "添加地址",
+          "pathName": "pages/address/insert/insert",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "收货地址",
+          "pathName": "pages/address/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "修改地址",
+          "pathName": "pages/address/edit/edit",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "用户信息",
+          "pathName": "pages/mine/userinfo/userinfo",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "选择登录",
+          "pathName": "pages/login/choose/choose",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "手机验证码登录",
+          "pathName": "pages/login/code/code",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "订单",
+          "pathName": "pages/order/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "订单详情",
+          "pathName": "pages/order/detail/detail",
+          "query": "id=36",
+          "scene": null
+        },
+        {
+          "name": "我的",
+          "pathName": "pages/mine/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "我的优惠券",
+          "pathName": "pages/mine/coupons/coupons",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "我的余额",
+          "pathName": "pages/mine/balance/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "余额明细",
+          "pathName": "pages/balance/detail/detail",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "会员中心",
+          "pathName": "pages/mine/member/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "选择定位地址",
+          "pathName": "pages/address/search/search",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "首页",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "用户授权",
+          "pathName": "pages/login/authorization/authorization",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "分享",
+          "pathName": "pages/mine/share/index/index",
+          "query": "inviterId=148",
+          "scene": null
+        },
+        {
+          "name": "测试",
+          "pathName": "pages/test/test",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "会员充值",
+          "pathName": "pages/mine/member-/recharge/recharge",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "充值记录",
+          "pathName": "pages/mine/member/record/record",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "账单详情",
+          "pathName": "pages/mine/member/detail/detail",
+          "query": "id=2",
+          "scene": null
+        },
+        {
+          "name": "我的积分",
+          "pathName": "pages/mine/integral/integral",
+          "query": "id=2",
+          "scene": null
+        },
+        {
+          "name": "设置支付密码",
+          "pathName": "pages/mine/security/reset/reset",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}
