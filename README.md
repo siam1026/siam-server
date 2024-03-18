@@ -59,7 +59,7 @@
 ## 相关资料获取
 
 1. 获取sql文件
-2. 获取用户端小程序、商家端小程序、骑手端小程序、骑手管理web端代码
+2. 获取商家端小程序、骑手端小程序、骑手管理web端代码
 
 [请加入QQ群或微信群获取](https://github.com/siam1026/siam-server#关注和交流)，进群前先在右上角Star本项目
 
@@ -71,9 +71,9 @@
 
 ~~~
 com.siam     
-├── wxapplet-siam-user      // 前端-用户端微信小程序
-├── wxapplet-siam-shop      // 前端-商家端微信小程序
-├── wxapplet-siam-rider     // 前端-骑手端微信小程序
+├── uniapp-siam-user        // 前端-用户端微信小程序
+├── uniapp-siam-shop        // 前端-商家端微信小程序
+├── uniapp-siam-rider       // 前端-骑手端微信小程序
 ├── vue-siam-shop           // 前端-商家管理后台 [80]
 ├── vue-siam-admin          // 前端-超管调度后台 [80]
 ├── siam-system             // web接口服务 [9200]
