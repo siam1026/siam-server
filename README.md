@@ -27,7 +27,7 @@
     <img src="./doc/images/wechat/公众号.jpg" width="500" />
 </p>
 
-项目已有较详细的 [项目搭建文档](https://gitee.com/siam1026/siam-server/wikis/pages?sort_id=9187815&doc_id=4850414) ，同时包括了 **Windows**、**Linux** 以及 **Docker** 环境下暹罗点餐的搭建。在使用过程中遇到问题时，首先认真阅读**项目搭建文档**~
+项目已有较详细的 [项目搭建文档](https://www.yuque.com/yuqueyonghuwukmla/dczoan/vtifg2p754bwmi1g) ，同时包括了 **Windows**、**Linux** 以及 **Docker** 环境下暹罗点餐的搭建。在使用过程中遇到问题时，首先认真阅读**项目搭建文档**~
 
 【提问】推荐使用 [Gitee issue](https://github.com/siam1026/siam-server/issues) 进行提问，因为issue解决后能够保留解决记录，帮助其它小伙伴避坑。其次可以使用 <a href="https://github.com/siam1026/siam-server#关注和交流">QQ群 </a>  或者 <a href="https://github.com/siam1026/siam-server#关注和交流">微信群 </a> 进行提问。群里提问注意提问的时间，把遇到**问题的详细过程都描述清楚**，最好**配上图文信息**，这样能有利于更高效的解决问题。
 
@@ -109,7 +109,7 @@ com.siam
 
 ## 项目文档
 
-文档地址：https://gitee.com/siam1026/siam-server/wikis/pages?sort_id=9187815&doc_id=4850414
+文档地址：https://www.yuque.com/yuqueyonghuwukmla/dczoan/vtifg2p754bwmi1g
 
 ## 项目地址
 
