@@ -3,33 +3,47 @@
 		<view id="page-top-view">
 			<view style="padding-bottom: 20rpx;background: #f6f6f6;">
 				<view class="flex_between public-views" style="background-color: white;">
-					<view class="shop_info_view" @tap="selfTap" :data-index="selfOutActiveIndex">
-						<view v-if="!initShopInfo" class="flex_start" style="font-size: 30rpx;">
-							<view>选择门店</view>
+					<view class="shop_info_view" @tap="parseEventDynamicCode($event, !memberInfo.id ? '' : 'selfTap')"
+						:data-index="selfOutActiveIndex">
+						<view v-if="selfOutActiveIndex==0&&!initShopInfo.id&&!isLoading" class="flex_start"
+							style="font-size: 30rpx;">
+							<view>该区域外送功能即将开通</view>
 							<van-icon name="arrow" />
 						</view>
-						<block v-if="selfOutActiveIndex==0&&initShopInfo">
-							<view class="flex_between">
-								<view class="out_of_range one_row">{{shopInfo.shop.name}}</view>
-								<van-icon name="arrow" />
-							</view>
-							<view class="distance_m" v-if="initShopInfo">
-								距您{{initShopInfo.shopAdditionalVo.deliveryDistanceText}}</view>
-						</block>
-						<block v-if="selfOutActiveIndex==1&&deliveryAndSelfTaking.deliveryAddress">
-							<view class="flex_between">
-								<view class="out_of_range one_row">
-									{{ deliveryAndSelfTaking.deliveryAddress.province }}{{ deliveryAndSelfTaking.deliveryAddress.city }}{{ deliveryAndSelfTaking.deliveryAddress.area }}{{ deliveryAndSelfTaking.deliveryAddress.street }}
+						<block v-if="selfOutActiveIndex==0&&initShopInfo.id&&!isLoading">
+							<view @tap="selfTap" :data-index="selfOutActiveIndex">
+								<view class="flex_between">
+									<view class="out_of_range one_row">{{shopInfo.shop.name}}</view>
+									<van-icon name="arrow" />
 								</view>
-								<van-icon name="arrow" />
+								<view class="distance_m" v-if="initShopInfo">
+									距您{{initShopInfo.shopAdditionalVo.deliveryDistanceText}}</view>
 							</view>
-							<view class="distance_m" v-if="deliveryAndSelfTaking">
-								{{ deliveryAndSelfTaking.deliveryAddress.phone }}
-								{{ deliveryAndSelfTaking.deliveryAddress.realname }}
+						</block>
+						<block v-if="(selfOutActiveIndex==0||selfOutActiveIndex==1)&&initShopInfo&&isLoading">
+							<van-loading custom-class="loading_box_class">加载中...</van-loading>
+						</block>
+						<block v-if="selfOutActiveIndex==1&&deliveryAndSelfTaking.deliveryAddress&&!isLoading">
+							<view @tap="selfTap" :data-index="selfOutActiveIndex">
+								<view class="flex_between">
+									<view class="out_of_range one_row">
+										{{ deliveryAndSelfTaking.deliveryAddress.province }}{{ deliveryAndSelfTaking.deliveryAddress.city }}{{ deliveryAndSelfTaking.deliveryAddress.area }}{{ deliveryAndSelfTaking.deliveryAddress.street }}
+									</view>
+									<van-icon name="arrow" />
+								</view>
+								<view class="distance_m" v-if="deliveryAndSelfTaking">
+									{{ deliveryAndSelfTaking.deliveryAddress.phone }}
+									{{ deliveryAndSelfTaking.deliveryAddress.realname }}
+								</view>
+							</view>
+						</block>
+						<block v-if="selfOutActiveIndex==1&&!deliveryAndSelfTaking.deliveryAddress&&!isLoading">
+							<view class="no_login_out_tip">
+								暂不支持外送
 							</view>
 						</block>
 					</view>
-					<view class="flex_between self_out_button" v-if="selfOutItems.length>0">
+					<view class="flex_between self_out_button" v-if="selfOutItems.length>0&&!isLoading">
 						<view v-for="(item,index) in selfOutItems" @tap="selfTap" :data-index="item.index"
 							:class="selfOutActiveIndex==index?'self_out_active self_button theme-bg':'self_button'">
 							{{item.text}}
@@ -48,14 +62,13 @@
 						<view class="menu_left_name">
 							<view class="out_of_range one_row menu_left_name_text ">{{ menu.name }}</view>
 						</view>
-						<!-- <view v-if="(menuList.length - 1) == menuIndex" :style="'height:'+(carHeight?carHeight:70)+'px;background: #f6f6f6;'"></view> -->
 					</view>
 				</block>
 			</scroll-view>
 			<scroll-view :scroll-y="true" :enable-flex="true"
-				:style="'height:'+(winHeight-(carHeight?(carHeight):70)-5)+'px;'" @scroll="mainScroll"
-				@touchstart="mainTouch" :scroll-into-view="'into'+activeTab" :scroll-with-animation="true"
-				id="scroll_right" class="menu_right_scorll">
+				:style="'height:'+(winHeight-(carHeight?(carHeight):70)-5)+'px;margin-left:1rpx;background: #f6f6f6;'"
+				@scroll="mainScroll" @touchstart="mainTouch" :scroll-into-view="'into'+activeTab"
+				:scroll-with-animation="true" id="scroll_right" class="menu_right_scorll">
 				<view class="menu_right_scorll_view">
 					<view v-for="(menu, menuIndex) in menuList" :id="'into'+menuIndex"
 						:class="'vtabs-content-item ' + (menuList.length - 1 == menuIndex ? '' : '')">
@@ -66,7 +79,7 @@
 						<block v-for="(chil, goodsIndex) in menu.goodsList" :key="goodsIndex">
 							<view :class="'commodity-item ' + (chil.goodsStatus == 4 ? 'isEnd' : '')"
 								:hover-class="chil.goodsStatus == 4 ? '' : 'hover-class-public'">
-								<view class="commodity-name-view"
+								<view class="flex_between commodity-name-view"
 									@tap="parseEventDynamicCode($event, chil.goodsStatus == 4 ? '' : 'commodityDetailTap')"
 									:data-id="chil.goodsId">
 									<image
@@ -76,44 +89,45 @@
 									<view class="commodity-name-english-view">
 										<view class="commodity-name">{{ chil.goodsName }}</view>
 										<view class="commodity-english"><text></text></view>
-										<view class="money-view">￥{{ chil.goodsPrice }}</view>
-									</view>
-								</view>
-								<view class="money-insert-view"
-									v-if="!shopInfo.isOutofDeliveryRange && shopInfo.isOperatingOfShop && shopInfo.shop.isOperating">
-									<view class="stepper" v-if="chil.number > 0">
-										<block>
-											<view class="flex_center car_reduce_add reduce-class" @tap="bindMinus"
-												:data-cartId="chil.cartId" :data-number="chil.number">
-												－
+										<view class="flex_between money-view">
+											<view>￥{{ chil.goodsPrice }}</view>
+											<view class="money-insert-view"
+												v-if="!shopInfo.isOutofDeliveryRange && shopInfo.isOperatingOfShop && shopInfo.shop.isOperating">
+												<block v-if="chil.number > 0">
+													<view class="stepper">
+														<view class="flex_center insert-view reduce-class"
+															@click.stop="bindMinus" :data-cartId="chil.cartId"
+															:data-number="chil.number">
+															－
+														</view>
+														<input disabled type="number" :value="chil.number"
+															class="radd-reduce-input" />
+														<view
+															@click.stop="parseEventDynamicCode($event, chil.goodsStatus != 4 ? 'openSpecifications' : '')"
+															class="flex_center insert-view add-class"
+															:data-goodsId="chil.goodsId">
+															＋
+														</view>
+													</view>
+												</block>
+												<block v-else>
+													<view
+														:class="'insert-view theme-bg ' + (chil.goodsStatus == 4 ? 'isEnd' : '')"
+														:data-goodsId="chil.goodsId"
+														@click.stop="parseEventDynamicCode($event, chil.goodsStatus != 4 ? 'openSpecifications' : '')">
+														＋
+													</view>
+												</block>
 											</view>
-											<input disabled type="number" :value="chil.number"
-												class="radd-reduce-input" />
-											<view
-												@tap="parseEventDynamicCode($event, chil.goodsStatus != 4 ? 'openSpecifications' : '')"
-												class="flex_center car_reduce_add add-class"
-												:data-goodsId="chil.goodsId">
-												＋
-											</view>
-										</block>
-									</view>
-									<block v-else>
-										<view :class="'insert-view theme-bg ' + (chil.goodsStatus == 4 ? 'isEnd' : '')"
-											:data-goodsId="chil.goodsId"
-											@tap="parseEventDynamicCode($event, chil.goodsStatus != 4 ? 'openSpecifications' : '')">
-											＋
 										</view>
-									</block>
+									</view>
 								</view>
+
 							</view>
-
-
 						</block>
 						<view v-if="(menuList.length - 1) == menuIndex" class="more_box">没有更多啦~</view>
-						<!-- <view v-if="(menuList.length - 1) == menuIndex" :style="'height:'+(carHeight?carHeight:70)+'px;background: #f6f6f6;'"></view> -->
 					</view>
 				</view>
-
 			</scroll-view>
 			<view id="menu_scorll_mask" :class="ifScroll ? '' : 'menu_scorll_mask'"></view>
 			<view class="flex_column shopping-cart-detail" id="shopping-cart-detail">
@@ -178,7 +192,8 @@
 
 		<van-empty v-if="menuList.length <= 0&&!isLoading" description="暂无商品"></van-empty>
 		<view class="shopping-cart-detail">
-			<van-action-sheet :show="shoppingCartDialog" title="已选商品" @close="closeShoppingCart">
+			<van-action-sheet v-model:show="shoppingCartDialog" :show="shoppingCartDialog" title="已选商品"
+				@close="closeShoppingCart" @cancel="closeShoppingCart" z-index='2'>
 				<view class="content">
 					<scroll-view style="height: 55vh" scroll-y>
 						<view class="shoppingCart-item" v-for="(item, index) in shoppingCartList" :key="index">
@@ -206,7 +221,8 @@
 					</scroll-view>
 				</view>
 			</van-action-sheet>
-			<van-action-sheet :show="specificationsDialog" @close="closeSpecifications" title="选择规格">
+			<van-action-sheet :show="specificationsDialog" @close="closeSpecifications" @cancel="closeSpecifications"
+				title="选择规格">
 				<view class="content">
 					<view class="goods-info-view">
 						<image :src="goodsInfo.mainImage" mode="aspectFill" class="commodity-image"></image>
@@ -216,13 +232,12 @@
 							<view class="goods-info-price">￥{{ priceAfter }}</view>
 						</view>
 					</view>
-					<scroll-view scroll-y style="height: 56vh">
+					<scroll-view scroll-y style="height: 50vh">
 						<view class="commdity-name-type-view">
 							<view class="commdity-name">{{ data.name }}</view>
 							<view class="commdity-engname">{{ data.name }}</view>
 							<view class="commdity-type-item" v-for="(item, key) in specList" :key="key">
 								<view class="commdity-type-name">{{ key }}</view>
-
 								<radio-group class="radio-group" @change="radioChange" :data-firstIndex="key">
 									<label :class="
                                                     'group-label theme-border ' +
@@ -238,17 +253,24 @@
 									</label>
 								</radio-group>
 							</view>
+							<view class="loading_box" v-if="specLoading&&specList.length==0">
+								<van-loading custom-class="loading_box_class" vertical>加载中...</van-loading>
+							</view>
+							<van-empty v-if="!specLoading&&specList.length <= 0" description="暂无规格"></van-empty>
 						</view>
-						<van-empty v-if="specList.length <= 0" description="暂无数据"></van-empty>
 					</scroll-view>
 					<view slot="footer" class="position-sticky-bottom">
 						<view class="good-choice-btn theme-bg" @tap="insertShoppingCart">我选好了</view>
 					</view>
 				</view>
 			</van-action-sheet>
+			<!-- 普通弹窗 -->
+			<!-- <van-action-sheet :show="specificationsDialog" title="标题" @close="">
+				<view class="content">内容</view>
+			</van-action-sheet> -->
 		</view>
 	</view>
-	<van-action-sheet :show="isActivityDialog" @close="close" title="优惠活动">
+	<van-action-sheet :show="isActivityDialog" @close="close" @cancel="close" title="优惠活动">
 		<view slot="desc">
 			<scroll-view style="height: 55vh" scroll-y>
 				<view v-if="shopInfo.promotionList.length > 0">
@@ -272,7 +294,7 @@
 			</scroll-view>
 		</view>
 	</van-action-sheet>
-	<van-action-sheet :show="isOutofDeliveryRangeDialog" title="本店超出配送范围">
+	<van-action-sheet :show="isOutofDeliveryRangeDialog" @cancel="close" title="本店超出配送范围">
 
 		<view slot="desc">
 			<view class="edit-address-class">建议您更换地址再下单</view>
@@ -282,16 +304,18 @@
 				style="font-size: 24rpx">更换地址</button>
 		</view>
 	</van-action-sheet>
+
 </template>
 
 <script>
 	import GlobalConfig from '../../../utils/global-config';
 	import https from '../../../utils/http';
 	import authService from '../../../utils/auth';
-	import toastService from'../../../utils/toast.service';
-	import utilHelper from'../../../utils/util';
-	import dateHelper from'../../../utils/date-helper';
-	var app = getApp();
+	import toastService from '../../../utils/toast.service';
+	import utilHelper from '../../../utils/util';
+	import dateHelper from '../../../utils/date-helper';
+
+	let app = null;
 	//声明全局变量
 	var proListToTop = [];
 	var isInitShow = true;
@@ -300,8 +324,13 @@
 	export default {
 		data() {
 			return {
+				initShopInfo: {
+					shopAdditionalVo: {
+
+					}
+				},
 				titleActiveColor: '#004ca0',
-				staticImg: app.globalData.staticImg,
+				staticImg: '',
 				currentActiveIndex: 0,
 				menuList: [],
 				imageTip: '../../assets/common/icon-internet-error.png',
@@ -374,7 +403,8 @@
 						area: '',
 						street: '',
 						startTime: '',
-						endTime: ''
+						endTime: '',
+						id: ''
 					},
 					promotionList: [],
 					isOutofDeliveryRange: '',
@@ -403,7 +433,8 @@
 				},
 				priceAfter: '',
 				specListString: '',
-				specList: '',
+				specList: [],
+				specLoading: false,
 				pageTopView: '',
 				dps: '',
 				shoppingCartDetail: '',
@@ -450,6 +481,7 @@
 				}],
 				selfOutActiveIndex: 0,
 				winHeight: 0,
+				topHeight: 0,
 				topArr: [],
 				isMainScroll: false,
 				scrollInto: '',
@@ -461,15 +493,18 @@
 					}
 				},
 				isLoading: true,
-				ifChooseBack: false
+				ifChooseBack: false,
+				memberInfo: {
+
+				}
 			};
 		},
 		/**
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad: function(options) {
-			console.log("onLoad=", options)
-			//this.onLoadClone3389(options);
+			console.log("onLoad=", options);
+			app = getApp();
 		},
 		/**
 		 * 生命周期函数--监听页面初次渲染完成
@@ -481,6 +516,7 @@
 		 * 生命周期函数--监听页面显示
 		 */
 		onShow: function() {
+			//toastService.showToast(app.globalData.deliveryAndSelfTaking.location)
 			console.log("onShow===", this.shopInfo.shop.id, "app.globalData.deliveryAndSelfTaking=", app.globalData
 				.deliveryAndSelfTaking);
 			var _this = this;
@@ -492,22 +528,32 @@
 			app.globalData.deliveryAndSelfTaking.ifIndexSwitchTab = false;
 			app.globalData.deliveryAndSelfTaking.selfOutActiveIndex = selfOutActiveIndex;
 			app.globalData.deliveryAndSelfTaking.chooseIndex = selfOutActiveIndex;
-			console.log("selfOutActiveIndex=", selfOutActiveIndex)
-			this.setData({
-				activeLeftTab: 0,
-				activeTab: 0,
-				activeLeftTab: 0,
-				topArr: [],
-				isMainScroll: false,
-				scrollInto: 'into0',
-				selfOutActiveIndex: selfOutActiveIndex,
-				deliveryAndSelfTaking:app.globalData.deliveryAndSelfTaking
-			});
-			if(this.shopInfo.shop.id){
+			console.log("selfOutActiveIndex=", selfOutActiveIndex);
+			console.log("query=", 1);
+			// this.setData({
+			// 	activeLeftTab: 0,
+			// 	activeTab: 0,
+			// 	topArr: [],
+			// 	isMainScroll: false,
+			// 	scrollInto: 'into0',
+			// 	selfOutActiveIndex: selfOutActiveIndex,
+			// 	"deliveryAndSelfTaking.deliveryAddress": app.globalData.deliveryAndSelfTaking.deliveryAddress
+			// });
+			this.staticImg = app.globalData.staticImg;
+			this.activeLeftTab = 0;
+			this.activeTab = 0;
+			this.topArr = [];
+			this.isMainScroll = false;
+			this.scrollInto = 'into0';
+			this.selfOutActiveIndex = selfOutActiveIndex;
+			this.deliveryAndSelfTaking.deliveryAddress = app.globalData.deliveryAndSelfTaking.deliveryAddress;
+			this.deliveryAndSelfTaking.selfOutActiveIndex = selfOutActiveIndex;
+
+			if (this.shopInfo.shop.id) {
+				console.log("query=", 2);
 				this.getShoppingCartList(this.shopInfo.shop.id);
 			}
-			
-			this.topViewHeight();
+
 			var ifChooseBack = app.globalData.deliveryAndSelfTaking.ifChooseBack;
 			var ifChoosePayBack = app.globalData.deliveryAndSelfTaking.ifChoosePayBack;
 			console.log('ifChooseBack=', ifChooseBack, 'ifChoosePayBack=', ifChoosePayBack);
@@ -515,58 +561,58 @@
 			if (selfOutActiveIndex == 0) {
 				console.log(ifChooseBack, ifChoosePayBack);
 				if (ifChoosePayBack || !ifChooseBack) {
-					this.setData({
-						isLoading:true,
-						menuList: []
-					});
+					this.isLoading = true;
+					this.menuList = [];
+					console.log("支付页面选择地址返回=====", this.initShopInfo);
 					this.getShopList();
 				}
-				
+
 				if (ifChooseBack) {
-					this.setData({
-						isLoading:true,
-						menuList: []
-					});
-					_this.getShopInfo(this.initShopInfo);
+					this.isLoading = true;
+					this.menuList = [];
+					console.log("菜单选择地址返回=====", this.initShopInfo);
+					this.$nextTick(() => {
+						setTimeout(() => {
+							this.getShopInfo(this.initShopInfo);
+						}, 500);
+					})
+
 				}
 			}
 			if (selfOutActiveIndex == 1) {
 				//当在支付页面切换地址时返回触发
 				if (ifChoosePayBack) {
-					this.setData({
-						isLoading:true,
-						menuList: []
-					});
+					this.isLoading = true;
+					this.menuList = [];
 					this.getShopList();
 				}
 				if (!ifChooseBack) {
-					this.setData({
-						isLoading:true,
-						menuList: []
-					});
+					this.isLoading = true;
+					this.menuList = [];
 					this.getDeliveryAddressList();
 				}
-				
+
 				if (ifChooseBack) {
-					this.setData({
-						isLoading:true,
-						menuList: []
-					});
-					_this.getShopInfo(this.initShopInfo);
+					this.isLoading = true;
+					this.menuList = [];
+					if (this.initShopInfo.id) {
+						_this.getShopInfo(this.initShopInfo);
+					}
 				}
 			}
+
 			this.selfAdaption();
-			
+
 			this.$nextTick(() => {
 				setTimeout(() => {
+					_this.topViewHeight();
 					_this.getElementTop();
-					_this.setData({
-						ifScroll: true
-					});
-				}, 1000);
+				}, 10);
+				setTimeout(() => {
+					_this.ifScroll = true;
+					_this.isLoading = false;
+				}, 3000);
 			});
-			
-
 		},
 		/**
 		 * 生命周期函数--监听页面隐藏
@@ -607,53 +653,14 @@
 
 		},
 		methods: {
-			/**
-			 * 生命周期函数--监听页面加载
-			 */
-			onLoadClone3389: function(options) {
-				// 确保页面数据已经刷新完毕~
-				var _this = this;
-				authService.checkIsLogin().then((result) => {
-					console.log(result);
-					if (result) {
-						return;
+			getUserInfo: function(e) {
+				https.request('/rest/member/getLoginMemberInfo', {}).then((result) => {
+					if (result.success) {
+						this.setData({
+							memberInfo: result.data
+						})
 					}
 				});
-				if (!app.globalData.deliveryAndSelfTaking.ifIndexSwitchTab) {
-					var selfOutActiveIndex = 0;
-					if ('radioIndex' in app.globalData.deliveryAndSelfTaking) {
-						selfOutActiveIndex = app.globalData.deliveryAndSelfTaking.radioIndex
-					}
-					console.log("selfOutActiveIndex=", selfOutActiveIndex)
-					this.setData({
-						selfOutActiveIndex: selfOutActiveIndex,
-						activeLeftTab: 0,
-						options: options,
-						activeLeftTab: 0,
-						topArr: [],
-						menuList: [],
-						isMainScroll: false,
-						scrollInto: 'into0'
-					});
-					this.topViewHeight();
-					if (selfOutActiveIndex == 0) {
-						this.getShopList();
-					}
-					if (selfOutActiveIndex == 1) {
-						this.getDeliveryAddressList();
-					}
-
-					this.selfAdaption();
-					this.$nextTick(() => {
-						setTimeout(() => {
-							_this.getElementTop();
-							_this.setData({
-								ifScroll: true
-							});
-						}, 1000)
-					});
-				}
-
 			},
 			selfAdaption() {
 				var _this = this;
@@ -718,6 +725,7 @@
 			},
 
 			openShoppingCart() {
+				var _this = this;
 				authService.checkIsLogin().then((result) => {
 					if (result) {
 						if (this.shoppingCartList.length > 0) {
@@ -727,10 +735,12 @@
 						}
 						return;
 					}
-					app.globalData.checkIsAuth('scope.userInfo');
+					_this.checkIsAuth();
 				});
 			},
-
+			checkIsAuth() {
+				app.globalData.checkIsAuth('scope.userInfo');
+			},
 			// 滑动切换tab
 			bindSlideChange: function(e) {
 				var that = this;
@@ -761,8 +771,7 @@
 				const query = uni.createSelectorQuery();
 				let windowHeight = app.globalData.systemInfoSync.windowHeight;
 				console.log(windowHeight);
-				query
-					.selectAll('.swiper-tabs-choice,.content-manjian')
+				query.selectAll('.swiper-tabs-choice,.content-manjian')
 					.boundingClientRect(function(rect) {
 						console.log(rect);
 						let height = windowHeight > 630 ? rect[0].height - 10 : rect[0].height + 25;
@@ -771,8 +780,7 @@
 							leftHeight: windowHeight - height,
 							bussinessHeight: windowHeight - height
 						});
-					})
-					.exec();
+					}).exec();
 			},
 
 			commodityDetailTap(e) {
@@ -821,8 +829,7 @@
 			getAllRects() {
 				// 获取商品数组的位置信息
 				let menuHeight = 0;
-				uni.createSelectorQuery()
-					.in(uni)
+				uni.createSelectorQuery().in(uni)
 					.selectAll('.commodity-item-view')
 					.boundingClientRect(function(rects) {
 						rects.forEach(function(rect) {
@@ -830,8 +837,7 @@
 							proListToTop.push(menuHeight);
 						});
 						//toastService.hideLoading();
-					})
-					.exec();
+					}).exec();
 			},
 			getDeliveryAddressList() {
 				var _this = this;
@@ -863,11 +869,8 @@
 									app.globalData.deliveryAndSelfTaking.deliveryAddress = shopAddress;
 									app.globalData.deliveryAndSelfTaking.feeData = 0;
 									console.log(app.globalData.deliveryAndSelfTaking)
-									_this.setData({
-										deliveryAndSelfTaking: app.globalData
-											.deliveryAndSelfTaking,
-										initShopInfo: initShopInfo
-									});
+									_this.deliveryAndSelfTaking = app.globalData.deliveryAndSelfTaking;
+									_this.initShopInfo = initShopInfo;
 									_this.getShopInfo(initShopInfo);
 								};
 							});
@@ -899,9 +902,7 @@
 					}).then((result) => {
 						if (result.success) {
 							setTimeout(function timeout() {
-								_this.setData({
-									isLoading: false
-								});
+								_this.isLoading = false;
 							}, 2000);
 							if (result.data.records.length > 0) {
 								_this.getShopInfo(result.data.records[0]);
@@ -917,10 +918,8 @@
 					position: app.globalData.deliveryAndSelfTaking.location
 				}).then((result) => {
 					if (result.success && result.data) {
-						this.setData({
-							shopInfo: result.data,
-							initShopInfo: initShopInfo
-						});
+						this.shopInfo = result.data;
+						this.initShopInfo = initShopInfo;
 						this.getMenuList(shopId);
 						this.getShoppingCartList(shopId);
 					}
@@ -931,7 +930,6 @@
 				https.request('/rest/menu/listWithGoods', {
 					shopId: shopId
 				}).then((result) => {
-
 					if (result.success && result.data) {
 						var goodsList = [];
 						result.data.forEach((aitem, index) => {
@@ -945,10 +943,10 @@
 
 						});
 						console.log(goodsList)
-						this.setData({
-							menuList: goodsList,
-							isLoading: false
-						});
+						this.menuList = goodsList;
+						setTimeout(() => {
+							_this.isLoading = false;
+						}, 0);
 					}
 				});
 			},
@@ -1014,15 +1012,13 @@
 							isStartDeliveryPrice = true;
 						}
 						priceDifference = this.shopInfo.shop.startDeliveryPrice - (totalPrice + packingCharges);
-						this.setData({
-							menuList: this.menuList,
-							totalNum: totalNum,
-							priceDifference: utilHelper.toFixed(priceDifference, 2),
-							isStartDeliveryPrice: isStartDeliveryPrice,
-							shoppingCartList: result.data.records,
-							packingCharges: packingCharges,
-							totalPrice: utilHelper.toFixed(totalPrice + packingCharges, 2)
-						});
+						this.menuList = this.menuList;
+						this.totalNum = totalNum;
+						this.priceDifference = utilHelper.toFixed(priceDifference, 2);
+						this.isStartDeliveryPrice = isStartDeliveryPrice;
+						this.shoppingCartList = result.data.records;
+						this.packingCharges = packingCharges;
+						this.totalPrice = utilHelper.toFixed(totalPrice + packingCharges, 2);
 						this.getShopCartFullReductionRule();
 					}
 				});
@@ -1236,20 +1232,17 @@
 				});
 			},
 			openSpecifications(e) {
-				toastService.showLoading();
-				this.setData({
-					specificationsDialog: true,
-					goodsId: e.currentTarget.dataset.goodsid
-				});
-				toastService.hideLoading();
+				this.specificationsDialog = true;
+				this.specLoading = true;
+				this.goodsId = e.currentTarget.dataset.goodsid;
 				this.getCommodityDetails(e.currentTarget.dataset.goodsid);
 			},
 
 			closeSpecifications: function() {
 				this.getShoppingCartList(this.shopInfo.shop.id);
-				this.setData({
-					specificationsDialog: false
-				});
+				this.specificationsDialog = false;
+				this.specList = [];
+				this.specLoading = false;
 			},
 
 			getCommodityDetails(id) {
@@ -1302,7 +1295,8 @@
 						}
 						this.setData({
 							specListString: specListString,
-							specList: specList
+							specList: JSON.stringify(specList) == '{}' ? [] : specList,
+							specLoading: false
 						});
 					}
 				});
@@ -1321,10 +1315,11 @@
 					specList[firstIndex][j].checked = false;
 				}
 				//给选中的第二级分类的checked设置为true
-				for (var i in checkValue) {
-					specList[firstIndex][checkValue[i]].checked = true;
-					//console.log(specList[firstIndex][checkValue[i]])
-				}
+				specList[firstIndex][checkValue].checked = true;
+				// for (var i in checkValue) {
+				// 	specList[firstIndex][checkValue[i]].checked = true;
+				// 	//console.log(specList[firstIndex][checkValue[i]])
+				// }
 
 				let price = this.goodsInfo.price;
 				let specListString = '';
@@ -1356,16 +1351,14 @@
 						}
 					}
 				}
-
+				console.log(specList)
 				this.setData({
 					specList: specList,
 					specListString: specListString,
 					priceAfter: price
 				});
 			},
-
 			insertShoppingCart(e) {
-
 				var _this = this;
 				authService.checkIsLogin().then((result) => {
 					toastService.showLoading();
@@ -1388,14 +1381,16 @@
 						}).then((result) => {
 							console.log(result)
 							if (result.success) {
-								_this.setData({
-									specificationsDialog: false
-								});
+								_this.specificationsDialog = false;
+								_this.specList = [];
+								_this.specLoading = true;
 								_this.getShoppingCartList(_this.shopInfo.shop.id);
 							}
 						});
 						return;
 					}
+					_this.specificationsDialog = false;
+					toastService.hideLoading();
 					app.globalData.checkIsAuth('scope.userInfo');
 				});
 			},
@@ -1448,10 +1443,9 @@
 					toastService.hideLoading();
 					//重新计算被选中的商品的总金额
 					totalNum++;
-					that.getShoppingCartList(_this.shopInfo.shop.id);
+					_this.getShoppingCartList(_this.shopInfo.shop.id);
 				});
 			},
-
 			updateNumber(id, number, type, callbak) {
 				authService.checkIsLogin().then((result) => {
 					console.log(result);
@@ -1459,20 +1453,17 @@
 						app.globalData.checkIsAuth('scope.userInfo');
 						return;
 					}
-					https
-						.request('/rest/member/shoppingCart/updateNumber', {
-							id: id,
-							number: number,
-							type: type
-						})
-						.then((result) => {
-							if (result.success) {
-								callbak();
-							}
-						});
+					https.request('/rest/member/shoppingCart/updateNumber', {
+						id: id,
+						number: number,
+						type: type
+					}).then((result) => {
+						if (result.success) {
+							callbak();
+						}
+					});
 				});
 			},
-
 			goToPay() {
 				authService.checkIsLogin().then((result) => {
 					if (!result) {
@@ -1504,7 +1495,7 @@
 				orderDetail.orderDetailList = [];
 				orderDetail.packingCharges = 0;
 				for (var key in list) {
-					orderDetail.packingCharges=orderDetail.packingCharges+list[key].packingCharges
+					orderDetail.packingCharges = orderDetail.packingCharges + list[key].packingCharges
 					orderDetail.orderDetailList.push({
 						goodsId: list[key].goodsId,
 						specList: list[key].specList,
@@ -1514,14 +1505,17 @@
 						price: list[key].price,
 						id: list[key].id,
 						packingCharges: list[key].packingCharges,
-						totalPrice: list[key].price*list[key].number
+						totalPrice: list[key].price * list[key].number
 					});
 				}
-				app.globalData.deliveryAndSelfTaking.payType = 'car';
-				app.globalData.deliveryAndSelfTaking.orderDetail = orderDetail;
-				uni.navigateTo({
-					url: '../pay/pay'
-				});
+				setTimeout(() => {
+					app.globalData.deliveryAndSelfTaking.selfOutActiveIndex = this.selfOutActiveIndex;
+					app.globalData.deliveryAndSelfTaking.payType = 'car';
+					app.globalData.deliveryAndSelfTaking.orderDetail = orderDetail;
+					uni.navigateTo({
+						url: '../pay/pay'
+					});
+				}, 100);
 			},
 
 			gotoShop(e) {
@@ -1547,7 +1541,8 @@
 				this.setData({
 					specificationsDialog: false,
 					shoppingCartDialog: false,
-					isActivityDialog: false
+					isActivityDialog: false,
+					isOutofDeliveryRangeDialog: false
 				});
 			},
 
@@ -1593,9 +1588,11 @@
 			},
 
 			topViewHeight() {
+
 				var _this = this;
 				isInitShow = false;
 				const query = uni.createSelectorQuery();
+
 				let windowHeight = app.globalData.systemInfoSync.windowHeight;
 				let screenHeight = app.globalData.systemInfoSync.screenHeight;
 				let statusBarHeight = app.globalData.systemInfoSync.statusBarHeight * 2;
@@ -1613,12 +1610,17 @@
 			},
 			selfTap(e) {
 				console.log(e);
+
 				var index = e.currentTarget.dataset.index;
 				var selfOutActiveIndex = this.selfOutActiveIndex;
 				console.log("选择地址======", this.deliveryAndSelfTaking);
 				var chooseId = this.deliveryAndSelfTaking.deliveryAddress ? this.deliveryAndSelfTaking.deliveryAddress.id :
 					'';
 				var chooseId = selfOutActiveIndex == 1 ? chooseId : 0;
+				if (!this.memberInfo.id && chooseId == 1) {
+					this.checkIsAuth();
+					return
+				}
 				var shopId = selfOutActiveIndex == 0 ? this.shopInfo.shop.id : app.globalData.deliveryAndSelfTaking.shopId;
 				app.globalData.deliveryAndSelfTaking.chooseId = chooseId;
 				app.globalData.deliveryAndSelfTaking.selfOutActiveIndex = selfOutActiveIndex;
@@ -1681,7 +1683,7 @@
 					return;
 				}
 				console.log(this.topArr);
-				if(this.topArr.length>0){
+				if (this.topArr.length > 0) {
 					let top = e.detail.scrollTop;
 					let index = -1;
 					if (top >= this.topArr[this.topArr.length - 1]) {
@@ -1692,10 +1694,10 @@
 						});
 					}
 					this.activeLeftTab = (index < 0 ? 0 : index);
-				}else{
+				} else {
 					this.getElementTop();
 				}
-				
+
 			},
 			/* 主区域触摸 */
 			mainTouch() {
@@ -1813,6 +1815,7 @@
 		flex-wrap: wrap;
 		padding: 5rpx;
 		border-radius: 50rpx;
+		margin-left: 2rpx;
 		/* height: 66rpx; */
 	}
 
@@ -2044,6 +2047,7 @@
 		background: white;
 		z-index: 1;
 		border-radius: 15rpx;
+		box-shadow: 0 -1px #fff;
 	}
 
 	.categoryName-view {
@@ -2073,8 +2077,6 @@
 
 	.commodity-name-view {
 		width: 100%;
-		display: flex;
-		align-items: center;
 	}
 
 	.line-view {
@@ -2097,7 +2099,7 @@
 	.money-view {
 		font-size: 30rpx;
 		font-weight: bold;
-		margin-top: 30rpx;
+		margin-top: 50rpx;
 	}
 
 	.insert-view {
@@ -2107,7 +2109,6 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: white;
 		line-height: 35rpx;
 	}
 
@@ -2116,10 +2117,14 @@
 	}
 
 	.money-insert-view {
-		position: absolute;
+		/* position: absolute;
 		margin-top: -10%;
 		right: 20rpx;
-		bottom: 10rpx;
+		bottom: 30rpx; */
+	}
+
+	.commodity-name-english-view {
+		width: 55%;
 	}
 
 	#space-view {
@@ -2148,7 +2153,7 @@
 	.shopping-cart-detail {
 		position: fixed;
 		bottom: 0;
-		z-index: 9999;
+		z-index: 999;
 		width: 100%;
 		background: white;
 	}
@@ -2482,8 +2487,8 @@
 
 	.group-label {
 		width: 28%;
-		padding: 1%;
-		margin: 1%;
+		padding: 12rpx 1rpx;
+		margin: 5rpx 5rpx;
 		font-size: 26rpx;
 		border-radius: 18rpx;
 		text-align: center;
@@ -2660,7 +2665,7 @@
 		width: 80%;
 		margin: 20rpx 0rpx;
 		padding: 0 50rpx;
-		border-right: 1rpx solid #f5f5f5;
+		/* border-right: 1rpx solid #f5f5f5; */
 	}
 
 	.evaluate-info-right {
@@ -2855,6 +2860,10 @@
 		width: 100%;
 	}
 
+	#menu_list {
+		background: #f6f6f6;
+	}
+
 	.menu_list {
 		position: relative;
 	}
@@ -2869,7 +2878,7 @@
 
 
 	.content {
-		padding: 16px 16px 16px;
+		padding: 0 16px 16px 16px;
 	}
 
 	.van-tabs {
@@ -3035,9 +3044,23 @@
 		text-align: center;
 		font-size: 26rpx;
 		padding: 0 20rpx;
+		box-shadow: 0 -1px #f6f6f6;
 	}
 
 	.left_active {
+		border: none;
 		border-radius: 0 40rpx 40rpx 0;
+	}
+
+	.no_login_out_tip {
+		font-size: 26rpx;
+	}
+
+	#shopping-cart-detail {
+		bottom: calc(var(--window-bottom));
+	}
+
+	.content {
+		/* bottom: calc(var(--window-bottom)); */
 	}
 </style>

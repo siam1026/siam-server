@@ -1,5 +1,6 @@
 package com.siam.system.modular.package_goods.model.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.siam.system.modular.package_goods.entity.GoodsSpecificationOption;
 import com.siam.system.modular.package_goods.entity.GoodsSpecificationOption;
 import io.swagger.annotations.ApiModelProperty;

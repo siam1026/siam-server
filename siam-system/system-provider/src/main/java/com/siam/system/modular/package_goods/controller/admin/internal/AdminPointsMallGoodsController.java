@@ -21,6 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/rest/admin/pointsMall/goods")
 @Transactional(rollbackFor = Exception.class)
@@ -97,7 +99,7 @@ public class AdminPointsMallGoodsController {
         goods.setUpdateTime(new Date());
         //兑换商品所需积分数量新增时默认等于折扣价
         goods.setExchangePoints(goods.getPrice().intValue());
-        pointsMallGoodsService.insertSelective(goods);
+        pointsMallGoodsService.save(goods);
 
         //建立商品与类别的关系
         PointsMallMenuGoodsRelation insertPointsMallMenuGoodsRelation = new PointsMallMenuGoodsRelation();
@@ -112,25 +114,27 @@ public class AdminPointsMallGoodsController {
 
         //建立商品与系统默认优惠券ID-新人3折卷的关联关系
         PointsMallCoupons dbPointsMallCoupons = pointsMallCouponsService.selectByPrimaryKey(BusinessType.NEW_PEOPLE_COUPONS_ID);
-        if(dbPointsMallCoupons == null){
-            throw new StoneCustomerException("系统默认优惠券-新人3折卷不存在");
+        if(dbPointsMallCoupons != null){
+            PointsMallCouponsGoodsRelation insertPointsMallCouponsGoodsRelation = new PointsMallCouponsGoodsRelation();
+            insertPointsMallCouponsGoodsRelation.setCouponsId(BusinessType.NEW_PEOPLE_COUPONS_ID);
+            insertPointsMallCouponsGoodsRelation.setGoodsId(goods.getId());
+            insertPointsMallCouponsGoodsRelation.setCreateTime(new Date());
+            pointsMallCouponsGoodsRelationService.insertSelective(insertPointsMallCouponsGoodsRelation);
+        }else{
+            log.error("系统默认优惠券-新人3折卷不存在");
         }
-        PointsMallCouponsGoodsRelation insertPointsMallCouponsGoodsRelation = new PointsMallCouponsGoodsRelation();
-        insertPointsMallCouponsGoodsRelation.setCouponsId(BusinessType.NEW_PEOPLE_COUPONS_ID);
-        insertPointsMallCouponsGoodsRelation.setGoodsId(goods.getId());
-        insertPointsMallCouponsGoodsRelation.setCreateTime(new Date());
-        pointsMallCouponsGoodsRelationService.insertSelective(insertPointsMallCouponsGoodsRelation);
 
         //建立商品与系统默认优惠券ID-推荐新人3折卷的关联关系
         PointsMallCoupons dbPointsMallCouponsInvite = pointsMallCouponsService.selectByPrimaryKey(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
-        if(dbPointsMallCouponsInvite == null){
-            throw new StoneCustomerException("系统默认优惠券ID-推荐新人3折卷不存在");
+        if(dbPointsMallCouponsInvite != null){
+            PointsMallCouponsGoodsRelation insertPointsMallCouponsGoodsRelationInvite = new PointsMallCouponsGoodsRelation();
+            insertPointsMallCouponsGoodsRelationInvite.setCouponsId(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
+            insertPointsMallCouponsGoodsRelationInvite.setGoodsId(goods.getId());
+            insertPointsMallCouponsGoodsRelationInvite.setCreateTime(new Date());
+            pointsMallCouponsGoodsRelationService.insertSelective(insertPointsMallCouponsGoodsRelationInvite);
+        }else{
+            log.error("系统默认优惠券-推荐新人3折卷不存在");
         }
-        PointsMallCouponsGoodsRelation insertPointsMallCouponsGoodsRelationInvite = new PointsMallCouponsGoodsRelation();
-        insertPointsMallCouponsGoodsRelationInvite.setCouponsId(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
-        insertPointsMallCouponsGoodsRelationInvite.setGoodsId(goods.getId());
-        insertPointsMallCouponsGoodsRelationInvite.setCreateTime(new Date());
-        pointsMallCouponsGoodsRelationService.insertSelective(insertPointsMallCouponsGoodsRelationInvite);
 
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);
@@ -151,7 +155,7 @@ public class AdminPointsMallGoodsController {
 
         // 修改商品信息
         goods.setUpdateTime(new Date());
-        pointsMallGoodsService.updateByPrimaryKeySelective(goods);
+        pointsMallGoodsService.updateById(goods);
 
         //判断商品类别关系  目前不考虑一个商品有多个类别的情况
         PointsMallMenuGoodsRelationExample example = new PointsMallMenuGoodsRelationExample();
@@ -189,7 +193,7 @@ public class AdminPointsMallGoodsController {
     public BasicResult delete(@RequestBody @Validated(value = {}) PointsMallGoods param){
         BasicResult basicResult = new BasicResult();
 
-        PointsMallGoods dbPointsMallGoods = pointsMallGoodsService.selectByPrimaryKey(param.getId());
+        PointsMallGoods dbPointsMallGoods = pointsMallGoodsService.getById(param.getId());
         if(dbPointsMallGoods == null){
             basicResult.setSuccess(false);
             basicResult.setCode(BasicResultCode.ERR);
@@ -211,7 +215,7 @@ public class AdminPointsMallGoodsController {
         pointsMallCouponsGoodsRelationService.deleteByPointsMallGoodsId(dbPointsMallGoods.getId());
 
         //删除商品
-        pointsMallGoodsService.deleteByPrimaryKey(dbPointsMallGoods.getId());
+        pointsMallGoodsService.removeById(dbPointsMallGoods.getId());
 
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);
@@ -250,7 +254,7 @@ public class AdminPointsMallGoodsController {
 
                 goods.setCreateTime(new Date());
                 goods.setUpdateTime(new Date());
-                pointsMallGoodsService.insertSelective(goods);
+                pointsMallGoodsService.save(goods);
             });
         } catch (IOException e) {
             e.printStackTrace();

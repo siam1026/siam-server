@@ -1,6 +1,5 @@
 package com.siam.system.modular.package_order.service;
 
-import com.siam.system.modular.package_order.model.example.OrderExample;
 import com.siam.system.modular.package_order.model.param.OrderParam;
 
 import java.math.BigDecimal;

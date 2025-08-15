@@ -1,6 +1,6 @@
 package com.siam.system.modular.package_goods.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,8 +16,11 @@ import java.util.Date;
 @ApiModel(value = "商品表")
 public class Goods {
 
-    @TableField(select = false)
+    @TableField(exist = false)
     private Integer menuId;
+
+    @TableField(exist = false)
+    String position;
 
     /**
      * 状态 1=待上架 2=已上架 3=已下架 4=售罄
@@ -26,8 +29,6 @@ public class Goods {
     public static final int STATUS_ON_SHELF = 2;
     public static final int STATUS_OFF_SHELF = 3;
     public static final int STATUS_SELL_OUT = 4;
-
-    String position;
 
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -95,6 +96,12 @@ public class Goods {
     @ApiModelProperty(notes = "排序号")
     private Integer sortNumber;
 
+    @ApiModelProperty(notes = "打印机id(多个用逗号隔开)")
+    private String printerId;
+
+    @ApiModelProperty(notes = "打印次数")
+    private Integer printNum;
+
     @ApiModelProperty(notes = "创建时间")
     private Date createTime;
 
@@ -102,10 +109,10 @@ public class Goods {
     private Date updateTime;
 
     //页码
-    private Integer pageNo = 1;
+    @TableField(exist = false) private Integer pageNo = 1;
 
     //页面大小
-    private Integer pageSize = 20;
+    @TableField(exist = false) private Integer pageSize = 20;
 
     public Integer getPageNo() {
         return pageNo;

@@ -89,7 +89,7 @@ public class AdminShopChangeRecordController {
             shopChangeRecordService.updateByPrimaryKeySelective(shopChangeRecord);
 
             //修改店铺信息
-            Shop dbShop = shopService.selectByPrimaryKey(dbShopChangeRecord.getShopId());
+            Shop dbShop = shopService.getById(dbShopChangeRecord.getShopId());
             Shop updateShop = new Shop();
             updateShop.setId(dbShop.getId());
             updateShop.setName(dbShopChangeRecord.getName());
@@ -119,7 +119,7 @@ public class AdminShopChangeRecordController {
             updateShop.setHouseNumber(dbShopChangeRecord.getHouseNumber());
             updateShop.setLongitude(dbShopChangeRecord.getLongitude());
             updateShop.setLatitude(dbShopChangeRecord.getLatitude());
-            shopService.updateByPrimaryKeySelective(updateShop);
+            shopService.updateById(updateShop);
         }else if(shopChangeRecordParam.getStatus() == Quantity.INT_2){
             //审核不通过
 

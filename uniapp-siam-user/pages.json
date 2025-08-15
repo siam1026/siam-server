@@ -1,6 +1,5 @@
 {
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "暹罗外卖",
@@ -245,8 +244,7 @@
 		},
 		{
 			"path": "pages/internal/mall/menu/menu",
-			"style": {
-			}
+			"style": {}
 		},
 		{
 			"path": "pages/internal/mall/car/car",
@@ -301,8 +299,7 @@
 		},
 		{
 			"path": "pages/mine/collect/index/index",
-			"style": {
-			}
+			"style": {}
 		},
 		{
 			"path": "pages/mine/unreceived/reward/list/list",
@@ -315,8 +312,7 @@
 		"color": "#bebebe",
 		"selectedColor": "#004ca0",
 		"borderStyle": "white",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/index/index",
 				"text": "首页",
 				"iconPath": "static/assets/tabbar/Icon/index.png",
@@ -348,51 +344,63 @@
 			}
 		]
 	},
-	"style": "v2",
 	"sitemapLocation": "sitemap.json",
 	"plugins": {
+		// #ifdef MP-WEIXIN
 		"chooseLocation": {
 			"version": "1.0.2",
 			"provider": "wx63ffb7b7894e99ae"
 		}
+		// #endif
 	},
 	"requiredBackgroundModes": [
-	    "location"
-	  ],
-	  "permission": {
-	    "scope.userLocation": {
-	      "desc": "你的位置信息将用于小程序位置接口的效果展示"
-	    }
-	  },
+		"location"
+	],
+	"permission": {
+		"scope.userLocation": {
+			"desc": "你的位置信息将用于小程序位置接口的效果展示"
+		}
+	},
 	"globalStyle": {
 		"backgroundTextStyle": "dark",
 		"navigationBarBackgroundColor": "#fff",
 		"navigationBarTitleText": "暹罗外卖",
-		"navigationBarTextStyle": "black",
-		"usingComponents": {
-			"van-row":"/wxcomponents/vant/dist/row/index",
-			"van-loading":"/wxcomponents/vant/dist/loading/index",
-			"van-tabs":"/wxcomponents/vant/dist/tabs/index",
-			"van-tab":"/wxcomponents/vant/dist/tab/index",
-			"van-action-sheet":"/wxcomponents/vant/dist/action-sheet/index",
-			"van-tree-select":"/wxcomponents/vant/dist/tree-select/index",
-			"van-sticky":"/wxcomponents/vant/dist/sticky/index",
-			"van-icon":"/wxcomponents/vant/dist/icon/index",
-			"van-empty":"/wxcomponents/vant/dist/empty/index",
-			"van-button":"/wxcomponents/vant/dist/button/index",
-			"van-sidebar":"/wxcomponents/vant/dist/sidebar/index",
-			"van-sidebar-item":"/wxcomponents/vant/dist/sidebar-item/index",
-			"van-cell":"/wxcomponents/vant/dist/cell/index",
-			"van-dialog":"/wxcomponents/vant/dist/dialog/index",
-			"van-overlay":"/wxcomponents/vant/dist/overlay/index",
-			"van-search":"/wxcomponents/vant/dist/search/index",
-			"van-grid":"/wxcomponents/vant/dist/grid/index",
-			"van-grid-item":"/wxcomponents/vant/dist/grid-item/index",
-			"van-swipe-cell":"/wxcomponents/vant/dist/swipe-cell/index",
-			"van-divider":"/wxcomponents/vant/dist/divider/index",
-			"van-area":"/wxcomponents/vant/dist/area/index",
-			"van-popup":"/wxcomponents/vant/dist/popup/index"
+		"navigationBarTextStyle": "black"
+		// #ifdef H5
+		,"app-plus": {
+			"titleNView": false //禁用原生导航栏  
 		}
+		// #endif
+		// #ifdef MP-WEIXIN
+		,"usingComponents": {
+			"van-button": "/wxcomponents/dist/vant/button/index",
+			"van-row": "/wxcomponents/dist/vant/row/index",
+			"van-loading": "/wxcomponents/dist/vant/loading/index",
+			"van-tabs": "/wxcomponents/dist/vant/tabs/index",
+			"van-tab": "/wxcomponents/dist/vant/tab/index",
+			"van-action-sheet": "/wxcomponents/dist/vant/action-sheet/index",
+			"van-tree-select": "/wxcomponents/dist/vant/tree-select/index",
+			"van-sticky": "/wxcomponents/dist/vant/sticky/index",
+			"van-icon": "/wxcomponents/dist/vant/icon/index",
+			"van-empty": "/wxcomponents/dist/vant/empty/index",
+			"van-sidebar": "/wxcomponents/dist/vant/sidebar/index",
+			"van-sidebar-item": "/wxcomponents/dist/vant/sidebar-item/index",
+			"van-cell": "/wxcomponents/dist/vant/cell/index",
+			"van-dialog": "/wxcomponents/dist/vant/dialog/index",
+			"van-overlay": "/wxcomponents/dist/vant/overlay/index",
+			"van-search": "/wxcomponents/dist/vant/search/index",
+			"van-grid": "/wxcomponents/dist/vant/grid/index",
+			"van-grid-item": "/wxcomponents/dist/vant/grid-item/index",
+			"van-swipe-cell": "/wxcomponents/dist/vant/swipe-cell/index",
+			"van-divider": "/wxcomponents/dist/vant/divider/index",
+			"van-area": "/wxcomponents/dist/vant/area/index",
+			"van-popup": "/wxcomponents/dist/vant/popup/index",
+			"van-config-provider": "/wxcomponents/dist/vant/config-provider/index"
+		}
+		// #endif
 	},
-	"subPackages": []
+	"subPackages": [],
+	"easycom": {
+		"autoscan": false
+	}
 }

@@ -48,7 +48,7 @@
 //            //商品的主图 等于 商品轮播图的第一张图
 //            if(StringUtils.isNotBlank(goods.getSubImages())){
 //                updateGoods.setMainImage(goods.getSubImages().split(",")[0]);
-//                goodsService.updateByPrimaryKeySelective(updateGoods);
+//                goodsService.updateById(updateGoods);
 //            }
 //        });
 //
@@ -66,11 +66,11 @@
 //        //3、外卖系统&积分商城--订单表的 接单门店logo、第一件商品的主图 需要维护
 //        List<com.siam.system.modular.package_goods.entity.Order> orderList = orderService.selectByExample(new com.siam.system.modular.package_goods.model.example.OrderExample());
 //        orderList.forEach(order -> {
-//            com.siam.system.modular.package_goods.entity.Shop shop = shopService.selectByPrimaryKey(order.getShopId());
+//            com.siam.system.modular.package_goods.entity.Shop shop = shopService.getById(order.getShopId());
 //            com.siam.system.modular.package_goods.entity.Order updateOrder = new com.siam.system.modular.package_goods.entity.Order();
 //            updateOrder.setId(order.getId());
 //            updateOrder.setShopLogoImg(shop.getShopLogoImg());
-//            orderService.updateByPrimaryKeySelective(updateOrder);
+//            orderService.updateById(updateOrder);
 //        });
 //
 //        //4、生成个人邀请分享太阳码

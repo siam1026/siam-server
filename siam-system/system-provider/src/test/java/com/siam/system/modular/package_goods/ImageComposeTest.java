@@ -17,7 +17,7 @@ import java.util.Map;
 public class ImageComposeTest {
 
     public static void main(String[] args) throws IOException {
-        CompoundImage("https://deerspot.oss-cn-hangzhou.aliyuncs.com/test/siamCompose.png", "https://deerspot.oss-cn-hangzhou.aliyuncs.com/test/eb831e8f0b42b8b3a8b4360c11a2b5e.jpg", "", "C:\\Users\\Administrator\\Desktop\\testComponse.png", "postion");
+        CompoundImage("https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/test/siamCompose.png", "https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/test/eb831e8f0b42b8b3a8b4360c11a2b5e.jpg", "", "C:\\Users\\Administrator\\Desktop\\testComponse.png", "postion");
 
         /*try {
             String destUrl = "https://ibsbjstar.ccb.com.cn/NCCB_Encoder/Encoder?CODE=EUSo4Twu6YRk2JDPJ9OnpfgrdDObpGwKBGOTqVwnBfWAvjCP5UOFuig6hySmrww2hXVIqDgb5NUOrvwI5NRuqtQ3pXcRVh";
@@ -49,7 +49,7 @@ public class ImageComposeTest {
         HttpURLConnection httpUrl = (HttpURLConnection) new URL(destUrl).openConnection();
         httpUrl.connect();
 
-        String destUrl_qrcode = "https://deerspot.oss-cn-hangzhou.aliyuncs.com/test/testQrcode.png";
+        String destUrl_qrcode = "https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/test/testQrcode.png";
         HttpURLConnection httpUrl_qrcode = (HttpURLConnection) new URL(destUrl_qrcode).openConnection();
         httpUrl_qrcode.connect();
 

@@ -1,31 +1,13 @@
 package com.siam.system.modular.package_goods.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.siam.system.modular.package_goods.entity.Shop;
-import com.siam.system.modular.package_goods.entity.Shop;
-import com.siam.system.modular.package_goods.model.example.ShopExample;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
-public interface ShopService {
-
-    int insert(Shop record);
-
-    int insertSelective(Shop record);
-
-    int deleteByExample(ShopExample example);
-
-    int deleteByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(Shop record);
-
-    List<Shop> selectByExample(ShopExample example);
-
-    Shop selectByPrimaryKey(Integer id);
-
-    int countByExample(ShopExample example);
+public interface ShopService extends IService<Shop> {
 
     Page<Shop> getListByPage(int pageNo, int pageSize, Shop shop);
 

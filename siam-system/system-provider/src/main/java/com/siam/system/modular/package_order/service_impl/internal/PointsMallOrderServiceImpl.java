@@ -1,6 +1,8 @@
 package com.siam.system.modular.package_order.service_impl.internal;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.siam.package_common.constant.Quantity;
 import com.siam.package_common.exception.StoneCustomerException;
 import com.siam.package_common.util.*;
@@ -18,7 +20,6 @@ import com.siam.system.modular.package_order.controller.member.internal.PointsMa
 import com.siam.system.modular.package_order.entity.*;
 import com.siam.system.modular.package_order.entity.internal.*;
 import com.siam.system.modular.package_order.mapper.internal.PointsMallOrderMapper;
-import com.siam.system.modular.package_order.model.example.OrderExample;
 import com.siam.system.modular.package_order.model.example.internal.PointsMallOrderDetailExample;
 import com.siam.system.modular.package_order.model.example.internal.PointsMallOrderExample;
 import com.siam.system.modular.package_order.model.param.OrderParam;
@@ -40,6 +41,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +51,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class PointsMallOrderServiceImpl implements PointsMallOrderService {
+public class PointsMallOrderServiceImpl extends ServiceImpl<PointsMallOrderMapper, PointsMallOrder> implements PointsMallOrderService {
 
     public static final String USER_ORDER_TOKEN_PREFIX = "order:token:";
 
@@ -132,7 +134,7 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
     private PointsMallFullReductionRuleService fullReductionRuleService;
 
     @Autowired
-    private RocketMQTemplate rocketMQTemplate;
+    private ApplicationContext applicationContext;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -304,6 +306,7 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
         /*//加入MQ延时队列，检测并关闭超时未支付的订单，5分钟
         Message message = new Message("TID_COMMON_MALL", "CLOSE_OVERDUE_ORDER", JSON.toJSONString(dbOrder).getBytes());
         message.setDelayTimeLevel(RocketMQConst.DELAY_TIME_LEVEL_5M);
+        RocketMQTemplate rocketMQTemplate = applicationContext.getBean("rocketMQTemplate", RocketMQTemplate.class);
         rocketMQTemplate.getProducer().send(message);*/
 
         return dbOrder;
@@ -329,7 +332,7 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
         //商品总数量
         int goodsTotalQuantity = 0;
         for (PointsMallOrderDetail orderDetail : param.getOrderDetailList()) {
-            PointsMallGoods dbGoods = goodsService.selectByPrimaryKey(orderDetail.getGoodsId());
+            PointsMallGoods dbGoods = goodsService.getById(orderDetail.getGoodsId());
             if (dbGoods == null){
                 throw new StoneCustomerException("订单商品数据异常，请稍后重试");
             }
@@ -593,8 +596,7 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
     @Override
     public void updateByFinishOverdueOrder() {
         //积分商城订单支付超过7天(7*24个小时) 且 订单处于已发货状态，则将订单修改为已完成
-        Date overdueTime = DateUtilsPlus.addDays(new Date(), Quantity.INT_7);
-        pointsMallOrderMapper.updateFinish(overdueTime, new Date(), Quantity.INT_6);
+        pointsMallOrderMapper.updateFinish(Quantity.INT_6);
     }
 
     @Override
@@ -843,9 +845,10 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
         excludeStatusList.add(1);
         excludeStatusList.add(10);
         //查询外卖系统的符合订单数
-        OrderExample orderExample = new OrderExample();
-        orderExample.createCriteria().andCreateTimeGreaterThan(vipRechargeRecord.getCreateTime()).andStatusNotIn(excludeStatusList);
-        int count = orderService.countByExample(orderExample);
+        LambdaQueryWrapper<Order> orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        orderLambdaQueryWrapper.gt(Order::getCreateTime, vipRechargeRecord.getCreateTime());
+        orderLambdaQueryWrapper.notIn(Order::getStatus, excludeStatusList);
+        int count = orderService.count(orderLambdaQueryWrapper);
         //查询积分商城的符合订单数
         PointsMallOrderExample pointsMallOrderExample = new PointsMallOrderExample();
         pointsMallOrderExample.createCriteria().andIdNotEqualTo(orderId).andCreateTimeGreaterThan(vipRechargeRecord.getCreateTime()).andStatusNotIn(excludeStatusList);
@@ -1502,7 +1505,7 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
         dbPointsMallOrderMap.put("isShowLogistics", isShowLogistics);
 
         //返回商家电话
-        /*Shop shop = shopService.selectByPrimaryKey(dbPointsMallOrder.getShopId());
+        /*Shop shop = shopService.getById(dbPointsMallOrder.getShopId());
         dbPointsMallOrderMap.put("shopContactPhone", shop.getContactPhone());*/
 
         vo.setOrder(dbPointsMallOrderMap);
@@ -1940,7 +1943,7 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
             }
         }
 
-        PointsMallOrder dbPointsMallOrder = pointsMallOrderMapper.selectById(param.getOrderRefund().getOrderId());
+        PointsMallOrder dbPointsMallOrder = pointsMallOrderMapper.selectById(param.getId());
         if(dbPointsMallOrder == null){
             throw new StoneCustomerException("该订单不存在");
         }
@@ -2268,7 +2271,7 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
             }
         }
 
-        PointsMallOrder dbPointsMallOrder = pointsMallOrderMapper.selectById(param.getOrderRefund().getOrderId());
+        PointsMallOrder dbPointsMallOrder = pointsMallOrderMapper.selectById(param.getId());
         if(dbPointsMallOrder == null){
             throw new StoneCustomerException("该订单不存在");
         }
@@ -2778,9 +2781,10 @@ public class PointsMallOrderServiceImpl implements PointsMallOrderService {
             excludeStatusList.add(1);
             excludeStatusList.add(10);
             //查询外卖系统的符合订单数
-            OrderExample orderExample = new OrderExample();
-            orderExample.createCriteria().andCreateTimeGreaterThan(vipRechargeRecord.getCreateTime()).andStatusNotIn(excludeStatusList);
-            int count = orderService.countByExample(orderExample);
+            LambdaQueryWrapper<Order> orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            orderLambdaQueryWrapper.gt(Order::getCreateTime, vipRechargeRecord.getCreateTime());
+            orderLambdaQueryWrapper.notIn(Order::getStatus, excludeStatusList);
+            int count = orderService.count(orderLambdaQueryWrapper);
             //查询积分商城的符合订单数
             PointsMallOrderExample pointsMallOrderExample = new PointsMallOrderExample();
             pointsMallOrderExample.createCriteria().andCreateTimeGreaterThan(vipRechargeRecord.getCreateTime()).andStatusNotIn(excludeStatusList);

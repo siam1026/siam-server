@@ -101,16 +101,16 @@ public class GoodsController {
     public BasicResult selectById(@RequestBody @Validated(value = {}) Goods param){
         BasicData basicResult = new BasicData();
 
-        //TODO(MARK)-小程序用的是高德地图，后端用的是百度地图，所以需要转换一下
-        String[] strArray = param.getPosition().split(",");
-        Map<String, BigDecimal> coordinateMap = baiduMapUtils.gaoDeToBaidu(Double.valueOf(strArray[0]), Double.valueOf(strArray[1]));
-        log.debug("\n\ngaode-position : " + param.getPosition());
-        log.debug("\n\nbaidu-position : " + coordinateMap.get("lng") + "," + coordinateMap.get("lat"));
+//        //TODO(MARK)-小程序用的是高德地图，后端用的是百度地图，所以需要转换一下
+//        String[] strArray = param.getPosition().split(",");
+//        Map<String, BigDecimal> coordinateMap = baiduMapUtils.gaoDeToBaidu(Double.valueOf(strArray[0]), Double.valueOf(strArray[1]));
+//        log.debug("\n\ngaode-position : " + param.getPosition());
+//        log.debug("\n\nbaidu-position : " + coordinateMap.get("lng") + "," + coordinateMap.get("lat"));
 
-        Goods dbGoods = goodsService.selectByPrimaryKey(param.getId());
+        Goods dbGoods = goodsService.getById(param.getId());
         if(dbGoods == null) throw new StoneCustomerException("该商品不存在");
 
-        Shop dbShop = shopService.selectByPrimaryKey(dbGoods.getShopId());
+        Shop dbShop = shopService.getById(dbGoods.getShopId());
         if(dbShop == null) throw new StoneCustomerException("该店铺不存在");
         if(dbShop.getStatus() != Quantity.INT_2) throw new StoneCustomerException("该店铺待上架或已下架，不能查看该商品");
 
@@ -121,20 +121,20 @@ public class GoodsController {
         //如果返回值小于等于0，则代表当前位置超出配送范围 或 当前位置不合法 -- 需要将该店铺从列表中移除
         //计算配送时长、距离公里数
         /*String addressB = dbShop.getProvince() + dbShop.getCity() + dbShop.getArea() + dbShop.getStreet();*/
-        TravelingDistanceVo travelingDistanceVo = commonService.selectTravelingDistance(coordinateMap.get("lng"), coordinateMap.get("lat"), dbShop.getLongitude(), dbShop.getLatitude());
-        System.out.println("\n\n" + dbShop.getName() + "'travelingDistanceVo.getDistanceValue() : " + travelingDistanceVo.getDistanceValue());
-        Setting setting = settingService.selectCurrent();
-        if(travelingDistanceVo.getDistanceValue().compareTo(BigDecimal.ZERO) == 0){
-            //如果距离为0，则代表百度地图没有计算结果
-            //还有一种情况会造成距离为0，那就是起点和终点相等--这种情况也算作地址填写错误
-            resultMap.put("isOutofDeliveryRange", true);
-        }else if(travelingDistanceVo.getDistanceValue().compareTo(setting.getDeliveryDistanceLimit()) > 0){
-            //超出5.5公里则不予配送
-            resultMap.put("isOutofDeliveryRange", true);
-        }else{
-            resultMap.put("isOutofDeliveryRange", false);
-        }
-        System.out.println("\n\n" + dbShop.getName() + "'isOutofDeliveryRange : " + resultMap.get("isOutofDeliveryRange"));
+//        TravelingDistanceVo travelingDistanceVo = commonService.selectTravelingDistance(coordinateMap.get("lng"), coordinateMap.get("lat"), dbShop.getLongitude(), dbShop.getLatitude());
+//        System.out.println("\n\n" + dbShop.getName() + "'travelingDistanceVo.getDistanceValue() : " + travelingDistanceVo.getDistanceValue());
+//        Setting setting = settingService.selectCurrent();
+//        if(travelingDistanceVo.getDistanceValue().compareTo(BigDecimal.ZERO) == 0){
+//            //如果距离为0，则代表百度地图没有计算结果
+//            //还有一种情况会造成距离为0，那就是起点和终点相等--这种情况也算作地址填写错误
+//            resultMap.put("isOutofDeliveryRange", true);
+//        }else if(travelingDistanceVo.getDistanceValue().compareTo(setting.getDeliveryDistanceLimit()) > 0){
+//            //超出5.5公里则不予配送
+//            resultMap.put("isOutofDeliveryRange", true);
+//        }else{
+//            resultMap.put("isOutofDeliveryRange", false);
+//        }
+//        System.out.println("\n\n" + dbShop.getName() + "'isOutofDeliveryRange : " + resultMap.get("isOutofDeliveryRange"));
 
         //查询当前门店是否营业
         Boolean isOperatingOfShop = commonService.selectIsOperatingOfShop(dbShop.getId());

@@ -1,6 +1,6 @@
 package com.siam.system.modular.package_user.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,11 +16,11 @@ public class MemberWithdrawRecord {
     /* ##################################### START 扩展字段 #################################### */
 
     //开始日期
-    @TableField(select = false)
+    @TableField(exist = false)
     private Date startCreateTime;
 
     //结束日期
-    @TableField(select = false)
+    @TableField(exist = false)
     private Date endCreateTime;
 
     public Date getStartCreateTime() {

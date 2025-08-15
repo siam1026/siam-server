@@ -1,7 +1,9 @@
 package com.siam.system.modular.package_goods.service_impl.internal;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.siam.package_common.constant.Quantity;
 import com.siam.package_common.util.DateUtilsExtend;
+import com.siam.system.modular.package_goods.entity.Shop;
 import com.siam.system.modular.package_order.model.example.OrderRefundExample;
 import com.siam.system.modular.package_order.model.example.internal.PointsMallOrderExample;
 import com.siam.system.modular.package_order.service.OrderService;
@@ -13,17 +15,6 @@ import com.siam.system.modular.package_user.service.MemberService;
 import com.siam.system.modular.package_user.service.MemberTradeRecordService;
 import com.siam.system.modular.package_user.service.MerchantWithdrawRecordService;
 import com.siam.system.modular.package_goods.model.example.ShopChangeRecordExample;
-import com.siam.system.modular.package_goods.model.example.ShopExample;
-import com.siam.system.modular.package_goods.model.example.internal.PointsMallGoodsExample;
-import com.siam.system.modular.package_goods.model.param.StatisticsParam;
-import com.siam.system.modular.package_goods.service.ShopChangeRecordService;
-import com.siam.system.modular.package_goods.service.ShopService;
-import com.siam.system.modular.package_goods.service.SystemUsageRecordService;
-import com.siam.system.modular.package_goods.service.internal.PointsMallGoodsService;
-import com.siam.system.modular.package_goods.service.internal.PointsMallShoppingCartService;
-import com.siam.system.modular.package_goods.service.internal.PointsMallStatisticsService;
-import com.siam.system.modular.package_goods.model.example.ShopChangeRecordExample;
-import com.siam.system.modular.package_goods.model.example.ShopExample;
 import com.siam.system.modular.package_goods.model.example.internal.PointsMallGoodsExample;
 import com.siam.system.modular.package_goods.model.param.StatisticsParam;
 import com.siam.system.modular.package_goods.service.ShopChangeRecordService;
@@ -33,11 +24,9 @@ import com.siam.system.modular.package_goods.service.internal.PointsMallGoodsSer
 import com.siam.system.modular.package_goods.service.internal.PointsMallShoppingCartService;
 import com.siam.system.modular.package_goods.service.internal.PointsMallStatisticsService;
 import com.siam.system.modular.package_order.entity.OrderRefund;
-import com.siam.system.modular.package_order.entity.internal.PointsMallOrder;
 import com.siam.system.modular.package_order.entity.internal.PointsMallOrderRefund;
 import com.siam.system.modular.package_order.model.param.OrderParam;
 import com.siam.system.modular.package_order.model.param.internal.PointsMallOrderParam;
-import com.siam.system.modular.package_user.entity.Member;
 import com.siam.system.modular.package_user.entity.MemberTradeRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,9 +144,9 @@ public class PointsMallStatisticsServiceImpl implements PointsMallStatisticsServ
         BigDecimal totalRefundDeliveryFee = (BigDecimal) orderRefundSumField.get("totalRefundDeliveryFee");
 
         //待处理开店申请、待处理提现申请、待处理变更资料申请、待处理退款申请
-        ShopExample shopExample = new ShopExample();
-        shopExample.createCriteria().andAuditStatusEqualTo(Quantity.INT_1);
-        int handleShopCount = shopService.countByExample(shopExample);
+        LambdaQueryWrapper<Shop> shopLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        shopLambdaQueryWrapper.eq(Shop::getAuditStatus, Quantity.INT_1);
+        int handleShopCount = shopService.count(shopLambdaQueryWrapper);
 
         int handleMerchantWithdrawCount = (int) merchantWithdrawRecordService.countByAuditStatus(Quantity.INT_1).getData();
 
@@ -170,21 +159,21 @@ public class PointsMallStatisticsServiceImpl implements PointsMallStatisticsServ
         int handleOrderRefundCount = orderRefundService.countByExample(orderRefundCount);
 
         //商家总览：已下架、已上架、全部商家
-        shopExample = new ShopExample();
-        shopExample.createCriteria().andStatusEqualTo(Quantity.INT_3);
-        int underShelfShopCount = shopService.countByExample(shopExample);
+        shopLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        shopLambdaQueryWrapper.eq(Shop::getStatus, Quantity.INT_3);
+        int underShelfShopCount = shopService.count(shopLambdaQueryWrapper);
 
-        shopExample = new ShopExample();
-        shopExample.createCriteria().andStatusEqualTo(Quantity.INT_2);
-        int onShelfShopCount = shopService.countByExample(shopExample);
+        shopLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        shopLambdaQueryWrapper.eq(Shop::getStatus, Quantity.INT_2);
+        int onShelfShopCount = shopService.count(shopLambdaQueryWrapper);
 
         /*List filterList = new ArrayList<>();
         filterList.add(Quantity.INT_1);
         filterList.add(Quantity.INT_2);
         filterList.add(Quantity.INT_3);*/
-        shopExample = new ShopExample();
-        shopExample.createCriteria().andAuditStatusEqualTo(Quantity.INT_2);
-        int allShopCount = shopService.countByExample(shopExample);
+        shopLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        shopLambdaQueryWrapper.eq(Shop::getAuditStatus, Quantity.INT_2);
+        int allShopCount = shopService.count(shopLambdaQueryWrapper);
 
         //用户总览：今日新增、昨日新增、本月新增、会员总数
         int dayMemberCount = memberService.selectCountRegister(DateUtilsExtend.getDayBegin(), DateUtilsExtend.getDayEnd());

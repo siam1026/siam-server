@@ -11,6 +11,7 @@ import com.siam.system.modular.package_order.mapper.internal.PointsMallOrderLogi
 import com.siam.system.modular.package_order.model.example.internal.PointsMallOrderLogisticsExample;
 import com.siam.system.modular.package_order.service.internal.PointsMallOrderLogisticsService;
 import com.siam.system.modular.package_order.service.internal.PointsMallOrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class PointsMallOrderLogisticsServiceImpl implements PointsMallOrderLogisticsService {
 
@@ -86,7 +88,7 @@ public class PointsMallOrderLogisticsServiceImpl implements PointsMallOrderLogis
             updateOrder.setIsSign(aliyunExpress.getIssign()==1 ? true : false);
             updateOrder.setDeliveryLastUpdateTime(aliyunExpress.getUpdateTime());
             updateOrder.setTakeTime(aliyunExpress.getTakeTime());
-            orderService.updateByPrimaryKeySelective(updateOrder);
+            orderService.updateById(updateOrder);
 
             //更新订单物流跟踪信息，采用先删后增的形式，排除系统默认插入的两条信息
             List<String> excludeDescriptionList = new ArrayList<>();
@@ -109,6 +111,7 @@ public class PointsMallOrderLogisticsServiceImpl implements PointsMallOrderLogis
             //查询不到物流跟踪信息
             //微信公众号消息通知管理员
             String errorMsg = "物流跟踪信息同步失败，请检查失败原因";
+            log.error(errorMsg + ",logisticsNo={0}",logisticsNo);
             wxPublicPlatformNotifyService.sendFatalErrorMessage(WxPublicPlatformNotifyService.jpOpenId, errorMsg, CommonUtils.getFunctionLocation(), "无", new Date(), "请管理员及时处理");
             return false;
         }

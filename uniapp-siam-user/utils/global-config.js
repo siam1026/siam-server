@@ -1,9 +1,9 @@
 export default class GlabalConfig {
     // static baseUrl = 'https://api.test.siamit.cn/siam-server';
-	// #ifdef APP-PLUS||H5
+	// #ifdef H5
 	static baseUrl = 'siam-server';
 	// #endif
-	// #ifdef MP-WEIXIN||MP-ALIPAY
+	// #ifdef APP-PLUS||MP-WEIXIN||MP-ALIPAY
 	static baseUrl = 'https://api.show.siamit.cn/siam-server';
 	// #endif
     

@@ -32,6 +32,7 @@ public class ImageComposeUtils {
      * @return
      */
     public void compoundImage(String mainImagePath, String qrCodePath, String savePath, String vipNo) throws IOException {
+        log.info("图片合成接口,mainImagePath={0},qrCodePath={1},savePath={2},vipNo={3}", mainImagePath, qrCodePath, savePath, vipNo);
         HttpURLConnection httpUrl = (HttpURLConnection) new URL(mainImagePath).openConnection();
         httpUrl.connect();
 

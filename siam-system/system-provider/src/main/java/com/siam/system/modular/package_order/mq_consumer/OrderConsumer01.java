@@ -35,7 +35,7 @@ package com.siam.system.modular.package_order.mq_consumer;
 //            Order updateOrder = new Order();
 //            updateOrder.setId(order.getId());
 //            updateOrder.setOrderStatus(Quantity.INT_1);
-//            orderService.updateByPrimaryKeySelective(updateOrder);
+//            orderService.updateById(updateOrder);
 //
 //            // 减少商品库存
 //            Integer number = orderDetail.getNumber();

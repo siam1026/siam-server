@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siam.package_common.entity.BasicData;
 import com.siam.package_common.entity.BasicResult;
 import com.siam.package_common.constant.BasicResultCode;
+import com.siam.package_common.exception.StoneCustomerException;
 import com.siam.system.modular.package_goods.entity.GoodsAccessories;
 import com.siam.system.modular.package_goods.service.GoodsAccessoriesService;
 import com.siam.system.modular.package_goods.model.example.GoodsSpecificationOptionExample;
@@ -80,10 +81,7 @@ public class AdminGoodsAccessoriesController {
 
         GoodsAccessories dbGoodsAccessories = goodsAccessoriesService.selectByPrimaryKey(param.getId());
         if(dbGoodsAccessories == null){
-            basicResult.setSuccess(false);
-            basicResult.setCode(BasicResultCode.ERR);
-            basicResult.setMessage("该商品辅料不存在，删除失败");
-            return basicResult;
+            throw new StoneCustomerException("该商品辅料不存在，删除失败");
         }
 
         //暂时不让他删除，后续可能会采取级联删除商品规格选项

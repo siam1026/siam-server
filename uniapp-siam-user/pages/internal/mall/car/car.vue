@@ -1,15 +1,18 @@
 <template>
 	<view>
-		<scroll-view :scroll-y="true" :style="'height:' + winHeight + 'px'">
+		<scroll-view :scroll-y="true" :style="'height:' + winHeight + 'px;'">
 			<checkbox-group class="weui-slidecells" @change="checkboxChange">
 				<view class="page__bd">
+
 					<view class="weui-slidecells" v-for="(item, index) in items" :key="index">
 						<van-swipe-cell :right-width="65">
 							<view :class="'weui-slidecell ' + (item.disable ? 'isDisable' : '')">
 								<label class="checkbox-group-label">
+									<!-- <checkbox :value="index" :index="index" class="theme-color theme-border-color"
+										:checked="item.checked" :disabled="item.disable" iconColor="#FFFFFF"
+										style="transform:scale(0.7);" /> -->
 									<checkbox :value="index" :index="index" class="theme-color theme-border-color"
-										:checked="item.checked" :disabled="item.disable" />
-
+										:checked="item.checked" :disabled="item.disable" iconColor="#FFFFFF" />
 									<view class="commdity-item">
 										<image
 											:src="item.mainImage ? item.mainImage : '/static/assets/images/load-image.png'"
@@ -35,10 +38,22 @@
 										:data-num="index + ',' + item.number">＋</view>
 								</view>
 							</view>
-							<view slot="right" class=" flvan-swipe-cell__right flex_between" :data-checkboxIndex="index"
+							// #ifdef APP-PLUS||H5
+							<template #right>
+								<view style="height: 100%;" class="flex_center">
+									<view class="flvan-swipe-cell__right flex_between" :data-checkboxIndex="index"
+										@tap="slideButtonTap($event, { checkboxIndex: index })">
+										<van-icon name="delete-o" />
+									</view>
+								</view>
+							</template>
+							// #endif
+							// #ifdef MP-WEIXIN||MP-ALIPAY
+							<view slot="right" class="flvan-swipe-cell__right flex_between" :data-checkboxIndex="index"
 								@tap="slideButtonTap($event, { checkboxIndex: index })">
 								<van-icon name="delete-o" />
 							</view>
+							// #endif
 						</van-swipe-cell>
 					</view>
 				</view>
@@ -100,7 +115,7 @@
 	import https from '../../../../utils/http';
 	import authService from '../../../../utils/auth';
 	import toastService from '../../../../utils/toast.service';
-	const app = getApp();
+	let app = null;
 	var winHeight = 0;
 	var totalPrice = 0;
 	var totalNum = 0;
@@ -110,9 +125,7 @@
 				slideButtons: [{
 					src: '/static/assets/common/icon-del.svg' // icon的路径
 				}],
-
 				items: [],
-
 				minusStatus: 'disable',
 				disabled: '',
 				totalPrice: '',
@@ -125,8 +138,11 @@
 				imageTip: ''
 			};
 		},
-		onLoad: function(option) {},
+		onLoad: function(option) {
+
+		},
 		onShow: function() {
+			app = getApp();
 			toastService.showLoading();
 			authService.checkIsLogin().then((result) => {
 				this.getLoveIt();
@@ -589,15 +605,6 @@
 		border-radius: 5rpx;
 	}
 
-	.weui-slideview_icon .weui-slideview__btn__wrp:first-child {
-		display: flex;
-		align-items: center;
-	}
-
-	.weui-slideview_icon .weui-slideview__btn {
-		background-color: red;
-	}
-
 	.checkbox-group-label {
 		display: flex;
 		align-items: center;
@@ -614,26 +621,6 @@
 		color: #858585;
 	}
 
-	/*checkbox 选项框大小  */
-
-	checkbox .wx-checkbox-input {
-		width: 40rpx;
-		height: 40rpx;
-	}
-
-	/*checkbox选中后样式  */
-
-	checkbox .wx-checkbox-input.wx-checkbox-input-checked {
-		width: 40rpx;
-		height: 40rpx;
-	}
-
-	checkbox {
-		width: 40rpx;
-		height: 40rpx;
-		margin-right: 15rpx;
-	}
-
 	.commdity-money-add-subtract {
 		width: 50%;
 		display: flex;
@@ -648,13 +635,11 @@
 	}
 
 	/*主容器*/
-
 	.stepper {
 		margin-left: 20rpx;
 	}
 
 	/*加号和减号*/
-
 	.stepper text {
 		width: 40rpx;
 		height: 40rpx;
@@ -663,13 +648,11 @@
 	}
 
 	/*数值*/
-
 	.stepper input {
 		width: 30px;
 	}
 
 	/* 底部去支付样式 */
-
 	.settlement-view {
 		position: fixed;
 		bottom: 0;
@@ -876,5 +859,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.settlement-view {
+		bottom: calc(var(--window-bottom));
 	}
 </style>

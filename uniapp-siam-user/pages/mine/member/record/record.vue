@@ -13,7 +13,7 @@
             </view>
         </view>
 		<van-empty v-if="list.length <= 0" description="暂无充值记录">
-			<van-button type="primary" size="small" @bindTap="goToDrink">去兑换</van-button>
+			<van-button type="primary" size="small" color="#004ca0" @bindTap="goToDrink">去兑换</van-button>
 		</van-empty>
     </view>
 </template>
@@ -21,10 +21,10 @@
 <script>
 import https from '../../../../utils/http';
 import authService from '../../../../utils/auth';
-var toastService = require('../../../../utils/toast.service');
-var utilHelper = require('../../../../utils/util');
-var dateHelper = require('../../../../utils/date-helper');
-var systemStatus = require('../../../../utils/system-status');
+import toastService from '../../../../utils/toast.service';
+import utilHelper from '../../../../utils/util';
+import dateHelper from '../../../../utils/date-helper';
+import systemStatus from '../../../../utils/system-status';
 var pageNo = 1;
 var pageSize = 20;
 export default {

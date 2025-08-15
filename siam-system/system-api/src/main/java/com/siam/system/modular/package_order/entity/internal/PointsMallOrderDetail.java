@@ -1,6 +1,6 @@
 package com.siam.system.modular.package_order.entity.internal;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -56,10 +56,10 @@ public class PointsMallOrderDetail {
     private Boolean isDeleted;
 
     //页码
-    private Integer pageNo = 1;
+    @TableField(exist = false) private Integer pageNo = 1;
 
     //页面大小
-    private Integer pageSize = 20;
+    @TableField(exist = false) private Integer pageSize = 20;
 
     public Integer getPageNo() {
         return pageNo;

@@ -35,7 +35,7 @@ public class PointsMallOrderApplicationTest {
             PointsMallOrder order = new PointsMallOrder();
             order.setMemberId(i);
             order.setOrderNo("orderNo" + i);
-            orderMapper.insertSelective(order);
+            orderMapper.insert(order);
         }
     }
 

@@ -6,13 +6,13 @@
 			</view>
 		</view>
 		<view class="ask-for-delivery-detail">
-			<view id="page-top-view" class="position-sticky flex_start public-views" style="display: flex;">
-				<view class="shop_info_view" @tap="selfTap">
-					<view v-if="!initShopInfo" class="flex_start" style="font-size: 30rpx;">
+			<view id="page-top-view" class="flex_start public-views" style="display: flex;">
+				<view class="shop_info_view" @tap="selfTap" :data-index="selfOutActiveIndex">
+					<view v-if="!initShopInfo.id" class="flex_start" style="font-size: 30rpx;">
 						<view>选择门店</view>
 						<van-icon name="arrow" />
 					</view>
-					<block v-if="selfOutActiveIndex==0&&initShopInfo">
+					<block v-if="selfOutActiveIndex==0&&initShopInfo&&shopInfo">
 						<view class="flex_start">
 							<view class="out_of_range one_row">{{shopInfo.shop.name}}</view>
 							<van-icon name="arrow" />
@@ -118,23 +118,20 @@
 				<view class="theme-color after-discount" v-else>
 					<text>无可用优惠券</text>
 				</view>
-				<text class="iconfont iconhtbArrowright02"></text>
+				<van-icon name="arrow" />
 			</view>
 		</view>
 		<view class="pay-mode-view margin-border-radius">
 			<view>支付方式</view>
 			<view class="choose-pay-mode">
-				<radio-group class="radio-group-address" @change="radioChangeAddress" :data-firstIndex="key">
+				<radio-group class="radio-group-address" @change="radioChangeAddress">
 					<block v-for="(item, index) in paymentModes" :key="index">
 						<label
 							:class="'radio-label-payment flex_center ' + (item.checked ? 'payment-checked' : 'payment-not-checked')"
 							v-if="item.show">
 							<radio :value="index" :checked="item.checked" class="pay_radio" />
-
-							<text :class="'iconfont ' + item.icon"></text>
-
+							<van-icon :name="item.icon" />
 							<text :decode="true">&nbsp;{{ item.text }}</text>
-
 							<text :decode="true" class="actionItem__desc" v-if="item.desc">&nbsp;{{ item.desc }}</text>
 						</label>
 					</block>
@@ -169,13 +166,22 @@
 				去支付
 			</view>
 		</view>
-		<!-- <mp-actionSheet @actiontap="goToPay" :show="dialogShow" :actions="paymentModes" :title="title"></mp-actionSheet> -->
-		<van-dialog use-slot :show="showPayPwdInput" :showConfirmButton="false" :showCancelButton="false">
+		<van-dialog use-slot :show="showPayPwdInput" :showConfirmButton="false" :showCancelButton="false" z-index='1'>
 			<view class="flex_between content_box">
 				<view></view>
 				<view>输入支付密码</view>
 				<van-icon name="cross" @tap="balancePayFail" />
 			</view>
+			// #ifdef APP-PLUS||H5
+			<!-- 密码输入框 -->
+			<view class="content_box" style="padding: 0 0;">
+				<view class="password_dialog_tip" style="padding: 0 16px;"><text>使用会员卡余额支付需要验证身份，验证通过后才可进行支付。</text>
+				</view>
+				<van-password-input :value="pwdVal" :focused="payFocus" @focus="payFocus = true" />
+				<view class="theme-color password_dialog_forget_pwd" @tap.stop.prevent="forgetThePassword">忘记密码</view>
+			</view>
+			// #endif
+			// #ifdef MP-WEIXIN||MP-ALIPAY
 			<view class="content_box" style="padding: 0 16px;">
 				<view class="password_dialog_tip"><text>使用会员卡余额支付需要验证身份，验证通过后才可进行支付。</text></view>
 				<view class="password_dialog_row" @tap="getFocus">
@@ -185,19 +191,23 @@
 				</view>
 				<view class="theme-color password_dialog_forget_pwd" @tap.stop.prevent="forgetThePassword">忘记密码</view>
 				<input class="password_dialog_input_control" password type="number" :focus="payFocus"
-					:hold-keyboard="holdKeyboard" :value="pwdVal" @input="inputPwd" maxlength="6"
-					:adjust-position="adjustPosition" cursor-spacing="100" />
+					:hold-keyboard="true" :value="pwdVal" @input="inputPwd" maxlength="6"
+					:adjust-position="adjustPosition" cursor-spacing="100" :auto-focus="payFocus" inputmode="numeric" />
 			</view>
-			<view slot="footer"></view>
+			// #endif
+			
 		</van-dialog>
-		<van-overlay :show="isVipDialogShow" z-index="100">
+		<van-overlay :show="isVipDialogShow" z-index="1">
 			<view class="flex_column content_box" style="margin-top: 50px;">
 				<image
-					:src="'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/vip_recharge_guide.png?v=' + timestamp"
+					:src="'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/vip_recharge_guide.png?v=' + timestamp"
 					mode="widthFix" class="now-order-image" @tap="goToRecharge"></image>
 				<van-icon name="clear" @tap="close" style="font-size: 40px;color: wheat;" />
 			</view>
 		</van-overlay>
+		// #ifdef APP-PLUS||H5
+		<van-number-keyboard :show="payFocus" @blur="payFocus = false" @input="inputPwd" @delete="deletePwd" />
+		// #endif
 	</view>
 </template>
 
@@ -207,11 +217,11 @@
 	import {
 		Base64
 	} from 'js-base64';
-	var toastService = require('../../../utils/toast.service');
-	var systemStatus = require('../../../utils/system-status');
-	var dateHelper = require('../../../utils/date-helper');
-	var utilHelper = require('../../../utils/util');
-	const app = getApp();
+	import toastService from '../../../utils/toast.service';
+	import systemStatus from '../../../utils/system-status';
+	import dateHelper from '../../../utils/date-helper';
+	import utilHelper from '../../../utils/util';
+	let app = null;
 	var wxNotifyTemplates = [];
 	export default {
 		data() {
@@ -242,14 +252,14 @@
 						checked: false,
 						value: 1,
 						text: '微信支付',
-						icon: 'iconwechat_pay',
+						icon: 'wechat-pay',
 						show: true
 					},
 					{
 						checked: true,
 						value: 2,
 						text: '平台余额',
-						icon: 'iconyue',
+						icon: 'balance-pay',
 						show: true
 					}
 				],
@@ -281,13 +291,14 @@
 					reducedDeliveryTotalPric: ''
 				},
 				orderDetail: {
-					actualPrice: '',
-					fullPriceReduction: '',
-					couponsIsHidden: '',
+					actualPrice: 0,
+					fullPriceReduction: 0,
+					couponsIsHidden: false,
 					orderDetailList: [],
-					packingCharges: '',
-					fullPriceReductionIsHidden: '',
-					fullReductionRuleName: ''
+					packingCharges: 0,
+					fullPriceReductionIsHidden: false,
+					fullReductionRuleName: '',
+					initShopInfo: {}
 				},
 				payType: '',
 				initData: '',
@@ -319,13 +330,23 @@
 				maskClosable: '',
 				i: '',
 				buttons: '',
-				extClass: ''
+				extClass: '',
+				initShopInfo: {
+					id: ''
+				},
+				shopInfo: {
+					shop: {
+						name: ''
+					}
+				},
+				fullPriceReduction: 0
 			};
 		},
 		/**
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad: function(options) {
+			app = getApp();
 			//this.onLoadInitLoad(options);
 		},
 		/**
@@ -339,6 +360,7 @@
 		 * 生命周期函数--监听页面显示
 		 */
 		onShow: function() {
+
 			if (this.showPayPwdInput) {
 				this.showPwdLayer();
 			}
@@ -379,9 +401,7 @@
 			},
 			onLoadOptions(options) {
 				var _this = this;
-				this.setData({
-					deliveryAndSelfTaking: app.globalData.deliveryAndSelfTaking
-				});
+				this.deliveryAndSelfTaking = app.globalData.deliveryAndSelfTaking;
 				console.log("app.globalData.deliveryAndSelfTaking========", app.globalData.deliveryAndSelfTaking);
 				let orderDetail = app.globalData.deliveryAndSelfTaking.orderDetail;
 				console.log("orderDetail========", orderDetail);
@@ -406,15 +426,23 @@
 				// 	})
 
 				// }
-				_this.getCouponsMemberRelation(orderDetail);
-				this.setData({
-					orderDetail: orderDetail,
-					payType: orderDetail.payType,
-					initData: orderDetail,
-					selfOutActiveIndex: app.globalData.deliveryAndSelfTaking.selfOutActiveIndex
-				});
+
+				// this.setData({
+				// 	orderDetail: orderDetail,
+				// 	payType: orderDetail.payType,
+				// 	initData: orderDetail,
+				// 	selfOutActiveIndex: app.globalData.deliveryAndSelfTaking.selfOutActiveIndex
+				// });
+				this.orderDetail = orderDetail;
+				this.payType = orderDetail.payType;
+				this.initData = orderDetail;
+				this.selfOutActiveIndex = app.globalData.deliveryAndSelfTaking.selfOutActiveIndex;
 				this.getShopInfo(orderDetail.initShopInfo);
-				this.selectCommissionReward(orderDetail);
+				_this.selectCommissionReward(orderDetail);
+				setTimeout(() => {
+
+					_this.getCouponsMemberRelation(orderDetail);
+				}, 500);
 			},
 			confirmSelectDeliveryFee(addressid, shopId) {
 				var _this = this;
@@ -433,9 +461,7 @@
 			getTimestamp() {
 				var timestamp = dateHelper.getTimestamp();
 				console.log(timestamp);
-				this.setData({
-					timestamp: timestamp
-				});
+				this.timestamp = timestamp;
 			},
 			getLoginMemberInfo: function(e) {
 				toastService.showLoading();
@@ -448,21 +474,17 @@
 						this.setData({
 							userInfo: result.data
 						});
-						
+
 					}
 				});
 			},
 
 			closeDialog: function() {
-				this.setData({
-					dialogShow: false
-				});
+				this.dialogShow = false;
 			},
 
 			close() {
-				this.setData({
-					isVipDialogShow: false
-				});
+				this.isVipDialogShow = false;
 				toastService.showLoading();
 				var _this = this;
 				https.request('/rest/member/order/insert', _this.isPayJson).then((result) => {
@@ -538,9 +560,7 @@
 					}
 				}
 				toastService.hideLoading();
-				this.setData({
-					paymentModes: paymentModes
-				});
+				this.paymentModes = paymentModes;
 			},
 
 			remarksInput(e) {
@@ -556,17 +576,16 @@
 					position: app.globalData.deliveryAndSelfTaking.location
 				}).then((result) => {
 					if (result.success) {
-						this.setData({
-							shopInfo: result.data,
-							reducedDeliveryPrice: result.data.shop.reducedDeliveryPrice,
-							initShopInfo: initShopInfo
-						});
-						
+						this.shopInfo = result.data;
+						this.reducedDeliveryPrice = result.data.shop.reducedDeliveryPrice;
+						this.initShopInfo = initShopInfo;
+						console.log(this.initShopInfo)
 					}
 				});
 			},
 			getCouponsMemberRelation(orderDetail) {
 				toastService.showLoading();
+				var _this = this;
 				https.request('/rest/member/couponsMemberRelation/list', {
 					pageNo: -1,
 					pageSize: 20,
@@ -579,11 +598,6 @@
 						let afterDiscounts = [];
 						result.data.records.forEach((res) => {
 							//判断优惠券是否过期和是否已经使用
-							//if (!res.couponsMemberRelationMap.isExpired && !res.couponsMemberRelationMap.isUsed) {
-							//console.log(this.orderDetail)
-							//判断是否已经满减，如果已经满减就取满减之后的字段值，反之取总额
-							//if (this.orderDetail.data.actualPrice && !this.orderDetail.data.fullPriceReduction) {
-
 							//判断当前优惠券是折扣还是满减券,1等于折扣,2等于满减
 							if (res.couponsMemberRelationMap.preferentialType == 1) {
 								if (res.shopList.length <= 0) {
@@ -609,44 +623,42 @@
 												res.goodsList.forEach((goods) => {
 													//判断当前订单的商品是否等于优惠券绑定的优惠商品
 													//等于则进行优惠
-													if (order.goodsId ==
-														goods
+													if (order.goodsId == goods
 														.id) {
-														afterDiscounts
-															.push({
-																id: res
+														afterDiscounts.push({
+															id: res
+																.couponsMemberRelationMap
+																.id,
+															price: res
+																.couponsMemberRelationMap
+																.discountAmount !=
+																0 ?
+																unitPrice :
+																unitPrice,
+															goodsId: order
+																.goodsId,
+															couponsId: res
+																.couponsMemberRelationMap
+																.couponsId,
+															couponsName: res
+																.couponsMemberRelationMap
+																.couponsName,
+															preferentialType: systemStatus
+																.preferentialTypeText(
+																	res
 																	.couponsMemberRelationMap
-																	.id,
-																price: res
-																	.couponsMemberRelationMap
-																	.discountAmount !=
-																	0 ?
-																	unitPrice :
-																	unitPrice,
-																goodsId: order
-																	.goodsId,
-																couponsId: res
-																	.couponsMemberRelationMap
-																	.couponsId,
-																couponsName: res
-																	.couponsMemberRelationMap
-																	.couponsName,
-																preferentialType: systemStatus
-																	.preferentialTypeText(
-																		res
-																		.couponsMemberRelationMap
-																		.preferentialType
-																	),
-																isExpired: res
-																	.couponsMemberRelationMap
-																	.isExpired,
-																isUsed: res
-																	.couponsMemberRelationMap
-																	.isUsed,
-																isValid: res
-																	.couponsMemberRelationMap
-																	.isValid
-															});
+																	.preferentialType
+																),
+															isExpired: res
+																.couponsMemberRelationMap
+																.isExpired,
+															isUsed: res
+																.couponsMemberRelationMap
+																.isUsed,
+															isValid: res
+																.couponsMemberRelationMap
+																.isValid
+														});
 													}
 												});
 												return;
@@ -747,16 +759,17 @@
 							totalNum = totalNum + result.number;
 							result.goodsPrices = utilHelper.toFixed(Number(result.goodsPrice) * result
 								.number, 2);
-							totalPrice += result.price * result.number; //初始化被选中的商品的总金额
+							totalPrice = totalPrice + (result.price * result.number); //初始化被选中的商品的总金额
 							result.disable = result.goodsStatus == 1 || result.goodsStatus == 3 || result
 								.goodsStatus == 4 ? true : false;
 							packingCharges =
 								result.goodsStatus == 1 || result.goodsStatus == 3 || result.goodsStatus ==
 								4 ?
 								packingCharges :
-								packingCharges + result.packingCharges * result.number;
+								packingCharges + (result.packingCharges * result.number);
 						});
 						totalPrice = utilHelper.toFixed(totalPrice + packingCharges, 2);
+						console.log("计算满减金额=", totalPrice);
 						//如果优惠券的使用张数大于0张
 						let fullPriceReduction = totalPrice;
 						var afterDiscountPrice = 0;
@@ -775,17 +788,17 @@
 							fullPriceReduction = fullPriceReduction - afterDiscountPrice;
 							couponsIsHidden = true;
 						}
-						this.setData({
-							afterDiscount: afterDiscountList,
-							'orderDetail.couponsIsHidden': couponsIsHidden,
-							'orderDetail.fullPriceReduction': utilHelper.toFixed(
-								fullPriceReduction <= 0 ?
-								0 :
-								fullPriceReduction, 2)
+						this.afterDiscount = afterDiscountList;
+						this.orderDetail.couponsIsHidden = couponsIsHidden;
+						this.orderDetail.fullPriceReduction = utilHelper.toFixed(fullPriceReduction <= 0 ? 0 :
+							fullPriceReduction, 2);
+						app.globalData.deliveryAndSelfTaking.orderDetail = this.orderDetail;
+						//this.fullPriceReduction = fullPriceReduction;
+						console.log("fullPriceReductionfullPriceReductionfullPriceReduction", fullPriceReduction)
+						//orderDetail.fullPriceReduction = fullPriceReduction;
+						this.$nextTick(() => {
+							_this.getFullReductionRule(this.orderDetail);
 						});
-						console.log("fullPriceReductionfullPriceReductionfullPriceReduction",fullPriceReduction)
-						orderDetail.fullPriceReduction=fullPriceReduction;
-						this.getFullReductionRule(orderDetail);
 					}
 				});
 			},
@@ -801,7 +814,6 @@
 				afterDiscount.limitedPrice = this.orderDetail.limitedPrice;
 				afterDiscount.fullReductionRuleName = this.orderDetail.fullReductionRuleName;
 				afterDiscount.fullReductionRuleId = this.orderDetail.fullReductionRuleId;
-				afterDiscount.fullPriceReductionIsHidden = this.orderDetail.fullPriceReductionIsHidden;
 				afterDiscount.packingCharges = this.orderDetail.packingCharges;
 				afterDiscount.feeData = this.deliveryAndSelfTaking.feeData;
 				afterDiscount.type = 1;
@@ -810,7 +822,6 @@
 					url: '../../mine/coupons/coupons?prevData=' + JSON.stringify(afterDiscount)
 				});
 			},
-
 			selectCommissionReward(data) {
 				console.log(this);
 				https.request('/rest/member/order/selectCommissionReward', {
@@ -818,13 +829,10 @@
 						.actualPrice : data.fullPriceReduction
 				}).then((result) => {
 					if (result.success) {
-						this.setData({
-							tipReward: result.data
-						});
+						this.tipReward = result.data;
 					}
 				});
 			},
-
 			getWxNotifyTemplate() {
 				https.request('/rest/wxNotifyTemplate/orderModule/list').then((result) => {
 					if (result.success) {
@@ -854,6 +862,10 @@
 						return;
 					}
 				}
+				// #ifdef APP-PLUS||H5
+				self.weChatPayTap();
+				// #endif
+				// #ifdef MP-WEIXIN||MP-ALIPAY
 				if (app.globalData.loginUserInfo.isRequestWxNotify) {
 					uni.requestSubscribeMessage({
 						tmplIds: wxNotifyTemplates,
@@ -872,15 +884,10 @@
 					return;
 				}
 				self.weChatPayTap();
+				// #endif
 			},
 
 			weChatPayTap() {
-				//判断店铺是否打烊
-				// app.getIsBusiness().then(result => {
-				//   if (!result) {
-				//     return
-				//   }
-
 				authService.checkIsLogin().then((result) => {
 					if (result) {
 						//判断店铺是否打烊
@@ -911,7 +918,7 @@
 							var list = this.orderDetail.orderDetailList;
 							var orderDetailList = [];
 							data.shoppingCartIdList = [];
-							var payType=app.globalData.deliveryAndSelfTaking.payType;
+							var payType = app.globalData.deliveryAndSelfTaking.payType;
 							for (var key in list) {
 								orderDetailList.push({
 									goodsId: list[key].goodsId,
@@ -919,7 +926,7 @@
 									specList: list[key].specList,
 									number: list[key].number
 								});
-								if(payType=='car'){
+								if (payType == 'car') {
 									data.shoppingCartIdList.push(list[key].id);
 								}
 							}
@@ -951,17 +958,14 @@
 							//获取订单的配送方式
 							let orderMode = this.selfOutItems[this.selfOutActiveIndex].name;
 							if (this.userInfo.type == 1) {
-								this.setData({
-									isVipDialogShow: true,
-									isPayJson: data
-								});
+								this.isVipDialogShow = true;
+								this.isPayJson = data;
 							} else {
 								toastService.showLoading();
 								https.request('/rest/member/order/insert', data).then((result) => {
 									toastService.hideLoading();
 									if (result.success) {
-										_this.toPay4Applet(result.data.id, result.data
-											.orderNo,
+										_this.toPay4Applet(result.data.id, result.data.orderNo,
 											result.data.actualPrice);
 									}
 								});
@@ -981,21 +985,15 @@
 						this.weChatPay(id, orderNo, actualPrice, openId);
 					}
 					if (this.paymentModes[this.paymentModeIndex].value == 2) {
-						_this.$nextTick(() => {
-							_this.setData({
-								showPayPwdInput: true
-							});
-							setTimeout(function timeout() {
-								_this.getFocus();
-							}, 500);
-						});
 						toastService.hideLoading();
-						this.setData({
-							balanceId: id,
-							balanceOrderNo: orderNo,
-							balanceActualPrice: actualPrice,
-							balanceOpenId: openId
+						_this.$nextTick(() => {
+							_this.showPayPwdInput = true;
+							_this.getFocus();
 						});
+						this.balanceId = id;
+						this.balanceOrderNo = orderNo;
+						this.balanceActualPrice = actualPrice;
+						this.balanceOpenId = openId;
 					}
 				});
 			},
@@ -1041,12 +1039,21 @@
 					}
 				});
 			},
-
+			deletePwd(e) {
+				if (this.pwdVal.length === 0) {
+					return;
+				}
+				const lastIndex = this.pwdVal.length - 1;
+				this.pwdVal = this.pwdVal.substring(0, lastIndex) + "";
+			},
 			inputPwd: function(e) {
-				this.setData({
-					pwdVal: e.detail.value
-				});
-				if (e.detail.value.length >= 6) {
+				// #ifdef APP-PLUS||H5
+				this.pwdVal = this.pwdVal + e;
+				// #endif
+				// #ifdef MP-WEIXIN||MP-ALIPAY
+				this.pwdVal = e.detail.value;
+				// #endif
+				if (this.pwdVal.length >= 6) {
 					toastService.showLoading('正在加载...');
 					this.balancePay();
 				}
@@ -1056,17 +1063,26 @@
 			 * 获取焦点
 			 */
 			getFocus: function() {
+				var _this = this;
+				this.payFocus = false;
+				//this.showPayPwdInput = true;
 				this.$nextTick(() => {
-					this.payFocus = true;
-				});
+					console.log("点击获取焦点");
+					// #ifdef APP-PLUS||H5
+					_this.payFocus = true;
+					// #endif
+					// #ifdef MP-WEIXIN||MP-ALIPAY
+					setTimeout(() => {
+						_this.payFocus = true;
+					}, 100);
+					// #endif
+				})
 			},
 
 			balancePay() {
 				var password = Base64.encode(this.pwdVal);
-				this.setData({
-					pwdVal: '',
-					payFocus: true
-				});
+				this.pwdVal = '';
+				this.payFocus = true;
 				https.request('/rest/member/platformPay/byBalance', {
 					openid: this.balanceOpenId,
 					type: 1,
@@ -1108,19 +1124,23 @@
 			},
 
 			hidePwdLayer() {
-				this.setData({
-					showPayPwdInput: false,
-					payFocus: false,
-					pwdVal: ''
-				});
+				this.showPayPwdInput = false;
+				this.payFocus = false;
+				this.pwdVal = '';
+
 			},
 
 			showPwdLayer() {
-				this.setData({
-					showPayPwdInput: true,
-					payFocus: true,
-					pwdVal: ''
-				});
+				this.showPayPwdInput = true;
+				this.payFocus = true;
+				this.pwdVal = '';
+
+
+				// this.setData({
+				// 	showPayPwdInput: true,
+				// 	payFocus: true,
+				// 	pwdVal: ''
+				// });
 			},
 
 			/**
@@ -1133,6 +1153,7 @@
 			},
 			//获取满减规则
 			getFullReductionRule(orderDetail) {
+				var _this = this;
 				toastService.showLoading();
 				https.request('/rest/fullReductionRule/list', {
 					pageNo: -1,
@@ -1141,31 +1162,33 @@
 				}).then((result) => {
 					toastService.hideLoading();
 					if (result.success) {
-						var orderDetailList = app.globalData.deliveryAndSelfTaking.orderDetail.orderDetailList;
-						var fullPriceReduction = app.globalData.deliveryAndSelfTaking.orderDetail.fullPriceReduction;
+						console.log('getFullReductionRule', app.globalData.deliveryAndSelfTaking.orderDetail);
+						var orderDetailList = orderDetail.orderDetailList;
+						var fullPriceReduction = orderDetail.fullPriceReduction;
 						//获取配送费，配送费不作为满减条件
-						var packingCharges = 0;
-						var totalNum = 0;
-						var totalPrice = 0;
-						orderDetailList.forEach((result, index) => {
-							totalNum = totalNum + result.number;
-							result.goodsPrices = utilHelper.toFixed(Number(result.goodsPrice) * result
-								.number, 2);
-							totalPrice += result.price * result.number; //初始化被选中的商品的总金额
-							result.disable = result.goodsStatus == 1 || result.goodsStatus == 3 || result
-								.goodsStatus == 4 ? true : false;
-							packingCharges =
-								result.goodsStatus == 1 || result.goodsStatus == 3 || result.goodsStatus ==
-								4 ?
-								packingCharges :
-								packingCharges + result.packingCharges * result.number;
-						});
-						totalPrice = utilHelper.toFixed(totalPrice + packingCharges, 2);
+						// var packingCharges = 0;
+						// var totalNum = 0;
+						// var totalPrice = 0;
+						// orderDetailList.forEach((result, index) => {
+						// 	totalNum = totalNum + result.number;
+						// 	result.goodsPrices = utilHelper.toFixed(Number(result.goodsPrice) * result
+						// 		.number, 2);
+						// 	totalPrice = totalPrice + (result.price * result.number); //初始化被选中的商品的总金额
+						// 	result.disable = result.goodsStatus == 1 || result.goodsStatus == 3 || result
+						// 		.goodsStatus == 4 ? true : false;
+						// 	packingCharges =
+						// 		result.goodsStatus == 1 || result.goodsStatus == 3 || result.goodsStatus ==
+						// 		4 ?
+						// 		packingCharges :
+						// 		packingCharges + result.packingCharges * result.number;
+						// });
+						// totalPrice = utilHelper.toFixed(totalPrice + packingCharges, 2);
 						var fullReductionRulePrice = 0;
 						for (let i = 0; i < result.data.records.length; i++) {
 							//总价格减去配送费大于满减金额则进行满减操作
 							if (fullPriceReduction >= result.data.records[i].limitedPrice) {
-								orderDetail.fullPriceReduction = utilHelper.toFixed(fullPriceReduction - result.data.records[i]
+								orderDetail.fullPriceReduction = utilHelper.toFixed(fullPriceReduction - result
+									.data.records[i]
 									.reducedPrice, 2);
 								orderDetail.fullReductionRuleName = result.data.records[i].name;
 								orderDetail.fullReductionRuleId = result.data.records[i].id;
@@ -1173,26 +1196,29 @@
 								orderDetail.reducedPrice = result.data.records[i].reducedPrice;
 							}
 						}
-						
-						this.getPsf();
+						//console.log('计算满减金额', totalPrice);
+						this.$nextTick(() => {
+							_this.getPsf(orderDetail);
+						});
+
 					}
 				});
 			},
-			getPsf() {
+			getPsf(orderDetail) {
 				app.globalData.deliveryAndSelfTaking.feeData = 0;
 				app.globalData.deliveryAndSelfTaking.reducedDeliveryTotalPrice = 0;
 				app.globalData.deliveryAndSelfTaking.isReducedDeliveryPrice = false;
-				var orderDetailList = app.globalData.deliveryAndSelfTaking.orderDetail.orderDetailList;
+				var orderDetailList = orderDetail.orderDetailList;
 				var packingCharges = 0;
 				var totalNum = 0;
 				var totalPrice = 0;
-				var fullPriceReduction = app.globalData.deliveryAndSelfTaking.orderDetail.fullPriceReduction;
-				
+				var fullPriceReduction = orderDetail.fullPriceReduction;
+
 				orderDetailList.forEach((result, index) => {
 					totalNum = totalNum + result.number;
 					result.goodsPrices = utilHelper.toFixed(Number(result.goodsPrice) * result
 						.number, 2);
-					totalPrice += result.price * result.number; //初始化被选中的商品的总金额
+					totalPrice = totalPrice + (result.price * result.number); //初始化被选中的商品的总金额
 					result.disable = result.goodsStatus == 1 || result.goodsStatus == 3 || result
 						.goodsStatus == 4 ? true : false;
 					packingCharges =
@@ -1202,9 +1228,10 @@
 						packingCharges + result.packingCharges * result.number;
 				});
 				totalPrice = utilHelper.toFixed(totalPrice, 2);
+				console.log('计算满减金额', totalPrice);
 				var isStartDeliveryPrice = false;
 				var priceDifference = 0;
-				var startDeliveryPrice=app.globalData.deliveryAndSelfTaking.orderDetail.initShopInfo.startDeliveryPrice;
+				var startDeliveryPrice = app.globalData.deliveryAndSelfTaking.orderDetail.initShopInfo.startDeliveryPrice;
 				if (totalPrice + packingCharges >= startDeliveryPrice) {
 					isStartDeliveryPrice = true;
 				}
@@ -1212,10 +1239,9 @@
 				if (app.globalData.deliveryAndSelfTaking.selfOutActiveIndex == 0) {
 					app.globalData.deliveryAndSelfTaking.orderDetail.fullPriceReduction = fullPriceReduction;
 					app.globalData.deliveryAndSelfTaking.orderDetail.actualPrice = actualPrice;
-					this.setData({
-						deliveryAndSelfTaking: app.globalData.deliveryAndSelfTaking,
-						orderDetail: app.globalData.deliveryAndSelfTaking.orderDetail
-					});
+					this.deliveryAndSelfTaking = app.globalData.deliveryAndSelfTaking;
+					this.orderDetail = app.globalData.deliveryAndSelfTaking.orderDetail;
+					console.log('this.orderDetail', this.orderDetail);
 				}
 				if (app.globalData.deliveryAndSelfTaking.selfOutActiveIndex == 1) {
 					var addressid = app.globalData.deliveryAndSelfTaking.deliveryAddress.id;
@@ -1247,11 +1273,11 @@
 						var actualPrice = utilHelper.toFixed(totalPrice + packingCharges, 2) + feeData;
 						fullPriceReduction = utilHelper.toFixed(fullPriceReduction, 2) + feeData;
 						app.globalData.deliveryAndSelfTaking.orderDetail.actualPrice = actualPrice;
-						app.globalData.deliveryAndSelfTaking.orderDetail.fullPriceReduction = utilHelper.toFixed(fullPriceReduction, 2);
-						this.setData({
-							deliveryAndSelfTaking: app.globalData.deliveryAndSelfTaking,
-							orderDetail: app.globalData.deliveryAndSelfTaking.orderDetail
-						});
+						app.globalData.deliveryAndSelfTaking.orderDetail.fullPriceReduction = utilHelper.toFixed(
+							fullPriceReduction, 2);
+						this.deliveryAndSelfTaking = app.globalData.deliveryAndSelfTaking;
+						this.orderDetail = app.globalData.deliveryAndSelfTaking.orderDetail;
+
 					})
 				}
 				setTimeout((time) => {
@@ -1289,7 +1315,8 @@
 					.deliveryAddress.id :
 					'';
 				var chooseId = selfOutActiveIndex == 1 ? chooseId : '';
-				var shopId = selfOutActiveIndex == 0 ? this.shopInfo.shop.id : app.globalData.deliveryAndSelfTaking.orderDetail.shopId;
+				var shopId = selfOutActiveIndex == 0 ? this.shopInfo.shop.id : app.globalData.deliveryAndSelfTaking
+					.orderDetail.shopId;
 				app.globalData.deliveryAndSelfTaking.chooseId = chooseId;
 				app.globalData.deliveryAndSelfTaking.selfOutActiveIndex = selfOutActiveIndex;
 				app.globalData.deliveryAndSelfTaking.shopId = shopId;
@@ -1565,7 +1592,7 @@
 		background: white;
 		box-shadow: -2px 0px 5px 0.5px rgba(0, 0, 0, 0.1);
 		font-size: 36rpx;
-		z-index: 99;
+		z-index: 1;
 		border-top: 0.5rpx solid #f5f5f5;
 	}
 

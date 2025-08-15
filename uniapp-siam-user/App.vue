@@ -9,6 +9,15 @@
 	//var Config = require('./utils/gaode-libs/config');
 	import amapFile from './utils/gaode-libs/amap-wx';
 	import * as Config from './utils/gaode-libs/config';
+	// #ifdef H5
+	import AMapLoader from "@amap/amap-jsapi-loader";
+	// #endif
+	var initRegeoInfo = {
+		name: '麓谷小镇',
+		address: '岳麓大道尖山路口北300米',
+		location: '112.885538,28.232363',
+		isAutoLocation: false
+	};
 	export default {
 		data() {
 			return {};
@@ -18,8 +27,7 @@
 			// var logs = wx.getStorageSync('logs') || []
 			// logs.unshift(Date.now())
 			// wx.setStorageSync('logs', logs)
-
-			// 登录
+			// #ifdef MP-WEIXIN||MP-ALIPAY
 			uni.login({
 				success: (res) => {
 					console.log(res)
@@ -27,6 +35,9 @@
 					this.globalData.code = res.code;
 				}
 			});
+			// #endif
+			// 登录
+
 			// 获取用户信息
 			// wx.getSetting({
 			//   success: res => {
@@ -50,8 +61,22 @@
 			// })
 			this.globalData.getSystemInfo();
 			this.globalData.getUserInfo();
-			this.globalData.getRegeoLocation();
+			// this.globalData.getUserAgent().then((result)=>{
+			// 	toastService.showToast(result);
+			// });
+
 			this.globalData.getShoppingCarNumber();
+			// #ifdef H5
+			this.globalData.getH5Location();
+			// #endif
+
+			// #ifdef APP-PLUS
+			this.globalData.getAppLocation();
+			// #endif
+
+			// #ifdef MP-WEIXIN||MP-ALIPAY
+			this.globalData.getRegeoLocation();
+			// #endif
 		},
 		onHide() {},
 		onShow: function() {},
@@ -85,7 +110,59 @@
 					// });
 				}, 1000);
 			},
-
+			//获取经纬度
+			getH5Location() {
+				var _this = this;
+				console.log(2222222222);
+				return new Promise((fulfil, reject) => {
+					uni.getLocation({
+						type: 'gcj02', //返回可以用于uni.openLocation的经纬度
+						geocode: true, //设置该参数为true可直接获取经纬度及城市信息
+						isHighAccuracy: true, // 开启地图精准定位
+						success: (res) => {
+							console.log("H5位置获取=", res);
+							console.log('H5端当前位置的经度：' + res.longitude);
+							console.log('H5端当前位置的纬度：' + res.latitude);
+							const longs = res.longitude.toString();
+							const lat = res.latitude.toString();
+							if (longs !== '' && lat !== '') {
+								this.deliveryAndSelfTaking.location = longs + ',' + lat;
+								//this.turnAdrr(longs, lat)//经纬度转地区名
+							}
+							fulfil(res);
+						},
+						fail: (err) => {
+							console.log("H5位置获取失败", err);
+							fulfil(err);
+						}
+					});
+				});
+			},
+			getAppLocation() {
+				var _this = this;
+				return new Promise((fulfil, reject) => {
+					uni.getLocation({
+						type: 'wgs84', // 返回可以用于高德地图的坐标
+						geocode: true, //设置该参数为true可直接获取经纬度及城市信息
+						altitude: true,
+						success: (res) => {
+							console.log('APP端当前位置的经度：' + res.longitude);
+							console.log('APP端当前位置的纬度：' + res.latitude);
+							const longs = res.longitude.toString();
+							const lat = res.latitude.toString();
+							if (longs !== '' && lat !== '') {
+								_this.deliveryAndSelfTaking.location = longs + ',' + lat;
+								//this.turnAdrr(longs, lat)//经纬度转地区名
+							}
+							fulfil(res);
+						},
+						fail: (err) => {
+							console.error('APP端获取位置失败：', err);
+							fulfil(err);
+						}
+					});
+				});
+			},
 			getSettingInfo() {
 				var _this = this;
 				uni.getSetting({
@@ -96,12 +173,54 @@
 					}
 				});
 			},
-
 			getSystemInfo() {
 				var res = uni.getSystemInfoSync();
 				this.systemInfoSync = res;
 			},
-
+			getUserAgent() {
+				return new Promise((resolve, reject) => {
+					let en = window.navigator.userAgent.toLowerCase();
+					// 判断微信方法1、匹配en中是否含有MicroMessenger字符串
+					if (en.match(/MicroMessenger/i) == 'micromessenger') {
+						resolve("H5_WECHAT");
+					}
+					// 判断微信方法2
+					// if (/MicroMessenger/.test(window.navigator.userAgent)) {
+					// 	console.log('微信浏览器');
+					// }
+					if (en.match(/MicroMessenger/i) != 'micromessenger') {
+						if (/AlipayClient/.test(window.navigator.userAgent)) {
+							//判断是否是支付宝浏览器打开
+							resolve("H5_ALIPAY");
+						} else {
+							resolve("H5_OTHER");
+						}
+					}
+				});
+			},
+			getCurrentEnvironment() {
+				var _this = this;
+				return new Promise((resolve, reject) => {
+					uni.getSystemInfo({
+						success: function(res) {
+							const platform = res.platform.toLowerCase();
+							if (platform === 'devtools') {
+								var userAgent = _this.getUserAgent();
+								resolve(userAgent);
+							} else if (platform === 'ios' || platform === 'android') {
+								resolve('APP');
+							} else if (platform === 'wechat') {
+								resolve('WECHAT');
+							} else {
+								resolve('OTHER');
+							}
+						},
+						fail: function(error) {
+							reject(error);
+						}
+					})
+				});
+			},
 			getLoginCode() {
 				return new Promise((fulfil, reject) => {
 					uni.login({
@@ -130,43 +249,41 @@
 			},
 
 			memberWeChatLogin(phoneNumber, openId, inviterId, userInfo) {
-				https
-					.request('/rest/member/weChat/login', {
-						mobile: phoneNumber,
-						headImg: userInfo.avatarUrl,
-						username: userInfo.nickName,
-						sex: userInfo.gender,
-						openId: openId,
-						inviterId: inviterId ? inviterId : ''
-					})
-					.then((result) => {
-						if (result.success) {
-							authService.setToken(result.token);
-							authService.setOpenId(openId);
-							authService.setPhoneNumber(phoneNumber);
-							toastService.showSuccess(result.message);
-							this.isNewPeople = result.isNewPeople;
-							this.getUserInfo();
-							let timeout = setTimeout(() => {
-								//如果是邀请链接直接跳转到首页，如果是进入用户后退一页
-								if (inviterId) {
+				https.request('/rest/member/weChat/login', {
+					mobile: phoneNumber,
+					headImg: userInfo.avatarUrl,
+					username: userInfo.nickName,
+					sex: userInfo.gender,
+					openId: openId,
+					inviterId: inviterId ? inviterId : ''
+				}).then((result) => {
+					if (result.success) {
+						authService.setToken(result.token);
+						authService.setOpenId(openId);
+						authService.setPhoneNumber(phoneNumber);
+						toastService.showSuccess(result.message);
+						this.isNewPeople = result.isNewPeople;
+						this.getUserInfo();
+						let timeout = setTimeout(() => {
+							//如果是邀请链接直接跳转到首页，如果是进入用户后退一页
+							if (inviterId) {
+								uni.switchTab({
+									url: '/pages/index/index'
+								});
+							} else {
+								var pages = getCurrentPages();
+								if (pages && pages.length > 0) {
+									uni.navigateBack(1);
+								} else {
 									uni.switchTab({
 										url: '/pages/index/index'
 									});
-								} else {
-									var pages = getCurrentPages();
-									if (pages && pages.length > 0) {
-										uni.navigateBack(1);
-									} else {
-										uni.switchTab({
-											url: '/pages/index/index'
-										});
-									}
 								}
-								clearTimeout(timeout);
-							}, 300);
-						}
-					});
+							}
+							clearTimeout(timeout);
+						}, 300);
+					}
+				});
 			},
 
 			getMemberInfo: function(e) {
@@ -252,35 +369,64 @@
 			},
 
 			checkIsAuth(authSetting, params) {
-				uni.getSetting({
-					success: (res) => {
-						console.log(res);
-						console.log(res.authSetting[authSetting]);
-						if (res.authSetting[authSetting]) {
-							let url = '/pages/internal/login/choose/choose';
-							if (params) {
-								if (params.inviterId) {
-									url = url + (params.inviterId ? '?inviterId=' + params.inviterId : '');
-								}
+				toastService.showModal(
+					null,
+					'当前未登录，确定去登录吗?',
+					function confirm() {
+						// #ifdef H5
+						let url = '/pages/internal/login/code/code';
+						if (params) {
+							if (params.inviterId) {
+								url = url + (params.inviterId ? '?inviterId=' + params.inviterId : '');
 							}
-							uni.navigateTo({
-								url: url
-							});
-						} else {
-							let url = '/pages/internal/login/authorization/authorization';
-							if (params) {
-								if (params.inviterId) {
-									url = url + (params.inviterId ? '?inviterId=' + params.inviterId : '');
-								}
-							}
-							uni.redirectTo({
-								url: url
-							});
 						}
-					}
-				});
+						uni.navigateTo({
+							url: url
+						});
+						// #endif
+						// #ifdef MP-WEIXIN||MP-ALIPAY
+						uni.getSetting({
+							success: (res) => {
+								console.log(res);
+								console.log(res.authSetting[authSetting]);
+								if (res.authSetting[authSetting]) {
+									let url = '/pages/internal/login/choose/choose';
+									if (params) {
+										if (params.inviterId) {
+											url = url + (params.inviterId ? '?inviterId=' + params.inviterId : '');
+										}
+									}
+									uni.navigateTo({
+										url: url
+									});
+								} else {
+									let url = '/pages/internal/login/authorization/authorization';
+									if (params) {
+										if (params.inviterId) {
+											url = url + (params.inviterId ? '?inviterId=' + params.inviterId : '');
+										}
+									}
+									uni.redirectTo({
+										url: url
+									});
+								}
+							}
+						});
+						// #endif
+					},
+					null,
+					true
+				);
+				
 			},
-
+			beforeClose(action) {
+				new Promise((resolve) => {
+					setTimeout(() => {
+						// action !== 'confirm'  拦截取消操作
+						resolve(action === 'confirm');
+					}, 1000);
+				})
+			},
 			getDeliveryAddressList() {
 				https.request('/rest/member/deliveryAddress/list', {
 					pageNo: -1,
@@ -372,19 +518,19 @@
 				reducedDeliveryTotalPrice: 0,
 				isItNear: false,
 				isThereADiscount: false,
-				location: '',
+				location: initRegeoInfo.location,
 				isOutofDeliveryRange: false,
-				regeoInfo: null,
+				initRegeoInfo: initRegeoInfo,
+				regeoInfo: initRegeoInfo,
 				ifIndexSwitchTab: false,
-				ifChooseBack:false,
-				ifChoosePayBack:false,
-				selfOutActiveIndex:0,
-				payType:'',
-				orderDetail:{
-					initShopInfo:{}
+				ifChooseBack: false,
+				ifChoosePayBack: false,
+				selfOutActiveIndex: 0,
+				payType: '',
+				orderDetail: {
+					initShopInfo: {}
 				}
 			},
-
 			authSetting: '',
 			systemInfoSync: '',
 			isNewPeople: '',
@@ -393,8 +539,6 @@
 	};
 </script>
 <style>
-	@import "/wxcomponents/vant/dist/common/index.wxss"
-
 	.margin-common {
 		margin: 0rpx 20rpx;
 	}
@@ -850,8 +994,8 @@
 	.content_box {
 		padding: 16px;
 	}
-	
-	.content_box_footer{
+
+	.content_box_footer {
 		margin: 10px;
 	}
 
@@ -866,13 +1010,13 @@
 		margin-top: 30%;
 		text-align: center;
 	}
-	
+
 	.loading_list_box {
 		width: 100%;
 		margin: 10rpx 0;
 		text-align: center;
 	}
-	
+
 	.loading_box_class {
 		color: #004ca0;
 	}
@@ -886,4 +1030,78 @@
 	}
 
 	.divider_box {}
+
+	/* #ifdef APP-PLUS||H5 */
+	uni-checkbox .uni-checkbox-input {
+		border-radius: 50% !important;
+		color: #ffffff !important;
+	}
+
+	uni-checkbox .uni-checkbox-input.uni-checkbox-input-checked {
+		border: 2rpx solid #004ca0 !important;
+		background: #004ca0;
+		border-color: #004ca0;
+	}
+
+	uni-checkbox .uni-checkbox-input svg {
+		background: #004ca0;
+		border-radius: 50%;
+		height: 100%;
+		border: 5px solid #004ca0;
+		color: #ffffff !important;
+	}
+
+	uni-checkbox .uni-checkbox-input.uni-checkbox-input-checked::before {
+		width: 40rpx;
+		height: 40rpx;
+		line-height: 40rpx;
+		text-align: center;
+		font-size: 18rpx;
+		color: #fff;
+		background: transparent;
+		transform: translate(-70%, -50%) scale(1);
+		-webkit-transform: translate(-70%, -50%) scale(1);
+	}
+
+	/* vant搜索框不兼容H5和app问题 */
+	.van-field__control[type=search]::-webkit-search-cancel-button {
+		-webkit-appearance: none !important;
+	}
+
+	/* 加载提示问题 */
+	.uni-toast {
+		height: 8em;
+		max-height: 8em;
+	}
+
+	.uni-toast__content {
+		margin-top: 5px;
+	}
+
+	.uni-toast__icon {
+		margin-top: 30px;
+	}
+
+	/* #endif */
+	// #ifdef MP-WEIXIN||MP-ALIPAY
+	/*checkbox 选项框大小  */
+	checkbox .wx-checkbox-input {
+		width: 40rpx;
+		height: 40rpx;
+	}
+
+	/*checkbox选中后样式  */
+	checkbox .wx-checkbox-input.wx-checkbox-input-checked {
+		width: 40rpx;
+		height: 40rpx;
+	}
+
+	checkbox {
+		width: 40rpx;
+		height: 40rpx;
+		margin-right: 15rpx;
+	}
+
+
+	// #endif
 </style>

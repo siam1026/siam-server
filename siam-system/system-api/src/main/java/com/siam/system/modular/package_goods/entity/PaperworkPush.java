@@ -1,6 +1,6 @@
 package com.siam.system.modular.package_goods.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,12 +16,10 @@ public class PaperworkPush {
     /* ##################################### START 扩展字段 #################################### */
 
     //页码
-    @TableField(select = false)
-    private Integer pageNo = 1;
+    @TableField(exist = false) private Integer pageNo = 1;
 
     //页面大小
-    @TableField(select = false)
-    private Integer pageSize = 20;
+    @TableField(exist = false) private Integer pageSize = 20;
 
     public Integer getPageNo() {
         return pageNo;
@@ -32,14 +30,14 @@ public class PaperworkPush {
     }
 
     //开始日期
-    @TableField(select = false)
+    @TableField(exist = false)
     private Date startCreateTime;
 
     //结束日期
-    @TableField(select = false)
+    @TableField(exist = false)
     private Date endCreateTime;
 
-    @TableField(select = false)
+    @TableField(exist = false)
     List<Integer> ids;
 
     public List<Integer> getIds() {

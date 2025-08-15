@@ -24,9 +24,7 @@
 
 ### uniapp ###
 node_modules/
-uni_modules/
 unpackage/
-wxcomponents/
 
 ### IntelliJ IDEA ###
 .idea
@@ -35,7 +33,7 @@ wxcomponents/
 *.ipr
 /out/
 
-### Maven����Ŀ¼ ###
+### Maven    Ŀ¼ ###
 target
 logs/debug.log
 logs/error.log
@@ -47,5 +45,7 @@ log.path_IS_UNDEFINED
 
 application-test.yml
 application-show.yml
+application-prod.yml
 application-siamcloud-test.yml
 application-siamcloud-show.yml
+application-siamcloud-prod.yml

@@ -24,6 +24,8 @@
     <result column="product_time" property="productTime" jdbcType="DECIMAL" />
     <result column="exchange_points" property="exchangePoints" jdbcType="INTEGER" />
     <result column="sort_number" property="sortNumber" jdbcType="INTEGER" />
+    <result column="printer_id" property="printerId" jdbcType="VARCHAR" />
+    <result column="print_num" property="printNum" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -50,6 +52,8 @@
     <result column="product_time" property="productTime" jdbcType="DECIMAL" />
     <result column="exchange_points" property="exchangePoints" jdbcType="INTEGER" />
     <result column="sort_number" property="sortNumber" jdbcType="INTEGER" />
+    <result column="printer_id" property="printerId" jdbcType="VARCHAR" />
+    <result column="print_num" property="printNum" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -148,157 +152,6 @@
     </if>
   </delete>
 
-  <insert id="insertSelective" parameterType="com.siam.system.modular.package_goods.entity.Goods" useGeneratedKeys="true" keyProperty="id">
-    insert into tb_goods
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="shopId != null" >
-        shop_id,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="mainImage != null" >
-        main_image,
-      </if>
-      <if test="subImages != null" >
-        sub_images,
-      </if>
-      <if test="detail != null" >
-        detail,
-      </if>
-      <if test="detailImages != null" >
-        detail_images,
-      </if>
-      <if test="price != null" >
-        price,
-      </if>
-      <if test="stock != null" >
-        stock,
-      </if>
-      <if test="isHot != null" >
-        is_hot,
-      </if>
-      <if test="isNew != null" >
-        is_new,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="isSale != null" >
-        is_sale,
-      </if>
-      <if test="salePrice != null" >
-        sale_price,
-      </if>
-      <if test="monthlySales != null" >
-        monthly_sales,
-      </if>
-      <if test="totalSales != null" >
-        total_sales,
-      </if>
-      <if test="totalComments != null" >
-        total_comments,
-      </if>
-      <if test="preferentialName != null" >
-        preferential_name,
-      </if>
-      <if test="packingCharges != null" >
-        packing_charges,
-      </if>
-      <if test="productTime != null" >
-        product_time,
-      </if>
-      <if test="exchangePoints != null" >
-        exchange_points,
-      </if>
-      <if test="sortNumber != null" >
-        sort_number,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="shopId != null" >
-        #{shopId,jdbcType=INTEGER},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="mainImage != null" >
-        #{mainImage,jdbcType=VARCHAR},
-      </if>
-      <if test="subImages != null" >
-        #{subImages,jdbcType=VARCHAR},
-      </if>
-      <if test="detail != null" >
-        #{detail,jdbcType=VARCHAR},
-      </if>
-      <if test="detailImages != null" >
-        #{detailImages,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null" >
-        #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="stock != null" >
-        #{stock,jdbcType=INTEGER},
-      </if>
-      <if test="isHot != null" >
-        #{isHot,jdbcType=BIT},
-      </if>
-      <if test="isNew != null" >
-        #{isNew,jdbcType=BIT},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="isSale != null" >
-        #{isSale,jdbcType=BIT},
-      </if>
-      <if test="salePrice != null" >
-        #{salePrice,jdbcType=DECIMAL},
-      </if>
-      <if test="monthlySales != null" >
-        #{monthlySales,jdbcType=INTEGER},
-      </if>
-      <if test="totalSales != null" >
-        #{totalSales,jdbcType=INTEGER},
-      </if>
-      <if test="totalComments != null" >
-        #{totalComments,jdbcType=INTEGER},
-      </if>
-      <if test="preferentialName != null" >
-        #{preferentialName,jdbcType=VARCHAR},
-      </if>
-      <if test="packingCharges != null" >
-        #{packingCharges,jdbcType=DECIMAL},
-      </if>
-      <if test="productTime != null" >
-        #{productTime,jdbcType=DECIMAL},
-      </if>
-      <if test="exchangePoints != null" >
-        #{exchangePoints,jdbcType=INTEGER},
-      </if>
-      <if test="sortNumber != null" >
-        #{sortNumber,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
   <select id="countByExample" parameterType="com.siam.system.modular.package_goods.model.example.GoodsExample" resultType="java.lang.Integer" >
     select count(*) from tb_goods
     <if test="_parameter != null" >

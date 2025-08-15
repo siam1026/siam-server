@@ -6,12 +6,10 @@ import com.siam.package_common.mod_websocket.WebSocketService;
 import com.siam.system.modular.package_goods.entity.SysMessage;
 import com.siam.system.modular.package_goods.mapper.MessageMapper;
 import com.siam.system.modular.package_goods.service.MessageService;
-import com.siam.system.modular.package_goods.entity.SysMessage;
-import com.siam.system.modular.package_goods.mapper.MessageMapper;
-import com.siam.system.modular.package_goods.service.MessageService;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class MessageServiceImpl extends ServiceImpl<MessageMapper, SysMessage> implements MessageService {
 
     @Autowired
-    private RocketMQTemplate rocketMQTemplate;
+    private ApplicationContext applicationContext;
 
     @Autowired
     private WebSocketService webSocketService;
@@ -47,6 +45,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, SysMessage> i
         //1、使用RocketMQ实现消息实时推送
         Message message = new Message("TID_WEBSOCKET", tags + sysMessage.getUserId(), JSON.toJSONString(sysMessage).getBytes());
         try {
+            RocketMQTemplate rocketMQTemplate = applicationContext.getBean("rocketMQTemplate", RocketMQTemplate.class);
             rocketMQTemplate.getProducer().send(message);
         } catch (Exception e) {
             log.error("[RocketMQ] topic : " + message.getTopic() + ", tags : " + message.getTags() + " 消息发送失败");

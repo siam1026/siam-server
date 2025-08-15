@@ -86,7 +86,7 @@ public class MerchantGoodsRawmaterialRelationController {
         //双层循环插入关联信息
         for (Integer goodsId : goodsIdList) {
             //校验商品信息是否存在，后续优化可以在循环外面批量校验
-            Goods dbGoods = goodsService.selectByPrimaryKey(goodsId);
+            Goods dbGoods = goodsService.getById(goodsId);
             if(dbGoods == null){
                 basicResult.setSuccess(false);
                 basicResult.setCode(BasicResultCode.ERR);

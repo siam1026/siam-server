@@ -1,6 +1,6 @@
 package com.siam.system.modular.package_goods.entity.internal;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -16,6 +16,7 @@ import java.util.List;
 @ApiModel(value = "商品规格选项表")
 public class PointsMallGoodsSpecificationOption {
 
+    @TableField(exist = false)
     private List<Integer> ids;
 
     @TableId(type = IdType.AUTO)
@@ -47,10 +48,10 @@ public class PointsMallGoodsSpecificationOption {
 
 
     //页码
-    private Integer pageNo = 1;
+    @TableField(exist = false) private Integer pageNo = 1;
 
     //页面大小
-    private Integer pageSize = 20;
+    @TableField(exist = false) private Integer pageSize = 20;
 
     public Integer getPageNo() {
         return pageNo;

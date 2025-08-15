@@ -159,7 +159,7 @@ public class PayController {
                 updateOrder.setId(dbOrder.getId());
                 updateOrder.setTradeId(insertMemberTradeRecord.getId());
                 updateOrder.setUpdateTime(new Date());
-                orderService.updateByPrimaryKeySelective(updateOrder);*//*
+                orderService.updateById(updateOrder);*//*
 
                 // 支付成功，将订单信息存入消息队列，用于减少库存
                 *//*String json = GsonUtils.toJson(dbOrder);
@@ -184,7 +184,7 @@ public class PayController {
                     Order updateOrder = new Order();
                     updateOrder.setId(order.getId());
                     updateOrder.setOrderStatus(Quantity.INT_1);
-                    orderService.updateByPrimaryKeySelective(updateOrder);
+                    orderService.updateById(updateOrder);
 
                     // 减少商品库存
                     Integer number = orderDetail.getNumber();
@@ -373,7 +373,7 @@ public class PayController {
         updateOrder.setTradeId(insertMemberTradeRecord.getId());
         updateOrder.setStatus(status);
         updateOrder.setUpdateTime(new Date());
-        orderService.updateByPrimaryKeySelective(updateOrder);
+        orderService.updateById(updateOrder);
 
         //减去使用的原料
         List<OrderDetail> orderDetailList = orderDetailService.selectByOrderId(dbOrder.getId());

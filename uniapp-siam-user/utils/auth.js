@@ -1,8 +1,8 @@
 import storage from './storage';
 import http from './http';
-const TOKEN_KEY = 'security.token';
-const OPENID_KEY = 'security.openid';
-const PHONE_KEY = 'security.phone';
+const TOKEN_KEY = 'security.siam.token';
+const OPENID_KEY = 'security.siam.openid';
+const PHONE_KEY = 'security.siam.phone';
 export default class AuthService {
     static getToken() {
         return storage.getStorage(TOKEN_KEY);

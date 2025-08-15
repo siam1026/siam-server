@@ -16,10 +16,10 @@
 <script>
 	import https from '../../../../utils/http';
 	import authService from '../../../../utils/auth';
-	var toastService = require('../../../../utils/toast.service');
-	var utilHelper = require('../../../../utils/util');
-	var dateHelper = require('../../../../utils/date-helper');
-	var systemStatus = require('../../../../utils/system-status');
+	import toastService from '../../../../utils/toast.service';
+	import utilHelper from '../../../../utils/util';
+	import dateHelper from '../../../../utils/date-helper';
+	import systemStatus from '../../../../utils/system-status';
 	var interval = null;
 	export default {
 		data() {
@@ -27,11 +27,9 @@
 				disabled: false,
 				time: '获取验证码',
 				currentTime: 60,
-
 				userInfo: {
 					mobile: ''
 				},
-
 				code: '',
 				disabledCode: false
 			};
@@ -79,9 +77,7 @@
 						result.data.statusVipText = systemStatus.statusVipText(result.data.vipStatus);
 						result.data.vipStartTime = dateHelper.formatDate(result.data.vipStartTime);
 						result.data.vipEndTime = dateHelper.formatDate(result.data.vipEndTime);
-						this.setData({
-							userInfo: result.data
-						});
+						this.userInfo = result.data;
 					}
 				});
 			},
@@ -94,10 +90,8 @@
 				if (key.length == 6) {
 					data.disabled = true;
 				}
-				this.setData({
-					code: key,
-					disabled: data.disabled
-				});
+				this.code = key;
+				this.disabled = data.disabled;
 			},
 
 			send(e) {
@@ -175,9 +169,7 @@
 					mobileCode: this.code
 				}).then((result) => {
 					if (result.success) {
-						this.setData({
-							disabled: false
-						});
+						this.disabled = false;
 						toastService.hideLoading();
 						uni.redirectTo({
 							url: '../reset/reset'

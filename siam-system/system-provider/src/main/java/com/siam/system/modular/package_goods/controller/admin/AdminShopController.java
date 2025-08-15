@@ -9,10 +9,10 @@ import com.siam.package_common.entity.BasicResult;
 import com.siam.package_common.exception.StoneCustomerException;
 import com.siam.package_common.model.valid_group.ValidGroupOfAudit;
 import com.siam.package_common.model.valid_group.ValidGroupOfId;
+import com.siam.system.modular.package_user.model.example.MerchantExample;
 import com.siam.system.modular.package_user.service.MemberService;
 import com.siam.system.modular.package_user.service.MerchantService;
 import com.siam.system.modular.package_goods.entity.Shop;
-import com.siam.system.modular.package_goods.model.example.ShopExample;
 import com.siam.system.modular.package_goods.model.param.ShopParam;
 import com.siam.system.modular.package_goods.service.ShopService;
 import com.siam.system.modular.package_user.entity.Member;
@@ -59,7 +59,7 @@ public class AdminShopController {
         BasicResult basicResult = new BasicResult();
         shop.setCreateTime(new Date());
         shop.setUpdateTime(new Date());
-        shopService.insertSelective(shop);
+        shopService.save(shop);
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);
         basicResult.setMessage("创建成功");
@@ -72,7 +72,7 @@ public class AdminShopController {
     public BasicResult update(@RequestBody @Validated(value = {}) Shop shop, String memberMobile) throws IOException {
         BasicResult basicResult = new BasicResult();
 
-        Shop dbShop = shopService.selectByPrimaryKey(shop.getId());
+        Shop dbShop = shopService.getById(shop.getId());
         if(dbShop == null) throw new StoneCustomerException("该店铺不存在");
 
         if(StringUtils.isNotBlank(memberMobile)){
@@ -102,7 +102,7 @@ public class AdminShopController {
         updateShop.setStatus(shop.getStatus());
         updateShop.setStartDeliveryPrice(shop.getStartDeliveryPrice());
         updateShop.setUpdateTime(new Date());
-        shopService.updateByPrimaryKeySelective(updateShop);
+        shopService.updateById(updateShop);
 
         if(basicResult.getSuccess()==null || basicResult.getSuccess()){
             basicResult.setSuccess(true);
@@ -118,17 +118,14 @@ public class AdminShopController {
     public BasicResult delete(@RequestBody @Validated(value = {}) Shop param){
         BasicResult basicResult = new BasicResult();
         for (Integer id : param.getIds()) {
-            //判断菜单下面有关联商品，则不能删除
-            ShopExample example = new ShopExample();
-            example.createCriteria().andIdEqualTo(id);
-            int result = shopService.countByExample(example);
-            if(result == 0){
+            Shop result = shopService.getById(id);
+            if(result == null){
                 basicResult.setSuccess(false);
                 basicResult.setCode(BasicResultCode.ERR);
                 basicResult.setMessage("该门店信息不存在");
                 return basicResult;
             }
-            shopService.deleteByPrimaryKey(id);
+            shopService.removeById(id);
         }
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);
@@ -157,14 +154,16 @@ public class AdminShopController {
             updateShop.setId(shopParam.getId());
             updateShop.setAuditStatus(Quantity.INT_2);
             updateShop.setAuditTime(new Date());
-            shopService.updateByPrimaryKeySelective(updateShop);
+            shopService.updateById(updateShop);
+
             //修改商家信息
-//            MerchantExample merchantExample = new MerchantExample();
-//            merchantExample.createCriteria().andShopIdEqualTo(shopParam.getId());
-//            Merchant updateMerchant = new Merchant();
-//            updateMerchant.setAuditStatus(Quantity.INT_2);
-//            updateMerchant.setUpdateTime(new Date());
-//            merchantService.updateByExampleSelective(updateMerchant, merchantExample);
+            MerchantExample merchantExample = new MerchantExample();
+            merchantExample.createCriteria().andShopIdEqualTo(shopParam.getId());
+            Merchant updateMerchant = new Merchant();
+            updateMerchant.setAuditStatus(Quantity.INT_2);
+            updateMerchant.setUpdateTime(new Date());
+            merchantService.updateByExampleSelective(updateMerchant, merchantExample);
+
             //TODO-发消息通知用户
         }else if(shopParam.getStatus() == Quantity.INT_2){
             //审核不通过
@@ -174,14 +173,16 @@ public class AdminShopController {
             updateShop.setAuditStatus(Quantity.INT_3);
             updateShop.setAuditReason(shopParam.getOpinion());
             updateShop.setAuditTime(new Date());
-            shopService.updateByPrimaryKeySelective(updateShop);
+            shopService.updateById(updateShop);
+
             //修改商家信息
-//            MerchantExample merchantExample = new MerchantExample();
-//            merchantExample.createCriteria().andShopIdEqualTo(shopParam.getId());
-//            Merchant updateMerchant = new Merchant();
-//            updateMerchant.setAuditStatus(Quantity.INT_3);
-//            updateMerchant.setUpdateTime(new Date());
-//            merchantService.updateByExampleSelective(updateMerchant, merchantExample);
+            MerchantExample merchantExample = new MerchantExample();
+            merchantExample.createCriteria().andShopIdEqualTo(shopParam.getId());
+            Merchant updateMerchant = new Merchant();
+            updateMerchant.setAuditStatus(Quantity.INT_3);
+            updateMerchant.setUpdateTime(new Date());
+            merchantService.updateByExampleSelective(updateMerchant, merchantExample);
+
             //TODO-发消息通知用户
         }
 
@@ -209,35 +210,39 @@ public class AdminShopController {
         if(shopParam.getStatus() == Quantity.INT_1){
             //审核通过
             //修改门店信息
-//            Shop updateShop = new Shop();
-//            updateShop.setId(shopParam.getId());
-//            updateShop.setAuditStatus(Quantity.INT_2);
-//            updateShop.setAuditTime(new Date());
-//            shopService.updateByPrimaryKeySelective(updateShop);
-//            //修改商家信息
-//            MerchantExample merchantExample = new MerchantExample();
-//            merchantExample.createCriteria().andShopIdEqualTo(shopParam.getId());
-//            Merchant updateMerchant = new Merchant();
-//            updateMerchant.setAuditStatus(Quantity.INT_2);
-//            updateMerchant.setUpdateTime(new Date());
-//            merchantService.updateByExampleSelective(updateMerchant, merchantExample);
+            Shop updateShop = new Shop();
+            updateShop.setId(shopParam.getId());
+            updateShop.setAuditStatus(Quantity.INT_2);
+            updateShop.setAuditTime(new Date());
+            shopService.updateById(updateShop);
+
+            //修改商家信息
+            MerchantExample merchantExample = new MerchantExample();
+            merchantExample.createCriteria().andShopIdEqualTo(shopParam.getId());
+            Merchant updateMerchant = new Merchant();
+            updateMerchant.setAuditStatus(Quantity.INT_2);
+            updateMerchant.setUpdateTime(new Date());
+            merchantService.updateByExampleSelective(updateMerchant, merchantExample);
+
             //TODO-发消息通知用户
         }else if(shopParam.getStatus() == Quantity.INT_2){
             //审核不通过
             //修改门店信息
-//            Shop updateShop = new Shop();
-//            updateShop.setId(shopParam.getId());
-//            updateShop.setAuditStatus(Quantity.INT_3);
-//            updateShop.setAuditReason(shopParam.getOpinion());
-//            updateShop.setAuditTime(new Date());
-//            shopService.updateByPrimaryKeySelective(updateShop);
-//            //修改商家信息
-//            MerchantExample merchantExample = new MerchantExample();
-//            merchantExample.createCriteria().andShopIdEqualTo(shopParam.getId());
-//            Merchant updateMerchant = new Merchant();
-//            updateMerchant.setAuditStatus(Quantity.INT_3);
-//            updateMerchant.setUpdateTime(new Date());
-//            merchantService.updateByExampleSelective(updateMerchant, merchantExample);
+            Shop updateShop = new Shop();
+            updateShop.setId(shopParam.getId());
+            updateShop.setAuditStatus(Quantity.INT_3);
+            updateShop.setAuditReason(shopParam.getOpinion());
+            updateShop.setAuditTime(new Date());
+            shopService.updateById(updateShop);
+
+            //修改商家信息
+            MerchantExample merchantExample = new MerchantExample();
+            merchantExample.createCriteria().andShopIdEqualTo(shopParam.getId());
+            Merchant updateMerchant = new Merchant();
+            updateMerchant.setAuditStatus(Quantity.INT_3);
+            updateMerchant.setUpdateTime(new Date());
+            merchantService.updateByExampleSelective(updateMerchant, merchantExample);
+
             //TODO-发消息通知用户
         }
 

@@ -22,7 +22,7 @@ public class OrderParam extends Order {
 
     private Date endTime;
 
-    //标识 1=处理订单 2=标记完成(自取订单) 3=标记配送 4=标记完成(配送订单)
+    //标识 1=处理订单 2=标记完成(自取订单) 3=标记配送 4=标记完成(配送订单) 5=收银台结算订单 6=收银台完成订单 7=收银台取消订单
     private Integer flag;
 
     private String idListStr;

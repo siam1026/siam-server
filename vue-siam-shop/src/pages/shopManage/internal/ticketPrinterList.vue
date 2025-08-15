@@ -42,8 +42,8 @@
 			<!-- <el-table-column prop="isDisabled" label="状态" width="100" :formatter="formatType"></el-table-column> -->
 			<el-table-column prop="brand" label="打印机品牌">
 				<template scope="scope">
-					<span v-if="scope.row.brand == 1">飞鹅打印机</span>					
-					<!-- <span v-else-if="scope.row.brand == 2">易联云打印机</span> -->
+					<span v-if="scope.row.brand == 1">飞鹅云打印机</span>					
+					<span v-else-if="scope.row.brand == 2">芯烨云打印机</span>
                </template>						
 			</el-table-column>
 			<el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
@@ -90,8 +90,8 @@
 				</el-form-item>
 				<el-form-item label="打印机品牌" prop="brand">
 					<el-select v-model="editForm.brand" placeholder="请选择">
-						<el-option label="飞鹅打印机" :value="1"></el-option>
-						<!-- <el-option label="易联云打印机" :value="2"></el-option> -->
+						<el-option label="飞鹅云打印机" :value="1"></el-option>
+						<el-option label="芯烨云打印机" :value="2"></el-option>
 					</el-select>
 				</el-form-item>				
 			</el-form>
@@ -249,10 +249,12 @@
 							param.isAutoPrint = 1;
 						}
 
-						if(param.brand == '飞鹅打印机'){
+						if(param.brand == '飞鹅云打印机'){
 							param.brand = 1;
-						}else if(param.brand == '易联云打印机'){
+						}else if(param.brand == '芯烨云打印机'){
 							param.brand = 2;
+						}else if(param.brand == '易联云打印机'){
+							param.brand = 3;
 						}
 
 						let url = '';

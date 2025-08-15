@@ -76,7 +76,7 @@ public class CommonController {
         //获取默认门店
         Setting setting = settingService.selectCurrent();
         int shopId = setting.getDefaultShopId();
-        Shop shop = shopService.selectByPrimaryKey(shopId);
+        Shop shop = shopService.getById(shopId);
 
         //返回是否营业时间
         Boolean result = false;

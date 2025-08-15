@@ -2,10 +2,9 @@ package com.siam.system.modular.package_goods.model.vo;
 
 import com.siam.system.modular.package_goods.entity.FullReductionRule;
 import com.siam.system.modular.package_goods.entity.Shop;
-import com.siam.system.modular.package_goods.entity.FullReductionRule;
-import com.siam.system.modular.package_goods.entity.Shop;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -26,4 +25,12 @@ public class ShopDetailVo {
     //当前门店是否营业
     private Boolean isOperatingOfShop;
 
+    //配送费
+    private BigDecimal deliveryFee;
+
+    //配送时长
+    private String deliveryDurationText;
+
+    //距离公里数
+    private String deliveryDistanceText;
 }

@@ -45,7 +45,7 @@ public class AdminMenuController {
 
         param.setCreateTime(new Date());
         param.setUpdateTime(new Date());
-        menuService.insertSelective(param);
+        menuService.insert(param);
 
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);

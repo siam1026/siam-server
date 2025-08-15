@@ -84,7 +84,7 @@ public class MerchantShopController {
 
         //修改申请开店的门店信息
         shop.setUpdateTime(new Date());
-        shopService.updateByPrimaryKeySelective(shop);
+        shopService.updateById(shop);
 
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);
@@ -98,7 +98,7 @@ public class MerchantShopController {
         BasicData basicResult = new BasicData();
         Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
 
-        Shop shop = shopService.selectByPrimaryKey(loginMerchant.getShopId());
+        Shop shop = shopService.getById(loginMerchant.getShopId());
         if(shop == null){
             throw new StoneCustomerException("无法获取开店信息，请稍后重试");
         }
@@ -128,7 +128,7 @@ public class MerchantShopController {
             throw new StoneCustomerException("您没有权限修改此门店信息");
         }
 
-        Shop dbShop = shopService.selectByPrimaryKey(shop.getId());
+        Shop dbShop = shopService.getById(shop.getId());
         if(dbShop == null){
             throw new StoneCustomerException("该店铺信息不存在");
         }
@@ -136,7 +136,7 @@ public class MerchantShopController {
         //TODO-有些信息不能直接修改，需要管理员审核
 
         shop.setUpdateTime(new Date());
-        shopService.updateByPrimaryKeySelective(shop);
+        shopService.updateById(shop);
 
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);
@@ -161,7 +161,7 @@ public class MerchantShopController {
             throw new StoneCustomerException("您没有权限修改此门店信息");
         }
 
-        Shop dbShop = shopService.selectByPrimaryKey(shopChangeRecord.getShopId());
+        Shop dbShop = shopService.getById(shopChangeRecord.getShopId());
         if(dbShop == null){
             throw new StoneCustomerException("该店铺信息不存在");
         }

@@ -23,8 +23,6 @@ public interface PointsMallOrderMapper extends BaseMapper<PointsMallOrder> {
 
     int deleteByPrimaryKey(Long id);
 
-    int insertSelective(PointsMallOrder record);
-
     List<PointsMallOrder> selectByExample(PointsMallOrderExample example);
 
     PointsMallOrder selectByPrimaryKey(Long id);
@@ -204,8 +202,8 @@ public interface PointsMallOrderMapper extends BaseMapper<PointsMallOrder> {
             "</script>")
     Page<PointsMallOrderResult> getListByTodayPointsMallOrderWithAsc(@Param("page") Page page, @Param("orderDto") PointsMallOrderParam param);
 
-    @Update("update tb_points_mall_order set order_completion_time=#{updateTime}, update_time=#{updateTime}, status=#{status} where payment_success_time < #{overdueTime} and status in(4)")
-    int updateFinish(@Param("overdueTime") Date overdueTime, @Param("updateTime") Date updateTime, @Param("status") Integer status);
+    @Update("update tb_points_mall_order set order_completion_time=now(), update_time=now(), status=#{status} where DATEDIFF(now(), payment_success_time) >= 7 and status in(5)")
+    int updateFinish(@Param("status") Integer status);
 
     @ResultMap("CustomResultMap")
     @Select("<script>\n" +
@@ -311,7 +309,7 @@ public interface PointsMallOrderMapper extends BaseMapper<PointsMallOrder> {
             "<if test=\"orderDto.changeToDeliveryTradeId != null\"> AND o.change_to_delivery_trade_id = #{orderDto.changeToDeliveryTradeId} </if>" +
             "<if test=\"orderDto.startCreateTime != null\"> AND DATE_FORMAT(o.create_time, '%Y/%m/%d') &gt;= #{orderDto.startCreateTime} </if>" +
             "<if test=\"orderDto.endCreateTime != null\"> AND DATE_FORMAT(o.create_time, '%Y/%m/%d') &lt;= #{orderDto.endCreateTime} </if>" +
-            "</where> order by o.create_time desc" +
+            "</where> order by or1.create_time desc" +
             "</script>")
     Page<Map<String, Object>> getAfterSalesListByPageWithAsc(@Param("page") Page page, @Param("orderDto") PointsMallOrderParam param);
 

@@ -450,7 +450,7 @@
 //            order.setDeliveryWay(Quantity.INT_1);
 //            order.setIsPayToMerchant(true);
 //            order.setBeforeReducedDeliveryFee(order.getDeliveryFee());
-//            orderMapper.insertSelective(order);
+//            orderMapper.insert(order);
 //        });
 //
 //        //tb_order_detail

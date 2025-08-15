@@ -3,7 +3,6 @@ package com.siam.system.modular.package_order.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siam.system.modular.package_order.entity.Order;
-import com.siam.system.modular.package_order.model.example.OrderExample;
 import com.siam.system.modular.package_order.model.param.OrderParam;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
@@ -16,25 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface OrderMapper extends BaseMapper<Order> {
-    int countByExample(OrderExample example);
-
-    int deleteByExample(OrderExample example);
-
-    int deleteByPrimaryKey(Integer id);
-
-    int insertSelective(Order record);
-
-    List<Order> selectByExample(OrderExample example);
-
-    Order selectByPrimaryKey(Integer id);
-
-    int updateByExampleSelective(@Param("record") Order record, @Param("example") OrderExample example);
-
-    int updateByExample(@Param("record") Order record, @Param("example") OrderExample example);
-
-    int updateByPrimaryKeySelective(Order record);
-
-    int updateByPrimaryKey(Order record);
 
     @ResultMap("BaseResultMap")
     @Select("<script>select o.* from tb_order o" +
@@ -207,8 +187,8 @@ public interface OrderMapper extends BaseMapper<Order> {
             "</script>")
     Page<Order> getListByTodayOrderWithAsc(@Param("page") Page page, @Param("orderDto") OrderParam param);
 
-    @Update("update tb_order set order_completion_time=#{updateTime}, update_time=#{updateTime}, status=#{status} where payment_success_time < #{overdueTime} and status in(2, 3, 4, 5)")
-    int updateFinish(@Param("overdueTime") Date overdueTime,@Param("updateTime") Date updateTime,@Param("status") Integer status);
+    @Update("update tb_order set order_completion_time=now(), update_time=now(), status=#{status} where TIMESTAMPDIFF(HOUR, payment_success_time, now()) >= 1 and status in(2, 3, 4, 5)")
+    int updateFinish(@Param("status") Integer status);
 
     @ResultMap("CustomResultMap")
     @Select("<script>\n" +
@@ -317,7 +297,7 @@ public interface OrderMapper extends BaseMapper<Order> {
             "<if test=\"orderDto.changeToDeliveryTradeId != null\"> AND o.change_to_delivery_trade_id = #{orderDto.changeToDeliveryTradeId} </if>" +
             "<if test=\"orderDto.startCreateTime != null\"> AND DATE_FORMAT(o.create_time, '%Y/%m/%d') &gt;= #{orderDto.startCreateTime} </if>" +
             "<if test=\"orderDto.endCreateTime != null\"> AND DATE_FORMAT(o.create_time, '%Y/%m/%d') &lt;= #{orderDto.endCreateTime} </if>" +
-            "</where> order by o.create_time desc" +
+            "</where> order by or1.create_time desc" +
             "</script>")
     Page<Order> getAfterSalesListByPageWithAsc(@Param("page") Page page, @Param("orderDto") OrderParam param);
 

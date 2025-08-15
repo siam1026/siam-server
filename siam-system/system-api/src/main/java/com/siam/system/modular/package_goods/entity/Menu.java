@@ -1,6 +1,7 @@
 package com.siam.system.modular.package_goods.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -14,6 +15,17 @@ import java.util.List;
 @TableName("tb_menu")
 @ApiModel(value = "菜单分类表")
 public class Menu {
+
+    //页码
+    @TableField(exist = false)
+    private Integer pageNo = 1;
+
+    //页面大小
+    @TableField(exist = false)
+    private Integer pageSize = 20;
+
+    @TableField(exist = false)
+    List<Integer> ids;
 
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -35,14 +47,6 @@ public class Menu {
 
     @ApiModelProperty(notes = "修改时间")
     private Date updateTime;
-
-    //页码
-    private Integer pageNo = 1;
-
-    //页面大小
-    private Integer pageSize = 20;
-
-    List<Integer> ids;
 
     public List<Integer> getIds() {
         return ids;

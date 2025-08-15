@@ -21,6 +21,7 @@ import com.siam.package_weixin_basic.util.WxQrCodeUtils;
 import com.siam.package_weixin_pay.util.*;
 import com.siam.system.modular.package_user.entity.Member;
 import com.siam.system.modular.package_user.model.example.MemberExample;
+import com.siam.system.modular.package_user.service_impl.MemberServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -444,30 +445,6 @@ public class GoodsApplicationTest {
         }
         System.out.println("\nrepeatNumber_member=" + repeatNumber_member);
         System.out.println("\nrepeatText_member=" + repeatText_member);
-    }
-
-    /**
-     * 测试oss工具类
-     */
-    @Test
-    public void testOssUtils() throws Exception {
-        /*Boolean exist = ossUtils.doesObjectExist("data/images/admin/1/siam_1574048067619.jpg");
-        System.out.println("exist : " + exist);*/
-
-        Integer memberId = 111;
-        String path = "data/images/invite_suncode/test";
-        String fileName = "suncode_" + memberId + ".png";
-        String savePath = path + "/" + fileName;
-        wxQrCodeUtils.generateSunCode("pages/login/choose/choose", "inviterId=111", savePath);
-
-        String mainImagePath = "https://deerspot.oss-cn-hangzhou.aliyuncs.com/test/siamCompose.png";
-        String qrCodePath = "https://deerspot.oss-cn-hangzhou.aliyuncs.com/" + savePath;
-
-        path = "data/images/invite_poster_compose/" + memberId;
-        fileName = fileName + "#" +"siamCompose.png";
-        savePath = path + "/" + fileName;
-
-        imageComposeUtils.compoundImage(mainImagePath, qrCodePath, savePath, "8888711246079366");
     }
 
     @Test

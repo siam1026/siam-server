@@ -84,7 +84,7 @@ public class MerchantMenuController {
         menu.setShopId(loginMerchant.getShopId());
         menu.setCreateTime(new Date());
         menu.setUpdateTime(new Date());
-        menuService.insertSelective(menu);
+        menuService.insert(menu);
 
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);

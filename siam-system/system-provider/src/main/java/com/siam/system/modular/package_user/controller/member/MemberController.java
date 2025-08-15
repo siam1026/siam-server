@@ -60,6 +60,17 @@ public class MemberController {
     }
 
     /**
+     * 微信静默登录
+     *
+     *  @author 暹罗
+     */
+    @PostMapping(value = "/weChat/silence/login")
+    public BasicResult wxSilenceLogin(@RequestBody @Validated(value = {}) MemberParam param) {
+        MemberResult result = memberService.wxSilenceLogin(param);
+        return BasicResult.success(result);
+    }
+
+    /**
      * 获取登录用户信息
      *
      * @author 暹罗

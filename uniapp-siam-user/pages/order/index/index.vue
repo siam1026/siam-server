@@ -20,11 +20,18 @@
 					<view class="swiper-tab-item two-tab" :data-current="index" @tap="clickOrderTab"
 						hover-class="hover-click-class" v-for="(item, index) in shopOrderTabList" :key="index">
 						<view :class="'swiper_table_item_view ' + (currentOrderTab == item.modeId ? 'active' : '')"
-							:data-current="index" @tap="clickOrderTab" style="position: relative; margin-right: 10px">
+							style="position: relative; margin-right: 10px">
 							<text class="out_of_range one_row">{{ item.modeName }}</text>
-							<!-- <text class="tab-number" wx:if="{{item.number>0}}">({{item.number}})</text> -->
-							<mp-badge v-if="item.number > 0" :content="item.number"
-								style="position: absolute; top: -0.9em; right: -0.8em" />
+							<view class="badge_position" v-if="item.number > 0">
+								// #ifdef APP-PLUS||H5
+								<van-badge :content="item.number > 0?item.number:''" />
+								// #endif
+								// #ifdef MP-WEIXIN||MP-ALIPAY
+								<text class="badge_num">{{item.number > 0?item.number:''}}</text>
+								// #endif
+
+							</view>
+
 						</view>
 					</view>
 				</view>
@@ -34,137 +41,145 @@
 					<view class="swiper-tab-item two-tab" :data-current="index" @tap="clickOrderTab"
 						hover-class="hover-click-class" v-for="(item, index) in pointsOrderTabList" :key="index">
 						<view :class="'swiper_table_item_view ' + (currentOrderTab == item.modeId ? 'active' : '')"
-							:data-current="index" @tap="clickOrderTab" style="position: relative; margin-right: 10px">
+							style="position: relative; margin-right: 10px">
 							<text class="out_of_range one_row" :decode="true">{{ item.modeName }}</text>
-							<!-- <text class="tab-number" wx:if="{{item.number>0}}">({{item.number}})</text> -->
-							<mp-badge v-if="item.number > 0" :content="item.number"
-								style="position: absolute; top: -0.9em; right: -0.8em" />
+							<view class="badge_position" v-if="item.number > 0">
+								// #ifdef APP-PLUS||H5
+								<van-badge :content="item.number > 0?item.number:''" />
+								// #endif
+								// #ifdef MP-WEIXIN||MP-ALIPAY
+								<text class="badge_num">{{item.number > 0?item.number:''}}</text>
+								// #endif
+							</view>
 						</view>
 					</view>
 				</view>
 			</scroll-view>
 		</view>
-
-		<swiper :current="currentOrderTab" class="swiper-box" duration="300" @change="bindSlideChange"
+		<!-- <swiper :current="currentOrderTab" class="swiper-box" @change="bindSlideChange"
 			:style="'height:' + winHeight + 'px;'" v-if="currentTab == 0">
-			<swiper-item class="swiper-items" v-for="(item, index) in shopOrderTabList" :key="index">
-				<scroll-view @scrolltoupper="onPullDownRefresh" upper-threshold="-50"
-					:style="'height:' + winHeight + 'px;'" @scrolltolower="onReachBottom" lower-threshold="0" scroll-y
-					class="scroll-views" v-if="list.length > 0">
-					<view class="order-list-view" v-for="(item, index1) in list" :key="index1">
-						<view class="order-item flex_between" hover-class="hover-class-public" @tap="orderDetailsTap"
-							:data-id="item.id" :data-index="index">
-							<image :src="item.shopLogoImg" class="commodity-image" mode="aspectFill"></image>
-							<view class="right-item">
-								<view class="address-status-info">
-									<view class="address-view">
-										<!-- <view class="order-mode theme-color-border">{{item.shoppingWay==1?"自取":"外卖"}}</view> -->
-										<view class="address-info out_of_range one_row">
-											{{ item.shopName }}
-										</view>
+			<swiper-item class="swiper-items" v-for="(item, index) in shopOrderTabList" :key="index"
+				:style="'height:' + winHeight + 'px;'"> -->
+		<block v-if="currentTab == 0">
+			<scroll-view @scrolltoupper="onPullDownRefresh" upper-threshold="-50" :style="'height:' + winHeight + 'px;'"
+				@scrolltolower="onReachBottom" lower-threshold="50" scroll-y class="scroll-views"
+				v-if="list.length > 0">
+				<view class="order-list-view" v-for="(item, index1) in list" :key="index1">
+					<view class="order-item flex_between" hover-class="hover-class-public" @tap="orderDetailsTap"
+						:data-id="item.id" :data-index="index">
+						<image :src="item.shopLogoImg" class="commodity-image" mode="aspectFill"></image>
+						<view class="right-item">
+							<view class="address-status-info">
+								<view class="address-view">
+									<!-- <view class="order-mode theme-color-border">{{item.shoppingWay==1?"自取":"外卖"}}</view> -->
+									<view class="address-info out_of_range one_row">
+										{{ item.shopName }}
 									</view>
-									<view class="status-view">{{ item.paymentModeText }}</view>
 								</view>
-								<view class="name-num-money">
-									<view class="name-num flex_between">
-										<text class="name-view out_of_range one_row"
-											:decode="true">{{ item.description }}</text>
-										<text class="num-view">x{{ item.goodsTotalQuantity }}</text>
-									</view>
-									<view class="money-view">￥{{ item.actualPrice }}</view>
+								<view class="status-view">{{ item.paymentModeText }}</view>
+							</view>
+							<view class="name-num-money">
+								<view class="name-num flex_between">
+									<text class="name-view out_of_range one_row"
+										:decode="true">{{ item.description }}</text>
+									<text class="num-view">x{{ item.goodsTotalQuantity }}</text>
 								</view>
-								<view class="tiem-view">
-									{{ item.createTime }}
-									<text class="status-text theme-color">{{ item.statusText }}</text>
-								</view>
+								<view class="money-view">￥{{ item.actualPrice }}</view>
+							</view>
+							<view class="tiem-view">
+								{{ item.createTime }}
+								<text class="status-text theme-color">{{ item.statusText }}</text>
 							</view>
 						</view>
+					</view>
 
-						<view class="tiem-view" v-if="item.isAllowAppraise">
-							<text></text>
-							<button class="evaluate-btn theme-color theme-border" size="mini" :data-id="item.id"
-								:data-shopId="item.shopId" @tap.stop.prevent="evaluateTip"
-								style="font-size: 22rpx; margin-top: 0">
-								评价
-							</button>
-						</view>
+					<view class="tiem-view" v-if="item.isAllowAppraise">
+						<text></text>
+						<button class="evaluate-btn theme-color theme-border" size="mini" :data-id="item.id"
+							:data-shopId="item.shopId" @tap.stop.prevent="evaluateTip"
+							style="font-size: 22rpx; margin-top: 0">
+							评价
+						</button>
 					</view>
-					<view class="loading_list_box" v-if="isLoading&&!isEndList">
-						<van-loading />
-					</view>
-					<van-divider contentPosition="center" custom-style="padding: 20px;"
-						v-if="!isLoading&&isEndList">没有更多啦</van-divider>
-				</scroll-view>
-				<van-empty :description="'暂无'+shopOrderTabList[currentOrderTab].modeName+'订单'" v-if="list.length <= 0">
-					<van-button type="primary" size="small" class="bottom-button" @tap="goToDrink"
-						custom-style="background: #004ca0;border: 1px #004ca0;">
-						{{currentTab==0?'去喝一杯':'去逛逛'}}
-					</van-button>
-				</van-empty>
-			</swiper-item>
-		</swiper>
-		<swiper :current="currentOrderTab" class="swiper-box" duration="300" @change="bindSlideChange"
-			:style="'height:' + winHeight + 'px;'" v-else>
-			<swiper-item class="swiper-items" v-for="(item, index) in pointsOrderTabList" :key="index">
-				<scroll-view @scrolltoupper="onPullDownRefresh" upper-threshold="-50"
-					:style="'height:' + winHeight + 'px;'" @scrolltolower="onReachBottom" lower-threshold="0" scroll-y
-					class="scroll-views" v-if="mallList.length > 0">
-					<view class="order-list-view" v-for="(item, index1) in mallList" :key="index1">
-						<view class="order-item flex_between" hover-class="hover-class-public"
-							@tap="orderMallDetailsTap" :data-id="item.id" :data-index="index">
-							<image :src="item.firstGoodsMainImage" class="commodity-image" mode="aspectFill"></image>
-							<view class="right-item">
-								<view class="address-status-info">
-									<view class="address-view">
-										<!-- <view class="order-mode theme-color-border">{{item.shoppingWay==1?"自取":"外卖"}}</view> -->
-										<view class="address-info out_of_range one_row">
-											{{ item.contactCity }}{{ item.contactArea }}{{ item.contactStreet }}
-										</view>
-										<view class="address-info out_of_range one_row">
-											{{ item.shopName }}
-										</view>
+				</view>
+				<view class="loading_list_box" v-if="isLoading&&!isEndList">
+					<van-loading />
+				</view>
+				<van-divider contentPosition="center" style="padding-bottom: 20px;"
+					v-if="!isLoading&&isEndList">没有更多啦</van-divider>
+			</scroll-view>
+			<van-empty :description="'暂无'+shopOrderTabList[currentOrderTab].modeName+'订单'" v-if="list.length <= 0">
+				<van-button type="primary" size="small" color="#004ca0" class="bottom-button" @tap="goToDrink">
+					{{currentTab==0?'去喝一杯':'去逛逛'}}
+				</van-button>
+			</van-empty>
+		</block>
+
+		<!-- </swiper-item>
+		</swiper> -->
+		<!-- <swiper :current="currentOrderTab" class="swiper-box" @change="bindSlideChange"
+			:style="'height:' + winHeight + 'px;'" v-if="currentTab == 1">
+			<swiper-item class="swiper-items" v-for="(item, index) in pointsOrderTabList" :key="index"
+				:style="'height:' + winHeight + 'px;'"> -->
+		<block v-if="currentTab == 1">
+			<scroll-view @scrolltoupper="onPullDownRefresh" upper-threshold="-50" :style="'height:' + winHeight + 'px;'"
+				@scrolltolower="onReachBottom" lower-threshold="0" scroll-y class="scroll-views"
+				v-if="mallList.length > 0">
+				<view class="order-list-view" v-for="(item, index1) in mallList" :key="index1">
+					<view class="order-item flex_between" hover-class="hover-class-public" @tap="orderMallDetailsTap"
+						:data-id="item.id" :data-index="index">
+						<image :src="item.firstGoodsMainImage" class="commodity-image" mode="aspectFill"></image>
+						<view class="right-item">
+							<view class="address-status-info">
+								<view class="address-view">
+									<view class="address-info out_of_range one_row">
+										{{ item.contactCity }}{{ item.contactArea }}{{ item.contactStreet }}
 									</view>
-									<view class="status-view">{{ item.paymentModeText }}</view>
-								</view>
-								<view class="name-num-money">
-									<view class="name-num flex_between">
-										<text class="name-view out_of_range one_row"
-											:decode="true">{{ item.description }}</text>
-										<text class="num-view">x{{ item.goodsTotalQuantity }}</text>
+									<view class="address-info out_of_range one_row">
+										{{ item.shopName }}
 									</view>
-									<view class="money-view">￥{{ item.actualPrice }}</view>
 								</view>
-								<view class="tiem-view">
-									{{ item.createTime }}
-									<text class="status-text theme-color">{{ item.statusText }}</text>
+								<view class="status-view">{{ item.paymentModeText }}</view>
+							</view>
+							<view class="name-num-money">
+								<view class="name-num flex_between">
+									<text class="name-view out_of_range one_row"
+										:decode="true">{{ item.description }}</text>
+									<text class="num-view">x{{ item.goodsTotalQuantity }}</text>
 								</view>
+								<view class="money-view">￥{{ item.actualPrice }}</view>
+							</view>
+							<view class="tiem-view">
+								{{ item.createTime }}
+								<text class="status-text theme-color">{{ item.statusText }}</text>
 							</view>
 						</view>
+					</view>
 
-						<view class="tiem-view" v-if="item.isAllowAppraise">
-							<text></text>
-							<button class="evaluate-btn theme-color theme-border" size="mini" :data-id="item.id"
-								:data-shopId="item.shopId" @tap.stop.prevent="evaluateTip"
-								style="font-size: 22rpx; margin-top: 0">
-								评价
-							</button>
-						</view>
+					<view class="tiem-view" v-if="item.isAllowAppraise">
+						<text></text>
+						<button class="evaluate-btn theme-color theme-border" size="mini" :data-id="item.id"
+							:data-shopId="item.shopId" @tap.stop.prevent="evaluateTip"
+							style="font-size: 22rpx; margin-top: 0">
+							评价
+						</button>
 					</view>
-					<view class="loading_list_box" v-if="isMallLoading&&!isEndMallList">
-						<van-loading />
-					</view>
-					<van-divider contentPosition="center" custom-style="padding: 20px;"
-						v-if="!isMallLoading&&isEndMallList">没有更多啦</van-divider>
-				</scroll-view>
-				<van-empty :description="'暂无'+shopOrderTabList[currentOrderTab].modeName+'订单'"
-					v-if="mallList.length <= 0">
-					<van-button type="primary" size="small" class="bottom-button" @tap="goToDrink"
-						custom-style="background: #004ca0;border: 1px #004ca0;">
-						{{currentTab==0?'去喝一杯':'去逛逛'}}
-					</van-button>
-				</van-empty>
-			</swiper-item>
-		</swiper>
+				</view>
+				<view class="loading_list_box" v-if="isMallLoading&&!isEndMallList">
+					<van-loading />
+				</view>
+				<van-divider contentPosition="center" style="padding-bottom: 20px;"
+					v-if="!isMallLoading&&isEndMallList">没有更多啦</van-divider>
+			</scroll-view>
+			<van-empty :description="'暂无'+shopOrderTabList[currentOrderTab].modeName+'订单'" v-if="mallList.length <= 0">
+				<van-button type="primary" size="small" color="#004ca0" class="bottom-button" @tap="goToDrink">
+					{{currentTab==0?'去喝一杯':'去逛逛'}}
+				</van-button>
+			</van-empty>
+		</block>
+
+		<!-- </swiper-item>
+		</swiper> -->
 	</view>
 </template>
 
@@ -172,19 +187,16 @@
 	import https from '../../../utils/http';
 	import authService from '../../../utils/auth';
 	import GlabalConfig from '../../../utils/global-config';
-	var toastService = require('../../../utils/toast.service');
-	var utilHelper = require('../../../utils/util');
-	var dateHelper = require('../../../utils/date-helper');
-	var systemStatus = require('../../../utils/system-status');
+	import toastService from '../../../utils/toast.service';
+	import utilHelper from '../../../utils/util';
+	import dateHelper from '../../../utils/date-helper';
+	import systemStatus from '../../../utils/system-status';
 	var pageNo = 1;
 	var pageSize = 10;
 	var pageMallNo = 1;
 	var pageMallSize = 10;
-	var id;
-	var index;
-	var isEndList = false;
-	var isEndMallList = false; //获取应用实例
-	const app = getApp();
+	//获取应用实例
+	let app = null;
 	export default {
 		data() {
 			return {
@@ -192,7 +204,6 @@
 				orderTab: 1,
 				winWidth: 0,
 				winHeight: 0,
-
 				shopOrderTabList: [{
 						modeId: 0,
 						modeType: 'all',
@@ -219,7 +230,6 @@
 						modeName: '退款/售后'
 					}
 				],
-
 				pointsOrderTabList: [{
 						modeId: 0,
 						modeType: 'all',
@@ -246,10 +256,8 @@
 						modeName: '退款/售后'
 					}
 				],
-
 				list: [],
 				mallList: [],
-
 				tabList: [{
 						modeId: 0,
 						modeName: '外卖订单'
@@ -259,7 +267,6 @@
 						modeName: '商城订单'
 					}
 				],
-
 				currentOrderTab: 0,
 				keyWords: '',
 				inputShowed: false,
@@ -271,7 +278,9 @@
 				isOperation: false,
 				modeName: '',
 				isLoading: true,
-				isMallLoading: true
+				isMallLoading: true,
+				isEndMallList: false,
+				isEndList: false
 			};
 		},
 		/**
@@ -279,20 +288,22 @@
 		 */
 		onLoad: function(options) {
 			console.log(options);
+			app = getApp();
 			pageNo = 1;
-			this.getHeight();
-			this.setData({
-				currentTab: options.currentTab,
-				currentOrderTab: options.currentOrderTab,
-				modeType: options.modeType
-			});
+
+			this.currentTab = Number(options.currentTab);
+			this.currentOrderTab = Number(options.currentOrderTab);
+			this.modeType = options.modeType;
 			this.selectTabNumber();
 			this.selectMallTabNumber();
+
 		},
 		/**
 		 * 生命周期函数--监听页面初次渲染完成
 		 */
-		onReady: function() {},
+		onReady: function() {
+			this.getHeight();
+		},
 		/**
 		 * 生命周期函数--监听页面显示
 		 */
@@ -350,13 +361,13 @@
 			if (this.currentTab == 0) {
 				pageNo = 1;
 				pageSize = 10;
-				isEndList = false;
+				this.isEndList = false;
 				this.getOrderList(this.shopOrderTabList[this.currentOrderTab].modeType, this.keyWords);
 			}
 			if (this.currentTab == 1) {
 				pageMallNo = 1;
 				pageMallSize = 10;
-				isEndMallList = false;
+				this.isEndMallList = false;
 				this.getMallOrderList(this.pointsOrderTabList[this.currentOrderTab].modeType, this.keyWords);
 			}
 			// 隐藏导航栏加载框
@@ -396,9 +407,7 @@
 										height = height + rect.height;
 									});
 									if (rects.length > 0) {
-										_this.setData({
-											winHeight: winHeight - height
-										});
+										_this.winHeight = winHeight - height;
 									}
 
 								}).exec();
@@ -410,92 +419,119 @@
 
 			// 滑动切换tab
 			bindSlideChange: function(e) {
-				console.log(e);
-				pageNo = 1;
-				this.setData({
-					currentOrderTab: e.detail.current
-				});
+				console.log("bindSlideChange", e);
+				this.currentOrderTab = e.detail.current;
+				console.log("currentTab===", this.currentTab, "currentOrderTab===", this.currentOrderTab);
 				if (this.currentTab == 0) {
-					this.setData({
-						modeType: this.shopOrderTabList[e.detail.current].modeType
-					});
+					pageNo = 1;
+					this.isEndList = false;
+					this.isLoading = true;
+					this.list = [];
+					this.modeType = this.shopOrderTabList[e.detail.current].modeType;
+					console.log(this.shopOrderTabList[e.detail.current].modeName);
 					this.getOrderList(this.shopOrderTabList[e.detail.current].modeType, this.keyWords);
 				}
 				if (this.currentTab == 1) {
-					this.setData({
-						modeType: this.pointsOrderTabList[e.detail.current].modeType
-					});
+					pageMallNo = 1;
+					this.isEndMallList = false;
+					this.isMallLoading = true;
+					this.mallList = [];
+					this.modeType = this.pointsOrderTabList[e.detail.current].modeType;
+					console.log(this.pointsOrderTabList[e.detail.current].modeName);
 					this.getMallOrderList(this.pointsOrderTabList[e.detail.current].modeType, this.keyWords);
 				}
 			},
 
 			//点击切换
 			clickTab: function(e) {
+				console.log("clickTab", e);
 				console.log(e.target.dataset.current);
 				if (this.currentTab === e.target.dataset.current) {
 					return false;
 				} else {
+					this.currentTab = e.target.dataset.current;
 					// 显示加载图标
-					this.setData({
-						currentTab: e.target.dataset.current,
-						currentOrderTab: 0
-					});
-					if (e.target.dataset.current == 0) {
-						this.setData({
-							modeType: this.shopOrderTabList[0].modeType
-						});
-						this.getOrderList(this.pointsOrderTabList[0].modeType, this.keyWords);
+					this.currentOrderTab = 0;
+					if (this.currentTab == 0) {
+						pageNo = 1;
+						this.isEndList = false;
+						this.isLoading = true;
+						this.list = [];
+						this.modeType = this.shopOrderTabList[this.currentOrderTab].modeType;
+						this.getOrderList(this.shopOrderTabList[this.currentOrderTab].modeType, this.keyWords);
 					}
-					if (e.target.dataset.current == 1) {
-						console.log(this.pointsOrderTabList[0].modeType);
-						this.setData({
-							modeType: this.pointsOrderTabList[0].modeType
-						});
-						this.getMallOrderList(this.pointsOrderTabList[0].modeType, this.keyWords);
+					if (this.currentTab == 1) {
+						pageMallNo = 1;
+						this.isEndMallList = false;
+						this.isMallLoading = true;
+						this.mallList = [];
+						console.log(this.pointsOrderTabList[this.currentOrderTab].modeType);
+						this.modeType = this.pointsOrderTabList[this.currentOrderTab].modeType;
+						this.getMallOrderList(this.pointsOrderTabList[this.currentOrderTab].modeType, this.keyWords);
 					}
 				}
 			},
 
 			//点击切换
 			clickOrderTab: function(e) {
-				console.log(e);
-				console.log(e.currentTarget.dataset.current);
+				console.log("clickOrderTab", e);
+
 				if (this.currentOrderTab === e.currentTarget.dataset.current) {
 					return false;
 				} else {
-					pageNo = 1;
+
 					// 显示加载图标
-					this.setData({
-						currentOrderTab: e.currentTarget.dataset.current
-					});
+					this.currentOrderTab = e.currentTarget.dataset.current;
+					console.log("currentTab", this.currentTab, "currentOrderTab", this.currentOrderTab);
+					if (this.currentTab === 0) {
+						pageNo = 1;
+						this.isEndList = false;
+						this.isLoading = true;
+						this.list = [];
+						this.modeType = this.shopOrderTabList[this.currentOrderTab].modeType;
+						console.log("this.modeType", this.modeType);
+						this.getOrderList(this.shopOrderTabList[this.currentOrderTab].modeType, this.keyWords);
+					}
+					if (this.currentTab === 1) {
+						pageMallNo = 1;
+						this.isEndMallList = false;
+						this.isMallLoading = true;
+						this.mallList = [];
+						this.modeType = this.pointsOrderTabList[this.currentOrderTab].modeType;
+						console.log("this.modeType", this.modeType);
+						this.getMallOrderList(this.pointsOrderTabList[this.currentOrderTab].modeType, this.keyWords);
+					}
 				}
 			},
 
 			orderDetailsTap(e) {
-				id = e.currentTarget.dataset.id;
-				index = e.currentTarget.dataset.index;
+				var id = e.currentTarget.dataset.id;
+				var index = e.currentTarget.dataset.index;
+				this.clickId = id;
+				this.clickIndex = index;
 				uni.navigateTo({
-					url: '../detail/detail?id=' + e.currentTarget.dataset.id
+					url: '../detail/detail?id=' + id
 				});
 			},
 
 			orderMallDetailsTap(e) {
-				id = e.currentTarget.dataset.id;
-				index = e.currentTarget.dataset.index;
+				var id = e.currentTarget.dataset.id;
+				var index = e.currentTarget.dataset.index;
+				this.clickId = id;
+				this.clickIndex = index;
 				console.log(this.modeType);
 				uni.navigateTo({
-					url: '../../internal/mall/order/detail/detail?id=' + e.currentTarget.dataset.id
+					url: '../../internal/mall/order/detail/detail?id=' + id
 				});
 			},
 
 			evaluateTip(e) {
-				id = e.currentTarget.dataset.id;
+				var id = e.currentTarget.dataset.id;
 				let shopId = e.currentTarget.dataset.shopid;
 				uni.navigateTo({
 					url: '../evaluate/evaluate?orderId=' + id + '&shopId=' + shopId
 				});
 			},
-
 			goToDrink() {
 				uni.switchTab({
 					url: '../../menu/index/index'
@@ -509,20 +545,20 @@
 					keyWords: keyWords
 				}).then((result) => {
 					if (result.success) {
+						if (result.data.records.length < pageSize) {
+							this.isEndList = true;
+						}
 						result.data.records.forEach((res) => {
 							res.createTime = dateHelper.fmtDate(res.createTime);
 							res.statusText = systemStatus.statusText(res.status);
 							res.paymentModeText = systemStatus.paymentModeText(res.paymentMode);
 							res.shopLogoImg = GlabalConfig.ossUrl + res.shopLogoImg;
 						});
-						this.setData({
-							list: result.data.records,
-							isLoading: false
-						});
+						this.list = result.data.records;
+						this.isLoading = false;
 					}
 				});
 			},
-
 			getMallOrderList(tabType, keyWords) {
 				https.request('/rest/member/pointsMall/order/list', {
 					pageNo: pageMallNo,
@@ -530,17 +566,20 @@
 					tabType: tabType,
 					keyWords: keyWords
 				}).then((result) => {
+					console.log(result)
 					if (result.success) {
+						if (result.data.records.length < pageMallSize) {
+							this.isEndMallList = true;
+						}
 						result.data.records.forEach((res) => {
 							res.createTime = dateHelper.fmtDate(res.createTime);
 							res.statusText = systemStatus.statusMallText(res.status);
 							res.paymentModeText = systemStatus.paymentModeText(res.paymentMode);
 							res.firstGoodsMainImage = GlabalConfig.ossUrl + res.firstGoodsMainImage;
 						});
-						this.setData({
-							mallList: result.data.records,
-							isMallLoading: false
-						});
+						this.mallList = result.data.records;
+						this.isMallLoading = false;
+
 					}
 				});
 			},
@@ -651,10 +690,8 @@
 			onReachBottom() {
 				console.log('占位：函数 onReachBottom 未声明');
 				if (this.currentTab == 0) {
-					if (isEndList) {
-						this.setData({
-							isEndList: true
-						});
+					if (this.isEndList) {
+						this.isEndList = true;
 						return;
 					}
 					this.isLoading = true;
@@ -667,6 +704,11 @@
 						keyWords: this.keyWords
 					}).then((result) => {
 						if (result.success) {
+							if (result.data.records.length == 0) {
+								this.isLoading = false;
+								this.isEndList = true;
+								pageNo = pageNo - 1;
+							}
 							if (result.data.records.length > 0) {
 								result.data.records.forEach((res) => {
 									res.createTime = dateHelper.formatDate(res.createTime);
@@ -674,27 +716,17 @@
 									res.shopLogoImg = GlabalConfig.ossUrl + res.shopLogoImg;
 									this.list.push(res);
 								});
-								this.setData({
-									list: this.list,
-									isLoading: false
-								});
-								return;
+								this.list = this.list;
+								this.isLoading = false;
 							}
-							this.setData({
-								isEndList: true,
-								isLoading: false
-							});
-							isEndList = true;
-							pageNo = pageNo - 1;
+
 						}
 					});
 				}
 				if (this.currentTab == 1) {
-					if (isEndMallList) {
-						this.setData({
-							isEndMallList: true,
-							isMallLoading: false
-						});
+					if (this.isEndMallList) {
+						this.isEndMallList = true;
+						this.isMallLoading = false;
 						return;
 					}
 					this.isMallLoading = true;
@@ -707,6 +739,11 @@
 						keyWords: this.keyWords
 					}).then((result) => {
 						if (result.success) {
+							if (result.data.records.length == 0) {
+								this.isMallLoading = false;
+								this.isEndMallList = true;
+								pageMallNo = pageMallNo - 1;
+							}
 							if (result.data.records.length > 0) {
 								result.data.records.forEach((res) => {
 									res.createTime = dateHelper.formatDate(res.createTime);
@@ -715,18 +752,10 @@
 										.firstGoodsMainImage;
 									this.mallList.push(res);
 								});
-								this.setData({
-									mallList: this.mallList,
-									isMallLoading: false
-								});
-								return;
+								this.mallList = this.mallList;
+								this.isMallLoading = false;
 							}
-							this.setData({
-								isEndMallList: true,
-								isMallLoading: false
-							});
-							isEndMallList = true;
-							pageMallNo = pageMallNo - 1;
+
 						}
 					});
 				}
@@ -930,5 +959,28 @@
 
 	.right-item {
 		width: 75%;
+	}
+
+	.badge_position {
+		position: absolute;
+		right: -6px;
+		top: -6px;
+	}
+
+	.badge_num {
+		display: inline-block;
+		box-sizing: border-box;
+		background-color: #ee0a24;
+		padding: 1px 3px;
+		border-radius: 999px;
+		min-width: 16px;
+		line-height: 1.2;
+		height: 1.2;
+		text-align: center;
+		font-size: 12px;
+		color: #fff;
+		position: absolute;
+		right: -6px;
+		top: 6px;
 	}
 </style>

@@ -15,7 +15,7 @@
 				<scroll-view @scrolltoupper="onPullDownRefresh" upper-threshold="-50" @scrolltolower="onReachBottom"
 					lower-threshold="0" scroll-y class="scroll-views">
 					<view class="section" @tap="getRegeoAddress">
-						<input :placeholder="'搜索门店' + scope.userLocation" :focus="true" disabled="disabled" />
+						<input :placeholder="'搜索门店' + scope.userLocation" disabled="disabled" />
 					</view>
 					<view class="self-taking-list">
 						<view :class="'self-taking-item '+(shopId == item.id?'active-bg':'')" @tap="confirmShopChoice"
@@ -55,7 +55,7 @@
 					</view>
 				</scroll-view>
 			</swiper-item>
-			<swiper-item class="swiper-items">
+			<swiper-item class="swiper-items" v-if="selfOutActiveIndex == 1">
 				<scroll-view @scrolltoupper="onPullDownRefresh" upper-threshold="-50" v-if="addressList.length > 0"
 					@scrolltolower="onReachBottom" lower-threshold="0" :scroll-x="false" :scroll-y="true"
 					class="scroll-views">
@@ -88,15 +88,14 @@
 									<view class="username-class">{{ item.realname }}</view>
 								</view>
 							</view>
-
 						</view>
 					</view>
 				</scroll-view>
 				<view class="loading_box" v-if="isLoading&&addressList.length==0">
 					<van-loading custom-class="loading_box_class" vertical>加载中...</van-loading>
 				</view>
-				<van-empty v-if="addressList.length <= 0" description="您还没有地址信息">
-					<van-button round type="danger" class="bottom-button" v-if="addressList.length > 0"
+				<van-empty v-if="addressList.length <= 0&&!isLoading" description="您还没有地址信息">
+					<van-button round type="primary" size="small" color="#004ca0" class="bottom-button" v-if="addressList.length > 0"
 						@bindTap="goToDrink">去喝一杯</van-button>
 				</van-empty>
 			</swiper-item>
@@ -105,13 +104,15 @@
 
 		<navigator url="../insert/insert" class="insert-address-view theme-color safe-area"
 			v-if="selfOutActiveIndex == 1">+新增地址</navigator>
+
+		<van-popup :show="openRegionDialog" round custom-style="height: 50%;" position="bottom">
+			<view class="content">
+				<van-area :area-list="areaList" :value="areaValue" :columns-num="2" title="选择城市" @cancel="close"
+					@change="bindRegionChange" @confirm="bindRegionComfirm" />
+			</view>
+		</van-popup>
 	</view>
-	<van-popup :show="openRegionDialog" round custom-style="height: 50%;" position="bottom">
-		<view class="content">
-			<van-area :area-list="areaList" :value="areaValue" :columns-num="2" title="选择城市" @cancel="close"
-				@change="bindRegionChange" @confirm="bindRegionComfirm" />
-		</view>
-	</van-popup>
+
 </template>
 
 <script>
@@ -120,16 +121,15 @@
 	import authService from '../../../utils/auth';
 	import amapFile from '../../../utils/gaode-libs/amap-wx';
 	import * as Config from '../../../utils/gaode-libs/config';
-	var toastService = require('../../../utils/toast.service');
-	var utilsHelper = require('../../../utils/util');
-	var dateHelper = require('../../../utils/date-helper');
-
+	import toastService from '../../../utils/toast.service';
+	import utilHelper from '../../../utils/util';
+	import dateHelper from '../../../utils/date-helper';
 	import {
 		areaList
 	} from '@vant/area-data';
 
 	//获取应用实例
-	const app = getApp();
+	let app = null;
 	var heightList = [];
 	export default {
 		data() {
@@ -145,7 +145,6 @@
 						modeId: 1
 					}
 				],
-
 				isInsert: false,
 				reducedDeliveryPrice: '',
 				selfOutActiveIndex: '',
@@ -190,6 +189,8 @@
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad: function(options) {
+			//获取应用实例
+			app = getApp();
 			console.log(options);
 			var location = app.globalData.deliveryAndSelfTaking.location;
 			var selfOutActiveIndex = app.globalData.deliveryAndSelfTaking.selfOutActiveIndex;
@@ -198,14 +199,12 @@
 			var pageType = app.globalData.deliveryAndSelfTaking.pageType;
 			var chooseId = app.globalData.deliveryAndSelfTaking.chooseId;
 			var shopId = app.globalData.deliveryAndSelfTaking.shopId;
-			this.setData({
-				selfOutActiveIndex: chooseIndex,
-				chooseIndex: actvieIndex,
-				pageType: pageType,
-				chooseId: chooseId,
-				shopId: shopId,
-				location: location
-			});
+			this.selfOutActiveIndex = chooseIndex;
+			this.chooseIndex = actvieIndex;
+			this.pageType = pageType;
+			this.chooseId = chooseId;
+			this.shopId = shopId;
+			this.location = location;
 			this.getDeliveryAddressList();
 			this.getShopList(location);
 		},
@@ -279,10 +278,8 @@
 										}
 									}
 								});
-								this.setData({
-									shopList: result.data.records,
-									isLoading: false
-								});
+								this.shopList = result.data.records;
+								this.isLoading = false;
 								fulfill(result.data);
 								authService.checkIsLogin().then((result) => {
 									if (!result) {
@@ -347,65 +344,60 @@
 						var prevToPage = pages[pages.length - 3]; //上一个页面
 						var payPrice = result.data - Number(this.reducedDeliveryPrice);
 						if (payPrice > 0) {
-							toastService.showModal(
-								'',
-								'确认支付' + payPrice + '元配送费吗？',
-								function() {
-									authService.getOpenId().then((openId) => {
-										if (openId) {
-											toastService.showLoading();
-											https.request('/rest/member/wxPay/toPay4Applet', {
-												openid: openId,
-												type: 3,
-												out_trade_no: that.orderNo,
-												total_fee: payPrice,
-												deliveryAddressId: shopAddress.id,
-												shopId: that.shopId
-											}).then((result) => {
-												if (result.success) {
-													uni.requestPayment({
-														appId: result.data.appid,
-														timeStamp: result.data
-															.timeStamp,
-														nonceStr: result.data.nonceStr,
-														package: result.data.package,
-														signType: 'MD5',
-														paySign: result.data.paySign,
-														success(res) {
-															toastService.showSuccess(
-																'支付成功', true);
-															let timeout = setTimeout(
-																() => {
-																	prevPage
-																		.getOrderDetail(
-																			that
-																			.orderId
+							toastService.showModal('', '确认支付' + payPrice + '元配送费吗？', function() {
+								authService.getOpenId().then((openId) => {
+									if (openId) {
+										toastService.showLoading();
+										https.request('/rest/member/wxPay/toPay4Applet', {
+											openid: openId,
+											type: 3,
+											out_trade_no: that.orderNo,
+											total_fee: payPrice,
+											deliveryAddressId: shopAddress.id,
+											shopId: that.shopId
+										}).then((result) => {
+											if (result.success) {
+												uni.requestPayment({
+													appId: result.data.appid,
+													timeStamp: result.data
+														.timeStamp,
+													nonceStr: result.data.nonceStr,
+													package: result.data.package,
+													signType: 'MD5',
+													paySign: result.data.paySign,
+													success(res) {
+														toastService.showSuccess(
+															'支付成功', true);
+														let timeout = setTimeout(
+														() => {
+																prevPage
+																	.getOrderDetail(
+																		that
+																		.orderId
 																		);
-																	prevToPage
-																		.setData({
-																			isOperation: true
-																		});
-																	clearTimeout(
-																		timeout
+																prevToPage
+																	.setData({
+																		isOperation: true
+																	});
+																clearTimeout(
+																	timeout
 																	);
-																	uni.navigateBack(
-																		1);
-																}, 1000);
-														},
-														fail(res) {
-															toastService.showError(
-																'支付失败', true);
-														}
-													});
-												}
-											});
-											return;
-										}
-										toastService.showToast('登录用户错误，请重新登录');
-									});
-								},
-								null
-							);
+																uni.navigateBack(
+																	1);
+															}, 1000);
+													},
+													fail(res) {
+														toastService.showError(
+															'支付失败', true);
+													}
+												});
+											}
+										});
+										return;
+									}
+									toastService.showToast('登录用户错误，请重新登录');
+								});
+							}, null);
 						}
 					}
 				});
@@ -413,7 +405,7 @@
 			},
 			//选择用户地址
 			confirmChoice(e) {
-				//console.log(e)
+				console.log("选择用户地址",e);
 				var key = e.currentTarget.dataset.index;
 				//直接调用上一个页面的 setData() 方法，把数据存到上一个页面中去
 				var shopAddress = this.addressList[key];
@@ -429,6 +421,11 @@
 				let prevPage = pages[pages.length - 2]; //上一个页面
 				console.log(prevPage);
 				var location = shopAddress.longitude + "," + shopAddress.latitude;
+				toastService.showLoading("加载中...");
+				//如果重复选择地址则不进行任何操作
+				if (_this.chooseId == shopAddress.id) {
+					return;
+				}
 				this.confirmChoiceShopList(location).then(result => {
 					console.log("查询用户地址配送费=", result);
 					var shopInfo = result.records[0];
@@ -438,15 +435,14 @@
 						feeData = app.globalData.deliveryAndSelfTaking.reducedDeliveryTotalPrice ? app
 							.globalData
 							.deliveryAndSelfTaking.reducedDeliveryTotalPrice : 0;
-						//如果重复选择地址则不进行任何操作
-						if (_this.chooseId == shopAddress.id) {
-							return;
-						}
+						toastService.hideLoading();
+						
 						app.globalData.deliveryAndSelfTaking.selfOutActiveIndex = 1;
 						app.globalData.deliveryAndSelfTaking.deliveryAddress = shopAddress;
 						app.globalData.deliveryAndSelfTaking.ifIndexSwitchTab = true;
 						app.globalData.deliveryAndSelfTaking.ifChooseBack = true;
-						
+						app.globalData.deliveryAndSelfTaking.reducedDeliveryTotalPrice = feeData;
+
 						prevPage.$vm.deliveryAndSelfTaking = app.globalData.deliveryAndSelfTaking;
 						prevPage.$vm.selfOutActiveIndex = 1;
 						prevPage.$vm.activeTab = 0;
@@ -456,6 +452,7 @@
 						prevPage.$vm.isMainScroll = false;
 						prevPage.$vm.scrollInto = 'into0';
 						prevPage.$vm.isLoading = true;
+						
 						uni.navigateBack(1);
 						_this.setData({
 							itemId: _this.addressList[key].id
@@ -467,7 +464,7 @@
 							app.globalData.deliveryAndSelfTaking.ifChoosePayBack = true;
 						}
 					})
-					
+
 				});
 			},
 			confirmSelectDeliveryFee(addressid, shopId) {
@@ -586,10 +583,8 @@
 					pageSize: 10
 				}).then((result) => {
 					if (result.success) {
-						this.setData({
-							addressList: result.data.records,
-							isLoading: false
-						});
+						this.addressList = result.data.records;
+						this.isLoading = false;
 					}
 				});
 			},
@@ -607,7 +602,8 @@
 			},
 
 			confirmShopChoice(e) {
-				console.log('占位：函数 confirmShopChoice 未声明');
+				console.log('占位：函数 confirmShopChoice 未声明', e);
+				toastService.showLoading();
 				var _this = this;
 				var index = e.currentTarget.dataset.index;
 				let pages = getCurrentPages();
@@ -636,7 +632,7 @@
 				if (this.pageType == 'pay') {
 					app.globalData.deliveryAndSelfTaking.ifChoosePayBack = true;
 				}
-
+				toastService.hideLoading();
 				app.globalData.deliveryAndSelfTaking.orderDetail.initShopInfo = this.shopList[index];
 				uni.navigateBack(1);
 				//toastService.showLoading();
@@ -754,7 +750,7 @@
 	}
 
 	.address-name-text {
-		/* width: 80%; */
+		width: 80%;
 	}
 
 	.address-items {

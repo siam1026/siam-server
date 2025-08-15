@@ -23,7 +23,30 @@
         <el-form-item label="门店公告" prop="announcement">
 					<el-input v-model="editForm.announcement"></el-input>
 				</el-form-item>
-			</el-form>
+
+
+      <el-form-item label="后厨总单打印机" prop="kitchenTotalOrderPrinterId">
+        <el-select v-model="editForm.kitchenTotalOrderPrinterId" class="minInput">
+          <el-option
+            v-for="item in printerList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="结账单打印机" prop="checkoutPrinterId">
+        <el-select v-model="editForm.checkoutPrinterId" class="minInput">
+          <el-option
+            v-for="item in printerList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
 
 			<div slot="footer" class="el-dialog__footer" style="text-align:center;">
 				<el-button type="primary" @click="saveShopMsg">保存</el-button>
@@ -40,6 +63,7 @@
             value: 'label',
             children: 'children'
         },
+        printerList: [],
         menuList: [],
         editForm: {
           name:'',
@@ -156,6 +180,30 @@
             )
           }
         });
+      },
+      getPrinterList() {
+        // 获取商品类别列表
+        let vue = this;
+        let param = {
+          pageNo: -1,
+          pageSize: 10,
+          type: 1,
+        };
+        vue.$http.post(
+          vue,
+          "/rest/merchant/printer/list",
+          param,
+          (vue, data) => {
+            vue.printerList = data.data.records;
+          },
+          (error, data) => {
+            vue.$message({
+              showClose: true,
+              message: data.message,
+              type: "error",
+            });
+          }
+        );
       },
       getDetail(id) { // 获取商品详情
           let vue = this
@@ -294,6 +342,7 @@
       },
     },
     created() {
+      this.getPrinterList()
       this.getTypeList()
       let id = this.$route.query.id
       this.getDetail(id)

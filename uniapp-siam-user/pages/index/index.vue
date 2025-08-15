@@ -1,5 +1,6 @@
 <template>
 	<view class="page">
+
 		<swiper :indicator-dots="indicatorDots" class="carousel-swiper" :autoplay="autoplay" :interval="interval"
 			:duration="duration" :indicator-active-color="afterColor" style="margin: 0;border-radius: 0;">
 			<block v-for="(item, index) in carouselUrls" :key="index">
@@ -42,11 +43,12 @@
 	import GlobalConfig from '../../utils/global-config';
 	import https from '../../utils/http';
 	import authService from '../../utils/auth';
-	import show from'../../utils/toast.service';
+	import toastService from '../../utils/toast.service';
+	import show from '../../utils/toast.service';
 	import amapFile from '../../utils/gaode-libs/amap-wx';
 	import * as Config from '../../utils/gaode-libs/config';
 	//获取应用实例
-	const app = getApp();
+	let app = null;
 	export default {
 		data() {
 			return {
@@ -67,16 +69,17 @@
 				noDataTip: '../../assets/common/no-data.png',
 				shopList: [],
 				isActivityDialog: false,
-				statusBarHeight: '',
+				statusBarHeight: 0,
 				dialogShow: false,
 				maskClosable: false,
 				regeoInfo: {
 					name: '',
-					address: ''
+					address: '',
+					location: ''
 				},
 				dialogvisible: false,
 				recommendGoodsList: '',
-				carouselUrls: '',
+				carouselUrls: [],
 				shopIndex: 0,
 				shopAdditionalVo: {
 					promotionList: []
@@ -89,36 +92,52 @@
 			};
 		},
 		onLoad: function() {
-			this.setData({
-				statusBarHeight: app.globalData.systemInfoSync.statusBarHeight * 2
-			});
+			app = getApp();
+			this.statusBarHeight = app.globalData.systemInfoSync.statusBarHeight * 2;
 			this.getCarouselList();
-			this.getRegeoInit();
+
 		},
 		onShow: function() {
 			//判断是否显示新用户弹窗
-
+			this.getRegeoInit();
 		},
 		onPullDownRefresh() {
 			this.getCarouselList();
-			this.getRegeo();
+			this.getRegeoInit();
+
 			setTimeout((outtime) => {
-				// 隐藏导航栏加载框
-				uni.hideNavigationBarLoading();
 				// 停止下拉动作
 				uni.stopPullDownRefresh();
+				// 隐藏导航栏加载框
+				uni.hideNavigationBarLoading();
+
 				clearTimeout(outtime);
 			}, 1000);
 		},
 		onHide() {
-			this.setData({
-				dialogShow: false,
-				maskClosable: true
-			});
+			this.dialogShow = false;
+			this.maskClosable = true;
 		},
 		methods: {
+			// position 为关闭时点击的位置
+			beforeClose(position) {
+				switch (position) {
+					case 'left':
+					case 'cell':
+					case 'outside':
+						return true;
+					case 'right':
+						return new Promise((resolve) => {
+							showConfirmDialog({
+									title: '确定删除吗？',
+								})
+								.then(() => resolve(true))
+								.catch(() => resolve(false));
+						});
+				}
+			},
 			getRegeo() {
-				var self = this;
+				var _this = this;
 				var key = Config.key();
 				var myAmapFun = new amapFile.AMapWX({
 					key: key
@@ -127,18 +146,19 @@
 					success: function(getRegeo) {
 						console.log(getRegeo);
 						if (!app.globalData.deliveryAndSelfTaking.regeoInfo) {
-							self.setData({
-								regeoInfo: getRegeo[0].regeocodeData.pois[0]
-							});
-							app.globalData.deliveryAndSelfTaking.location = getRegeo[0].longitude + ',' +
+							_this.regeoInfo = getRegeo[0].regeocodeData.pois[0];
+							app.globalData.deliveryAndSelfTaking.location = getRegeo[0].longitude +
+								',' +
 								getRegeo[0].latitude;
-							app.globalData.deliveryAndSelfTaking.regeoInfo = getRegeo[0].regeocodeData.pois[0];
+							app.globalData.deliveryAndSelfTaking.regeoInfo = getRegeo[0].regeocodeData
+								.pois[0];
+							app.globalData.deliveryAndSelfTaking.regeoInfo.isAutoLocation = true;
 						} else {
 							app.globalData.deliveryAndSelfTaking.location = app.globalData
 								.deliveryAndSelfTaking.location;
-							self.setData({
-								regeoInfo: app.globalData.deliveryAndSelfTaking.regeoInfo
-							});
+							app.globalData.deliveryAndSelfTaking.regeoInfo.isAutoLocation = true;
+							_this.regeoInfo = app.globalData.deliveryAndSelfTaking.regeoInfo;
+
 						}
 					},
 					fail: function(info) {
@@ -146,28 +166,15 @@
 					}
 				});
 			},
-
 			getRegeoInit() {
-				var self = this;
-				if (!app.globalData.deliveryAndSelfTaking.regeoInfo) {
-					var addressInfo = {
-						name: '麓谷小镇',
-						address: '岳麓大道尖山路口北300米',
-						location: '112.885538,28.232363'
-					};
-					self.setData({
-						regeoInfo: addressInfo
-					});
-					app.globalData.deliveryAndSelfTaking.location = addressInfo.location;
-					app.globalData.deliveryAndSelfTaking.regeoInfo = addressInfo;
-				} else {
-					app.globalData.deliveryAndSelfTaking.location = app.globalData.deliveryAndSelfTaking.location;
-					self.setData({
-						regeoInfo: app.globalData.deliveryAndSelfTaking.regeoInfo
-					});
-				}
-			},
+				var _this = this;
+				console.log(app.globalData.deliveryAndSelfTaking.location)
+				var addressInfo = app.globalData.deliveryAndSelfTaking.initRegeoInfo;
 
+				_this.regeoInfo = addressInfo;
+				app.globalData.deliveryAndSelfTaking.regeoInfo = addressInfo;
+				app.globalData.deliveryAndSelfTaking.location = addressInfo.location;
+			},
 			shoppingAddressTap() {
 				uni.navigateTo({
 					url: `../address/replace/replace?jump_page=index`
@@ -216,7 +223,8 @@
 
 			commodityDetailTap(e) {
 				uni.navigateTo({
-					url: '../menu/detail/detail?id=' + e.currentTarget.dataset.id + '&shopId=' + e.currentTarget
+					url: '../menu/detail/detail?id=' + e.currentTarget.dataset.id + '&shopId=' + e
+						.currentTarget
 						.dataset.shopid
 				});
 			},
@@ -317,6 +325,7 @@
 <style>
 	page {
 		width: 100%;
+
 	}
 
 	.banner {

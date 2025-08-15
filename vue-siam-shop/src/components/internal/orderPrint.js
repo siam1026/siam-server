@@ -227,7 +227,7 @@ const install = function(Vue) {
                                         '"shoppingWay": "配送方式：'+ shoppingWayText +'", '+
                                         '"nickname": "'+ order.contactRealname + (order.contactSex == 0 ? '' : (order.contactSex == 1 ? '(先生)' : '(女士)')) +'", '+
                                         '"mobile": "'+ order.contactPhone +'", '+
-                                        '"logo": "'+ 'https://siam.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/logo.jpg' +'", '+
+                                        '"logo": "'+ 'https://siam.oss-cn-hangzhou.aliyuncs.com/data/images/business/logo.jpg' +'", '+
                                         '"actualPrice": "'+ order.actualPrice +'", '+
                                         '"contactStreet": "'+ address +'", '+
                                         '"contactStreet": " '+ (order.shoppingWay == 1 ? '' : ('配送地址：'+address)) +'", '+

@@ -4,6 +4,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.siam.package_common.constant.BusinessType;
 import com.siam.package_common.exception.StoneCustomerException;
 import com.siam.package_common.util.BaiduMapUtils;
+import com.siam.system.modular.package_goods.entity.Setting;
 import com.siam.system.modular.package_goods.service.SettingService;
 import com.siam.system.modular.package_goods.service.ShopService;
 import com.siam.system.modular.package_goods.entity.Shop;
@@ -34,14 +35,12 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public BigDecimal selectDeliveryFee(BigDecimal lngA, BigDecimal latA, Integer shopId) {
-        //系统默认匹配最近的门店接单(目前只有一家门店，所以先设个默认值)
-        /*Shop dbShop = shopService.selectByName(BusinessType.DEFAULT_SHOP_NAME);*/
-        /*Setting setting = settingService.selectCurrent();
-        int shopId = setting.getDefaultShopId();*/
-        Shop dbShop = shopService.selectByPrimaryKey(shopId);
+        Shop dbShop = shopService.getById(shopId);
         if(dbShop == null){
             throw new StoneCustomerException("门店数据异常");
         }
+
+        Setting setting = settingService.selectCurrent();
 
         //拼接省、市、区、街道
         /*String addressA = dbDeliveryAddress.getProvince() + dbDeliveryAddress.getCity() + dbDeliveryAddress.getArea() + dbDeliveryAddress.getStreet();*/
@@ -61,22 +60,20 @@ public class CommonServiceImpl implements CommonService {
             throw new StoneCustomerException("您的收货地址超出配送范围");
         }
         //超出5.5公里则不予配送
-        if(distanceValue.compareTo(BigDecimal.valueOf(5.5)) > 0){
-            throw new StoneCustomerException("您的配送距离超出5.5公里，不予配送");
+        if(distanceValue.compareTo(setting.getDeliveryDistanceLimit()) > 0){
+            throw new StoneCustomerException("您的配送距离超出" + setting.getDeliveryDistanceLimit() + "公里，不予配送");
         }
 
         //配送费计算规则：起送价1.5元(0~1KM)，每增加1KM加1元
         //得按照行车距离-骑行来计算，不能按照直线距离
-        BigDecimal basicPrice = BigDecimal.valueOf(1.5);
-        BigDecimal increasedPrice = BigDecimal.ONE;
 
         BigDecimal deliveryFee = BigDecimal.ZERO;
         if(distanceValue.compareTo(BigDecimal.ZERO)>=0 && distanceValue.compareTo(BigDecimal.ONE)<=0){
-            deliveryFee = basicPrice;
+            deliveryFee = setting.getStartDeliveryPrice();
         }else{
             //增加的价格要按照天花板取整
-            BigDecimal sumIncreasedPrice = distanceValue.subtract(BigDecimal.ONE).multiply(increasedPrice).setScale(0, BigDecimal.ROUND_CEILING);
-            deliveryFee = basicPrice.add(sumIncreasedPrice);
+            BigDecimal sumIncreasedPrice = distanceValue.subtract(BigDecimal.ONE).multiply(setting.getDeliveryKilometerPrice()).setScale(0, BigDecimal.ROUND_CEILING);
+            deliveryFee = setting.getStartDeliveryPrice().add(sumIncreasedPrice);
         }
         return deliveryFee;
     }
@@ -107,7 +104,7 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public Boolean selectIsOperatingOfShop(Integer shopId) {
-        Shop shop = shopService.selectByPrimaryKey(shopId);
+        Shop shop = shopService.getById(shopId);
         if(shop == null) throw new StoneCustomerException("该店铺不存在");
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");

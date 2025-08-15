@@ -1,10 +1,14 @@
 package com.siam.system.modular.package_goods.service_impl.internal;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.siam.system.modular.package_goods.entity.Goods;
 import com.siam.system.modular.package_goods.entity.internal.PointsMallGoods;
+import com.siam.system.modular.package_goods.mapper.GoodsMapper;
 import com.siam.system.modular.package_goods.mapper.internal.PointsMallGoodsMapper;
 import com.siam.system.modular.package_goods.model.dto.internal.PointsMallGoodsMenuDto;
 import com.siam.system.modular.package_goods.model.example.internal.PointsMallGoodsExample;
+import com.siam.system.modular.package_goods.service.GoodsService;
 import com.siam.system.modular.package_goods.service.internal.PointsMallGoodsService;
 import com.siam.system.modular.package_goods.mapper.internal.PointsMallGoodsMapper;
 import com.siam.system.modular.package_goods.service.internal.PointsMallGoodsService;
@@ -25,7 +29,8 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service
-public class PointsMallGoodsServiceImpl implements PointsMallGoodsService {
+public class PointsMallGoodsServiceImpl extends ServiceImpl<PointsMallGoodsMapper, PointsMallGoods> implements PointsMallGoodsService {
+
     @Autowired
     private PointsMallGoodsMapper goodsMapper;
 
@@ -34,24 +39,8 @@ public class PointsMallGoodsServiceImpl implements PointsMallGoodsService {
         return goodsMapper.countByExample(example);
     }
 
-    public void deleteByPrimaryKey(Integer id){
-        goodsMapper.deleteByPrimaryKey(id);
-    }
-
-    public void insertSelective(PointsMallGoods record){
-        goodsMapper.insertSelective(record);
-    }
-
     public List<PointsMallGoods> selectByExample(PointsMallGoodsExample example){
         return goodsMapper.selectByExample(example);
-    }
-
-    public PointsMallGoods selectByPrimaryKey(Integer id){
-        return goodsMapper.selectByPrimaryKey(id);
-    }
-
-    public void updateByPrimaryKeySelective(PointsMallGoods record){
-        goodsMapper.updateByPrimaryKeySelective(record);
     }
 
     @Override
@@ -88,7 +77,7 @@ public class PointsMallGoodsServiceImpl implements PointsMallGoodsService {
 
     @Override
     public void increaseStock(int id, int number) {
-        PointsMallGoods dbPointsMallGoods = goodsMapper.selectByPrimaryKey(id);
+        PointsMallGoods dbPointsMallGoods = goodsMapper.selectById(id);
         //增加库存数量
         PointsMallGoods updatePointsMallGoods = new PointsMallGoods();
         updatePointsMallGoods.setId(dbPointsMallGoods.getId());
@@ -98,7 +87,7 @@ public class PointsMallGoodsServiceImpl implements PointsMallGoodsService {
 
     @Override
     public void decreaseStock(int id, int number) {
-        PointsMallGoods dbPointsMallGoods = goodsMapper.selectByPrimaryKey(id);
+        PointsMallGoods dbPointsMallGoods = goodsMapper.selectById(id);
         if(dbPointsMallGoods.getStock() - number < 0){
             throw new StoneCustomerException(dbPointsMallGoods.getName() + "库存不足，请减少该单品购买数量");
         }
@@ -413,7 +402,7 @@ public class PointsMallGoodsServiceImpl implements PointsMallGoodsService {
     @Override
     public void updateStatus(List<Integer> ids, Integer status) {
         for (Integer id : ids) {
-            PointsMallGoods goods=goodsMapper.selectByPrimaryKey(id);
+            PointsMallGoods goods=goodsMapper.selectById(id);
             if (goods == null) {
                 throw new StoneCustomerException("修改失败,商品未找到");
             }

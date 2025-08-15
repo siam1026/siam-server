@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @Slf4j
@@ -21,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class RocketMQTest {
 
     @Autowired
-    private RocketMQTemplate rocketMQTemplate;
+    private ApplicationContext applicationContext;
 
     @Test
     public void test() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
@@ -31,6 +32,8 @@ public class RocketMQTest {
         //2、
         String id = "1";
         Message message = new Message("goods-topic", "goods-tag", id, "msg body".getBytes());
+
+        RocketMQTemplate rocketMQTemplate = applicationContext.getBean("rocketMQTemplate", RocketMQTemplate.class);
         rocketMQTemplate.getProducer().send(message);
 
         System.out.println("\n\n\n11111111111111");

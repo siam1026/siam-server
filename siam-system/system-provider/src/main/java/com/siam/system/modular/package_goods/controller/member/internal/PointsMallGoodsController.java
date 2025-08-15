@@ -91,7 +91,7 @@ public class PointsMallGoodsController {
     public BasicResult selectById(@RequestBody @Validated(value = {}) PointsMallGoods param){
         BasicData basicResult = new BasicData();
 
-        PointsMallGoods dbPointsMallGoods = goodsService.selectByPrimaryKey(param.getId());
+        PointsMallGoods dbPointsMallGoods = goodsService.getById(param.getId());
         if(dbPointsMallGoods == null) throw new StoneCustomerException("该商品不存在");
 
         Map<String, Object> resultMap = BeanUtils.beanToMap(dbPointsMallGoods);

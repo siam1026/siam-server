@@ -1,73 +1,26 @@
 package com.siam.system.modular.package_goods.service_impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.siam.system.modular.package_goods.entity.Setting;
 import com.siam.system.modular.package_goods.entity.Shop;
 import com.siam.system.modular.package_goods.mapper.ShopMapper;
-import com.siam.system.modular.package_goods.model.example.ShopExample;
 import com.siam.system.modular.package_goods.service.SettingService;
-import com.siam.system.modular.package_goods.service.ShopService;
-import com.siam.system.modular.package_goods.service.SettingService;
-import com.siam.system.modular.package_goods.entity.Setting;
-import com.siam.system.modular.package_goods.entity.Shop;
-import com.siam.system.modular.package_goods.model.example.ShopExample;
-import com.siam.system.modular.package_goods.mapper.ShopMapper;
 import com.siam.system.modular.package_goods.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 @Service
-public class ShopServiceImpl implements ShopService {
+public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements ShopService {
 
     @Autowired
     private ShopMapper shopMapper;
 
     @Autowired
     private SettingService settingService;
-
-    @Override
-    public int insert(Shop record) {
-        return shopMapper.insert(record);
-    }
-
-    @Override
-    public int insertSelective(Shop record) {
-        return shopMapper.insertSelective(record);
-    }
-
-    @Override
-    public int deleteByExample(ShopExample example) {
-        return shopMapper.deleteByExample(example);
-    }
-
-    @Override
-    public int deleteByPrimaryKey(Integer id) {
-        return shopMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public int updateByPrimaryKeySelective(Shop record) {
-        return shopMapper.updateByPrimaryKeySelective(record);
-    }
-
-    @Override
-    public List<Shop> selectByExample(ShopExample example) {
-        return shopMapper.selectByExample(example);
-    }
-
-    @Override
-    public Shop selectByPrimaryKey(Integer id) {
-        return shopMapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public int countByExample(ShopExample example) {
-        return shopMapper.countByExample(example);
-    }
 
     @Override
     public Page<Shop> getListByPage(int pageNo, int pageSize, Shop shop) {

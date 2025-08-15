@@ -20,6 +20,7 @@ import com.siam.system.modular.package_user.model.result.MerchantResult;
 import com.siam.system.modular.package_user.service.MerchantService;
 import com.siam.system.util.TokenUtil;
 import com.siam.system.modular.package_goods.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class MerchantServiceImpl implements MerchantService {
 
@@ -237,7 +239,7 @@ public class MerchantServiceImpl implements MerchantService {
 
             // 添加merchant记录
             Merchant insertMerchant = new Merchant();
-            insertMerchant.setUsername(param.getUsername());
+            insertMerchant.setUsername(param.getUsername() != null ? param.getUsername() : "admin-" + param.getMobile());
             insertMerchant.setMobile(param.getMobile());
             insertMerchant.setPassword(password);
             insertMerchant.setPasswordSalt(passwordSalt);
@@ -259,7 +261,8 @@ public class MerchantServiceImpl implements MerchantService {
             insertShop.setAuditStatus(Quantity.INT_1);
             insertShop.setCreateTime(new Date());
             insertShop.setUpdateTime(new Date());
-            int shopId = shopService.insertSelective(insertShop);
+            shopService.save(insertShop);
+            int shopId = insertShop.getId();
 
             //商家账号绑定店铺信息
             Merchant updateMerchant = new Merchant();
@@ -269,24 +272,27 @@ public class MerchantServiceImpl implements MerchantService {
 
             //建立店铺与系统默认优惠券ID-新人3折卷的关联关系
             Coupons dbCoupons = couponsService.selectByPrimaryKey(BusinessType.NEW_PEOPLE_COUPONS_ID);
-            if(dbCoupons == null){
-                throw new StoneCustomerException("系统默认优惠券-新人3折卷不存在");
+            if(dbCoupons != null){
+                CouponsShopRelation insertCouponsShopRelation = new CouponsShopRelation();
+                insertCouponsShopRelation.setCouponsId(BusinessType.NEW_PEOPLE_COUPONS_ID);
+                insertCouponsShopRelation.setShopId(shopId);
+                insertCouponsShopRelation.setCreateTime(new Date());
+                couponsShopRelationService.insertSelective(insertCouponsShopRelation);
+            }else{
+                log.error("系统默认优惠券-新人3折卷不存在");
             }
-            CouponsShopRelation insertCouponsShopRelation = new CouponsShopRelation();
-            insertCouponsShopRelation.setCouponsId(BusinessType.NEW_PEOPLE_COUPONS_ID);
-            insertCouponsShopRelation.setShopId(shopId);
-            insertCouponsShopRelation.setCreateTime(new Date());
-            couponsShopRelationService.insertSelective(insertCouponsShopRelation);
+
             //建立店铺与系统默认优惠券ID-推荐新人3折卷的关联关系
             Coupons dbCouponsInvite = couponsService.selectByPrimaryKey(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
-            if(dbCouponsInvite == null){
-                throw new StoneCustomerException("系统默认优惠券ID-推荐新人3折卷不存在");
+            if(dbCouponsInvite != null){
+                CouponsShopRelation insertCouponsShopRelationInvite = new CouponsShopRelation();
+                insertCouponsShopRelationInvite.setCouponsId(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
+                insertCouponsShopRelationInvite.setShopId(shopId);
+                insertCouponsShopRelationInvite.setCreateTime(new Date());
+                couponsShopRelationService.insertSelective(insertCouponsShopRelationInvite);
+            }else{
+                log.error("系统默认优惠券-推荐新人3折卷不存在");
             }
-            CouponsShopRelation insertCouponsShopRelationInvite = new CouponsShopRelation();
-            insertCouponsShopRelationInvite.setCouponsId(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
-            insertCouponsShopRelationInvite.setShopId(shopId);
-            insertCouponsShopRelationInvite.setCreateTime(new Date());
-            couponsShopRelationService.insertSelective(insertCouponsShopRelationInvite);
 
             //TODO-给调度后台发送一条系统消息
             SysMessage sysMessage = new SysMessage();
@@ -323,7 +329,7 @@ public class MerchantServiceImpl implements MerchantService {
 
         //需要返回关联的店铺信息，返回是否营业
         Map<String, Object> resultMap = com.siam.package_common.util.BeanUtils.beanToMap(dbMerchant);
-        Shop shop = shopService.selectByPrimaryKey(dbMerchant.getShopId());
+        Shop shop = shopService.getById(dbMerchant.getShopId());
         resultMap.put("shopName", shop.getName());
         resultMap.put("shopLogoImg", shop.getShopLogoImg());
 

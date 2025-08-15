@@ -62,7 +62,7 @@ public class BusinessType {
     public static final String NEW_ORDER_PRINT = "newOrderPrint";
 
     //oss文件路径前缀
-    public static final String OSS_PREFIX = "https://deerspot.oss-cn-hangzhou.aliyuncs.com/";
+    public static final String OSS_PREFIX = "https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/";
 
     //系统/平台邮件地址
     public static final String SYSTEM_EMAIL_ADDRESS = "siam1026@163.com";

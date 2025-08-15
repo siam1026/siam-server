@@ -1,5 +1,6 @@
 package com.siam.system.modular.package_goods.controller.member;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siam.package_common.constant.BusinessType;
 import com.siam.package_common.constant.Quantity;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Random;
 
 @Slf4j
 @RestController
@@ -84,6 +86,7 @@ public class MemberAdvertisementController {
                 String filePath = "data/images/invite_poster_compose/" + loginMember.getId() + "/" + fileName;
                 Boolean isExist = ossUtils.doesObjectExist(filePath);
                 if (isExist){
+                    filePath = filePath + "?time="+ DateUtil.current();
                     dbAdvertisement.setImagePath(filePath);
                 } else {
                     //合成并上传图片
@@ -92,6 +95,7 @@ public class MemberAdvertisementController {
                     String savePath = compose_path + "/" + compose_fileName;
                     try {
                         imageComposeUtils.compoundImage(BusinessType.OSS_PREFIX + dbAdvertisement.getImagePath(), BusinessType.OSS_PREFIX + loginMember.getInviteSuncode(), savePath, loginMember.getVipNo());
+                        savePath = savePath + "?time="+ DateUtil.current();
                         dbAdvertisement.setImagePath(savePath);
                     } catch (IOException e) {
                         e.printStackTrace();

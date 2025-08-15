@@ -8,7 +8,6 @@ import com.siam.package_common.entity.BasicData;
 import com.siam.package_common.entity.BasicResult;
 import com.siam.package_common.constant.Quantity;
 import com.siam.system.modular.package_goods.service.CouponsService;
-import com.siam.system.modular.package_goods.model.example.ShopExample;
 import com.siam.system.modular.package_goods.entity.Coupons;
 import com.siam.system.modular.package_goods.entity.CouponsShopRelation;
 import com.siam.system.modular.package_goods.entity.Shop;
@@ -46,8 +45,7 @@ public class AdminCouponsController {
         couponsService.insertSelective(param);
 
         //所有状态的店铺(包括审核未通过的)都查出来
-        ShopExample shopExample = new ShopExample();
-        List<Shop> shopList = shopService.selectByExample(shopExample);
+        List<Shop> shopList = shopService.list();
         //添加优惠券与店铺的关系，默认关联所有店铺
         CouponsShopRelation couponsShopRelation = new CouponsShopRelation();
         for (Shop shop : shopList) {

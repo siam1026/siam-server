@@ -190,16 +190,20 @@
 				// 	console.log(value + "  " + specList[value]);
 				// })
 				// console.log(specList);
-				for(var key in specList){
-					//console.log(key + "-" + specList[key]);
-					if(specStr == ''){
-						specStr += specList[key];
+
+
+				// for(var key in specList){
+				// 	//console.log(key + "-" + specList[key]);
+				// 	if(specStr == ''){
+				// 		specStr += specList[key];
 						
-					}else{
-						specStr += '/' + specList[key];
-					}
-				}
-				return specStr;
+				// 	}else{
+				// 		specStr += '/' + specList[key];
+				// 	}
+				// }
+				// return specStr;
+
+				return row.specList
 			},      			
 			addUnit(row, column) { // 添加单位
 				return (row[column.property] || 0) + '元'
@@ -339,7 +343,7 @@
 								'"shoppingWay": "发货方式：'+ shoppingWayText +'", '+
 								'"nickname": "'+ order.contactRealname + (order.contactSex == 0 ? '' : (order.contactSex == 1 ? '(先生)' : '(女士)')) +'", '+
 								'"mobile": "'+ order.contactPhone +'", '+
-								'"logo": "'+ 'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/logo.jpg' +'", '+
+								'"logo": "'+ 'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/logo.jpg' +'", '+
 								'"actualPrice": "'+ order.actualPrice +'", '+
 								'"contactStreet": "'+ order.contactStreet +'", '+
 								'"contactStreet": " '+ (order.shoppingWay == 1 ? '' : ('发货地址：'+order.contactStreet)) +'", '+

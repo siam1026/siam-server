@@ -13,7 +13,7 @@
             </view>
         </view>
 		<van-empty v-if="list.length <= 0" description="暂无充值记录">
-			<van-button type="primary" size="small" @bindTap="goToDrink">去兑换</van-button>
+			<van-button type="primary" size="small" color="#004ca0" @bindTap="goToDrink">去兑换</van-button>
 		</van-empty>
     </view>
 </template>
@@ -21,9 +21,9 @@
 <script>
 import https from '../../../../../utils/http';
 import authService from '../../../../../utils/auth';
-import {showToast} from '../../../../../utils/toast.service';
-import {fmtDate} from '../../../../../utils/date-helper';
-import {payStatusText} from '../../../../../utils/system-status';
+import toastService from '../../../../../utils/toast.service';
+import dateHelper from '../../../../../utils/date-helper';
+import systemStatus from '../../../../../utils/system-status';
 var pageNo = 1;
 var pageSize = 20;
 export default {
@@ -78,14 +78,12 @@ export default {
     methods: {
         getMemberBillingRecordList() {
             toastService.showLoading('正在加载...');
-            https
-                .request('/rest/member/billingRecord/list', {
+            https.request('/rest/member/billingRecord/list', {
                     pageNo: pageNo,
                     pageSize: pageSize,
                     coinType: 4,
                     isSettled: 0
-                })
-                .then((result) => {
+                }).then((result) => {
                     toastService.hideLoading();
                     if (result.success) {
                         result.data.records.forEach((item, index) => {

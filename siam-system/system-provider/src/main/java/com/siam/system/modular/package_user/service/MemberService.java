@@ -53,14 +53,14 @@ public interface MemberService {
      *
      * @author 暹罗
      */
-    List<Member> selectAllMemberNoneCoupons();
+    List<Member> selectAllMemberNoneCoupons(Integer couponsId);
 
     /**
      * 将新用户的"是否需要弹出新人引导提示"字段值改成是
      *
      * @author 暹罗
      */
-    List<Member> selectAllMemberNoneCouponsByPointsMall();
+    List<Member> selectAllMemberNoneCouponsByPointsMall(Integer couponsId);
 
     /**
      * 将新用户的"是否需要弹出新人引导提示"字段值改成是
@@ -202,6 +202,13 @@ public interface MemberService {
      * @author 暹罗
      */
     MemberResult wxLogin(MemberParam param);
+
+    /**
+     * 微信静默登录
+     * @param param
+     * @author 暹罗
+     */
+    MemberResult wxSilenceLogin(MemberParam param);
 
     /**
      * 获取登录用户信息

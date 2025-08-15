@@ -1,10 +1,10 @@
 <template>
 	<view class="container">
 		<image
-			:src="'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/mypage_top.jpg?v=' + appVersion"
+			:src="'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/mypage_top.jpg?v=' + appVersion"
 			class="index-bg-class" mode="widthFix"></image>
 		<view class="userinfo" :style="'margin-top:' + (statusBarHeight + 30) + 'rpx;'">
-			<block v-if="!data">
+			<block v-if="!data.id">
 				<button @tap="getUserProfile" :plain="true" class="userinfo-button"
 					style="margin: 0; width: 100%; padding: inherit">
 					<view class="notlogin">
@@ -16,29 +16,31 @@
 			</block>
 			<block v-else>
 				<navigator url="../userinfo/userinfo" class="navigator-userinfo">
-					<view class="userinfo-view">
-						<image class="userinfo-avatar"
-							:src="data.headImg ? data.headImg : '/static/assets/images/user-head.png'" mode="cover">
-						</image>
-						<view class="userinfo-nickname">
-							<view class="nickname-class">{{ data.username }}</view>
-							<view class="vip-class">
-								<!-- <text class="{{data.type!=1?'is-vip-class':'not-vip-class'}}">{{data.typeVipText}}</text> -->
-								<!-- <text decode="true">&nbsp;&nbsp;</text> -->
-								<view class="vip-image-view">
-									<image :src="item + '?v=' + appVersion" mode="widthFix" class="is-vip-image"
-										v-for="(item, index) in isVipImages" :key="index"></image>
+					<view class="flex_between" style="width: 100%;">
+						<view class="userinfo-view">
+							<image class="userinfo-avatar"
+								:src="data.headImg ? data.headImg : '/static/assets/images/user-head.png'" mode="cover">
+							</image>
+							<view class="userinfo-nickname">
+								<view class="nickname-class">{{ data.username }}</view>
+								<view class="vip-class">
+									<!-- <text class="{{data.type!=1?'is-vip-class':'not-vip-class'}}">{{data.typeVipText}}</text> -->
+									<!-- <text decode="true">&nbsp;&nbsp;</text> -->
+									<view class="vip-image-view">
+										<image :src="item + '?v=' + appVersion" mode="widthFix" class="is-vip-image"
+											v-for="(item, index) in isVipImages" :key="index"></image>
+									</view>
+								</view>
+								<view>
+									<text :decode="true">NO:&nbsp;&nbsp;{{ data.vipNo }}</text>
 								</view>
 							</view>
-							<view>
-								<text :decode="true">NO:&nbsp;&nbsp;{{ data.vipNo }}</text>
-							</view>
 						</view>
+						<view><van-icon name="arrow" /></view>
 					</view>
-					<van-icon name="arrow" />
 				</navigator>
 			</block>
-			<view v-if="data">
+			<view id="content_info" v-if="data.id">
 				<view class="mine-blocking-view">
 					<view class="mine-blocking">
 						<navigator class="mine-navigator" url="../share/reward/reward">
@@ -132,7 +134,7 @@
 						<navigator class="navigator-class" :url="'../../mine/share/index/index?inviterId=' + data.id">
 							<view class="invite-wrapper">
 								<image
-									:src="'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/share-invite/share_mine.png?v=' + timestamp"
+									:src="'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/share-invite/share_mine.png?v=' + timestamp"
 									mode="widthFix" class="invite-image"></image>
 							</view>
 						</navigator>
@@ -151,7 +153,7 @@
 	import dateHelper from '../../../utils/date-helper';
 	import systemStatus from '../../../utils/system-status';
 	//获取应用实例
-	const app = getApp();
+	let app = null;
 	export default {
 		data() {
 			return {
@@ -159,7 +161,6 @@
 				hasUserInfo: false,
 				canIUse: uni.canIUse('button.open-type.getUserInfo'),
 				couponsNum: 0,
-
 				tabList: [{
 						modeId: 0,
 						modeName: '外卖订单'
@@ -169,7 +170,6 @@
 						modeName: '商城订单'
 					}
 				],
-
 				shopOrderTabList: [{
 						modeId: 1,
 						modeType: 'waitPayment',
@@ -195,7 +195,6 @@
 						icon: 'balance-list-o'
 					}
 				],
-
 				pointsOrderTabList: [{
 						modeId: 1,
 						modeType: 'waitPayment',
@@ -223,15 +222,25 @@
 				],
 				currentTab: 0,
 				isVipImages: [],
-				appVersion: app.globalData.appVersion,
+				appVersion: 1.0,
 				statusBarHeight: '',
-				data: {
-					headImg: false,
+				initData: {
+					headImg: '',
 					username: '',
 					vipNo: '',
 					inviteRewardAmount: '',
 					points: '',
-					couponsNumber: false,
+					couponsNumber: 0,
+					balance: '',
+					id: ''
+				},
+				data: {
+					headImg: '',
+					username: '',
+					vipNo: '',
+					inviteRewardAmount: '',
+					points: '',
+					couponsNumber: 0,
 					balance: '',
 					id: ''
 				},
@@ -239,24 +248,19 @@
 			};
 		},
 		onLoad: function() {
-			this.setData({
-				statusBarHeight: app.globalData.systemInfoSync.statusBarHeight * 2
-			});
+			app = getApp();
+			this.statusBarHeight = app.globalData.systemInfoSync.statusBarHeight * 2;
 			if (app.globalData.userInfo) {
 				console.log(1);
-				this.setData({
-					userInfo: app.globalData.userInfo,
-					hasUserInfo: true
-				});
+				this.userInfo = app.globalData.userInfo;
+				this.hasUserInfo = true;
 			} else if (this.canIUse) {
 				console.log(2);
 				// 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
 				// 所以此处加入 callback 以防止这种情况
 				app.globalData.userInfoReadyCallback = (res) => {
-					this.setData({
-						userInfo: res.userInfo,
-						hasUserInfo: true
-					});
+					this.userInfo = res.userInfo;
+					this.hasUserInfo = true;
 				};
 			} else {
 				console.log(3);
@@ -271,12 +275,14 @@
 					// this.getCouponsSelectCounts();
 					return;
 				}
-				this.setData({
-					data: null,
-					userInfo: null
-				});
+				this.data = this.initData;
+				this.userInfo = {};
+				app.globalData.checkIsAuth('scope.userInfo');
 			});
 			this.getTimestamp();
+		},
+		onReady() {
+			
 		},
 		methods: {
 			// 滑动切换tab
@@ -293,7 +299,6 @@
 					timestamp: timestamp
 				});
 			},
-
 			//点击切换
 			clickTab: function(e) {
 				console.log(e.target.dataset.current);
@@ -306,14 +311,21 @@
 					});
 				}
 			},
-
 			getUserProfile(e) {
 				// 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
 				// 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
 				console.log(app.globalData.userInfo);
+
+				// #ifdef APP-PLUS||H5
+				uni.navigateTo({
+					url: '../../internal/login/code/code'
+				});
+				// #endif
+				// #ifdef MP-WEIXIN||MP-ALIPAY
 				uni.navigateTo({
 					url: '../../internal/login/choose/choose'
 				});
+				// #endif
 			},
 
 			bindUserinfoTap() {
@@ -332,24 +344,24 @@
 						this.isVipImages = [];
 						if (result.data.type == 1) {
 							this.isVipImages.push(
-								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/mine_page/user_1.png'
-								);
+								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/mine_page/user_1.png'
+							);
 							this.isVipImages.push(
-								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/mine_page/user_2.png'
-								);
+								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/mine_page/user_2.png'
+							);
 							this.isVipImages.push(
-								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/mine_page/user_3.png'
-								);
+								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/mine_page/user_3.png'
+							);
 						} else {
 							this.isVipImages.push(
-								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/mine_page/vip_1.png'
-								);
+								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/mine_page/vip_1.png'
+							);
 							this.isVipImages.push(
-								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/mine_page/vip_2.png'
-								);
+								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/mine_page/vip_2.png'
+							);
 							this.isVipImages.push(
-								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/mine_page/vip_3.png'
-								);
+								'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/mine_page/vip_3.png'
+							);
 						}
 						this.setData({
 							data: result.data,
@@ -496,7 +508,7 @@
 	}
 
 	.userinfo-view {
-		/* width: 80%; */
+		width: 100%;
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
@@ -545,9 +557,6 @@
 
 	.navigator-userinfo {
 		/* width: 100%; */
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 		padding: 40rpx 20rpx;
 		border-radius: 5rpx;
 	}
@@ -555,7 +564,8 @@
 	.navigator-box {
 		padding: 0 20rpx;
 		background: inherit;
-		padding-bottom: 20rpx;
+		padding-bottom: 120rpx;
+		bottom: calc(var(--window-bottom));
 	}
 
 	.navigator-radius {
@@ -564,7 +574,7 @@
 	}
 
 	.navigator-class {
-		padding: 15rpx 20rpx;
+		padding: 20rpx;
 		background: white;
 		border-radius: 10rpx;
 	}
@@ -732,6 +742,10 @@
 	}
 
 	.my-order-box .navigator-class {
-		padding: 20rpx 0;
+		padding: 0rpx 0rpx 20rpx 0;
+	}
+	
+	#content_info{
+		bottom: calc(var(--window-bottom));
 	}
 </style>

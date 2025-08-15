@@ -29,38 +29,26 @@
 					@tap="isAllowCancelNoReason" v-if="order.isAllowCancelNoReason" style="font-size: 28rpx">
 					取消订单
 				</button>
-
-				<!-- <button size="mini" class="cancel-button" hover-class="hover-class-public" bindtap="applyRefund">申请退款</button> -->
 				<button size="mini" class="quxiao-shenqing-button pinglun-btn" hover-class="hover-class-public"
 					@tap="applyRefund" v-if="order.isAllowApplyRefund" style="font-size: 28rpx">
 					申请退款
 				</button>
-				<!-- wx:if="{{order.shoppingWay==1&&order.status==2&&order.status==3}}" -->
-				<!-- <button size="mini" class="theme-bg pinglun-btn" bindtap="deliveryAddressChange" wx:if="{{order.shoppingWay==1&&order.status==2||order.status==3}}">我要配送</button> -->
-
 				<button v-if="order.isAllowAppraise" size="mini" class="pinglun-btn theme-bg" :data-id="order.id"
 					:data-shopId="order.shopId" @tap="evaluateTip" style="font-size: 28rpx">
 					评论
 				</button>
-
 				<button size="mini" class="pinglun-btn theme-bg" @tap="contactBussinessTap"
 					style="font-size: 28rpx">联系商家</button>
 			</view>
 		</view>
-
-		<!-- wx:if="{{order.refundStatus==1||order.refundStatus==2||order.refundStatus==3||order.refundStatus==4
-||order.refundStatus==5||order.refundStatus==6||order.refundStatus==7}}" wx:if="{{order.isRefundOrder}}" -->
 		<view class="refund-process-view" @tap="bindRefundProcess" v-if="order.isRefundOrder">
 			<view class="refund-process-detail">
 				<text>退款进度</text>
 				<view class="refund-process-right">
 					<text class="theme-color">{{ order.refundStatusText }}</text>
-					<text class="iconfont iconhtbArrowright02"></text>
+					<van-icon name="arrow" color="#004ca0" />
 				</view>
 			</view>
-			<!-- <view class="wenxin-tip">
-		温馨提示：不同商品的退款可能会分多笔金额原路退回，请注意查收。
-	</view> -->
 		</view>
 
 		<view class="order-details-view">
@@ -101,17 +89,10 @@
 				<text class="actual-payment-number" :decode="true">{{ order.description }}商品</text>
 				<view class="actual-payment-view">
 					<text class="actual-payment-title">实付</text>
-					<!-- <view class="{{order.goodsTotalPrice+order.packingCharges!=order.actualPrice?'fullPriceReductionClass':''}}" wx:if="{{order.couponsId||order.fullReductionRuleId}}">
-				<text class="actual-payment-money">￥{{order.goodsTotalPrice+order.packingCharges}}</text>
-				<text class="fullPriceReductionText" hidden="{{order.goodsTotalPrice+order.packingCharges==order.actualPrice}}">/</text>
-			</view> -->
 					<text class="actual-payment-money">￥{{ order.actualPrice }}</text>
 				</view>
 			</view>
 		</view>
-		<!-- <view class="order-time-view">
-	<text>下单时间：{{order.createTime}}</text>
-</view> -->
 		<view class="order-time-view">
 			<text class="receiving-address-title">支付方式</text>
 			<text class="receiving-address">{{ order.paymentModeText }}</text>
@@ -119,18 +100,19 @@
 		<view class="receiving-address-view">
 			<text class="receiving-address-title">{{ order.shoppingWay == 1 ? '自取' : '配送' }}地址</text>
 			<view class="receiving-address-details" v-if="order.shoppingWay == 1">
-				<view class="receiving-address out_of_range one_row">【{{ order.shopName }}】{{ order.shopAddress }}
+				<view class="receiving-address out_of_range">【{{ order.shopName }}】{{ order.shopAddress }}
 				</view>
 			</view>
 			<view class="receiving-address-details" v-else>
-				<view class="receiving-address out_of_range one_row">
+				<view class="receiving-address out_of_range">
 					{{ order.contactProvince }}{{ order.contactCity }}{{ order.contactArea }}{{ order.contactStreet }}
 				</view>
 				<view class="username-phone">{{ order.contactRealname }}{{ order.contactSex == 0 ? '先生' : '女士' }}
-					{{ order.contactPhone }}</view>
+					{{ order.contactPhone }}
+				</view>
 			</view>
 		</view>
-		<van-action-sheet :show="choiceReasonDialog" title="选择取消原因" @close="isAllowCancelNoReason">
+		<van-action-sheet :show="choiceReasonDialog" title="选择取消原因" @close="close" @cancel="close" z-index="1">
 			<view class="content_box">
 				<scroll-view style="height: 55vh" scroll-y>
 					<radio-group class="choiceReason-radio-group" @change="radioChange">
@@ -147,16 +129,25 @@
 					<view class="good-choice-btn theme-bg" @tap="cancelOrderNoReasonFun">确定</view>
 				</view>
 			</view>
-			
+
 		</van-action-sheet>
 		<van-action-sheet :show="dialogShow" :actions="paymentModes" @select="goToPay" cancel-text="取消" :title="title"
 			@cancel="closeDialog" @close="closeDialog"></van-action-sheet>
-		<van-dialog use-slot :show="showPayPwdInput" :showConfirmButton="false" :showCancelButton="false">
+		<van-dialog use-slot :show="showPayPwdInput" :showConfirmButton="false" :showCancelButton="false" z-index='2'>
 			<view class="flex_between content_box">
 				<view></view>
 				<view>输入支付密码</view>
 				<van-icon name="cross" @tap="balancePayFail" />
 			</view>
+			// #ifdef APP-PLUS||H5
+			<!-- 密码输入框 -->
+			<view class="content_box" style="padding: 0 0;">
+				<view class="password_dialog_tip" style="padding: 0 16px;"><text>使用会员卡余额支付需要验证身份，验证通过后才可进行支付。</text></view>
+				<van-password-input :value="pwdVal" :focused="payFocus" @focus="payFocus = true" />
+				<view class="theme-color password_dialog_forget_pwd" @tap.stop.prevent="forgetThePassword">忘记密码</view>
+			</view>
+			// #endif
+			// #ifdef MP-WEIXIN||MP-ALIPAY
 			<view class="content_box" style="padding: 0 16px;">
 				<view class="password_dialog_tip"><text>使用会员卡余额支付需要验证身份，验证通过后才可进行支付。</text></view>
 				<view class="password_dialog_row" @tap="getFocus">
@@ -165,25 +156,29 @@
 					</view>
 				</view>
 				<view class="theme-color password_dialog_forget_pwd" @tap.stop.prevent="forgetThePassword">忘记密码</view>
-				<input class="password_dialog_input_control" password type="number" :focus="payFocus" autofocus="autofocus"
+				<input class="password_dialog_input_control" password type="number" :focus="payFocus"
 					:hold-keyboard="true" :value="pwdVal" @input="inputPwd" maxlength="6"
-					:adjust-position="adjustPosition" cursor-spacing="100" />
+					:adjust-position="adjustPosition" cursor-spacing="100" :auto-focus="payFocus" inputmode="numeric" />
 			</view>
+			// #endif
 		</van-dialog>
+		<van-number-keyboard :show="payFocus" @blur="payFocus = false" @input="inputPwd" @delete="deletePwd" />
 	</view>
 </template>
 
 <script>
 	import https from '../../../utils/http';
 	import authService from '../../../utils/auth';
-	import {Base64} from 'js-base64';
-	var toastService = require('../../../utils/toast.service');
-	var utilHelper = require('../../../utils/util');
-	var dateHelper = require('../../../utils/date-helper');
-	var systemStatus = require('../../../utils/system-status');
-	
+	import {
+		Base64
+	} from 'js-base64';
+	import toastService from '../../../utils/toast.service';
+	import utilHelper from '../../../utils/util';
+	import dateHelper from '../../../utils/date-helper';
+	import systemStatus from '../../../utils/system-status';
+
 	var id = '';
-	const app = getApp();
+	let app = null;
 	export default {
 		data() {
 			return {
@@ -250,10 +245,8 @@
 						name: '退款成功'
 					}
 				],
-
 				choiceReasonDialog: false,
 				choiceReasonApplyDialog: false,
-
 				buttons: [{
 						text: '取消'
 					},
@@ -261,18 +254,13 @@
 						text: '确定'
 					}
 				],
-
 				showPayPwdInput: false,
-
 				//是否展示密码输入层
 				pwdVal: '',
-
 				//输入的密码
 				payFocus: false,
-
 				//文本框焦点
 				adjustPosition: false,
-
 				isForgetThePassword: false,
 				userInfo: '',
 				dialogShow: false,
@@ -284,7 +272,6 @@
 				balanceId: '',
 				balanceOpenId: '',
 				cancelOrderNoReason: '',
-
 				order: {
 					status: 0,
 					queueNo: '',
@@ -318,7 +305,6 @@
 					contactSex: 0,
 					contactPhone: ''
 				},
-
 				orderDetailList: '',
 				shopInfo: '',
 				i: ''
@@ -328,6 +314,7 @@
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad: function(options) {
+			app = getApp();
 			id = options.id;
 			this.getOrderDetail(id);
 		},
@@ -425,32 +412,30 @@
 				let paymentModes = [{
 						value: 1,
 						name: '微信支付',
-						icon: 'iconwechat_pay',
+						icon: 'wechat-pay',
 						show: true
 					},
 					{
 						value: 2,
 						name: '平台余额',
-						icon: 'iconyue',
+						icon: 'balance-pay',
 						show: true
 					}
 				];
 				console.log('余额=', this.userInfo.balance);
 				console.log('需支付金额=', this.order.actualPrice);
 				if (this.order.actualPrice > this.userInfo.balance) {
-					paymentModes[1].desc = '余额不足';
+					paymentModes[1].subname = '余额不足';
 					paymentModes[1].isBindTap = true;
 				}
 				if (!this.userInfo.paymentPassword) {
-					paymentModes[1].desc = '未设置支付密码,去设置';
+					paymentModes[1].subname = '未设置支付密码,去设置';
 					paymentModes[1].isBindTap = false;
 				}
-				this.setData({
-					dialogShow: true,
-					maskClosable: false,
-					title: '请选择支付方式',
-					paymentModes: paymentModes
-				});
+				this.dialogShow = true;
+				this.maskClosable = false;
+				this.title = '请选择支付方式';
+				this.paymentModes = paymentModes;
 			},
 
 			closeDialog: function() {
@@ -473,6 +458,7 @@
 			},
 
 			goToPay(e) {
+				console.log(e)
 				var _this = this;
 				authService.getOpenId().then((openId) => {
 					console.log(openId);
@@ -482,10 +468,17 @@
 					//   return
 					// }
 					console.log(_this.order);
+					var paymentModeIndex = 1;
+					// #ifdef APP-PLUS||H5
+					paymentModeIndex = e.value;
+					// #endif
+					// #ifdef MP-WEIXIN||MP-ALIPAY
+					paymentModeIndex = e.detail.value;
+					// #endif
 					_this.setData({
-						paymentModeIndex: e.detail.index
+						paymentModeIndex: paymentModeIndex
 					});
-					if (e.detail.value == 1) {
+					if (paymentModeIndex == 1) {
 						console.log('微信支付');
 						toastService.showToast('暂不支持微信支付，请选择余额支付/积分支付');
 						return;
@@ -493,7 +486,7 @@
 						//that.weChatPay(id, openId);
 					}
 
-					if (e.detail.value == 2) {
+					if (paymentModeIndex == 2) {
 						console.log('余额支付');
 						if (!_this.userInfo.paymentPassword) {
 							uni.navigateTo({
@@ -506,12 +499,8 @@
 							balanceOpenId: openId
 						});
 						_this.$nextTick(() => {
-							_this.setData({
-								showPayPwdInput: true
-							});
-							setTimeout(function timeout() {
-								_this.getFocus();
-							}, 500);
+							_this.showPayPwdInput = true;
+							_this.getFocus();
 						});
 					}
 				}, null);
@@ -559,12 +548,21 @@
 					}
 				});
 			},
-
+			deletePwd(e) {
+				if (this.pwdVal.length === 0) {
+					return;
+				}
+				const lastIndex = this.pwdVal.length - 1;
+				this.pwdVal = this.pwdVal.substring(0, lastIndex) + "";
+			},
 			inputPwd: function(e) {
-				this.setData({
-					pwdVal: e.detail.value
-				});
-				if (e.detail.value.length >= 6) {
+				// #ifdef APP-PLUS||H5
+				this.pwdVal = this.pwdVal + e;
+				// #endif
+				// #ifdef MP-WEIXIN||MP-ALIPAY
+				this.pwdVal = e.detail.value;
+				// #endif
+				if (this.pwdVal.length >= 6) {
 					toastService.showLoading('正在加载...');
 					this.balancePay();
 				}
@@ -574,9 +572,20 @@
 			 * 获取焦点
 			 */
 			getFocus: function() {
+				var _this = this;
+				this.payFocus = false;
+				//this.showPayPwdInput = true;
 				this.$nextTick(() => {
-				  this.payFocus = true;
-				});
+					console.log("点击获取焦点");
+					// #ifdef APP-PLUS||H5
+					_this.payFocus = true;
+					// #endif
+					// #ifdef MP-WEIXIN||MP-ALIPAY
+					setTimeout(() => {
+						_this.payFocus = true;
+					}, 100);
+					// #endif
+				})
 			},
 
 			balancePay() {
@@ -679,11 +688,11 @@
 					null
 				);
 			},
-
+			close() {
+				this.choiceReasonDialog = false;
+			},
 			isAllowCancelNoReason() {
-				this.setData({
-					choiceReasonDialog: this.choiceReasonDialog ? false : true
-				});
+				this.choiceReasonDialog = true;
 			},
 
 			applyRefund() {
@@ -704,9 +713,7 @@
 
 			cancelOrderNoReasonFun() {
 				toastService.showLoading();
-				this.setData({
-					choiceReasonDialog: false
-				});
+				this.choiceReasonDialog = false;
 				https.request('/rest/member/order/cancelOrderNoReason', {
 					id: this.order.id,
 					orderRefund: {
@@ -778,10 +785,8 @@
 								result.data.order.refundStatusText = this.refundStatusTexts[i].name;
 							}
 						}
-						this.setData({
-							order: result.data.order,
-							orderDetailList: result.data.orderDetailList
-						});
+						this.order = result.data.order;
+						this.orderDetailList = result.data.orderDetailList;
 						this.getShopInfo(result.data.order.shopId);
 					}
 				});
@@ -807,9 +812,7 @@
 					position: app.globalData.deliveryAndSelfTaking.location
 				}).then((result) => {
 					if (result.success && result.data) {
-						this.setData({
-							shopInfo: result.data
-						});
+						this.shopInfo = result.data;
 					}
 				});
 			}
@@ -1116,52 +1119,6 @@
 		border-radius: 15rpx;
 		font-size: 28rpx;
 		font-weight: bold;
-	}
-
-	/* 自定义弹出框的最大高度为100%，并设置他的左右上交的border-ric为0 */
-	.weui-show .weui-half-screen-dialog.extClassShoppingCart {
-		max-height: 100vh;
-		padding: 0 20rpx;
-		position: fixed;
-		bottom: 0;
-		z-index: 99999;
-		/* padding-bottom: 12%; */
-	}
-
-	.weui-half-screen-dialog.extClassShoppingCart .weui-half-screen-dialog__ft {
-		padding: 20rpx 0;
-		position: sticky;
-		bottom: 0;
-	}
-
-	.weui-show .weui-half-screen-dialog.extClassShoppingCart .weui-half-screen-dialog__hd {
-		padding: 0 20rpx;
-	}
-
-	/* 选择商品规格弹窗 */
-	.weui-show .weui-half-screen-dialog.extClassSpecifications {
-		z-index: 9999999;
-	}
-
-	/* 自定义弹窗样式 */
-	.weui-show .weui-half-screen-dialog.extClassSpecifications {
-		padding: 0 20rpx;
-	}
-
-	.weui-half-screen-dialog.extClassSpecifications .weui-half-screen-dialog__ft {
-		padding: 20rpx 0 0 0;
-		position: sticky;
-		bottom: 0;
-	}
-
-	/* 自定义弹出框的最大高度为100%，并设置他的左右上交的border-ric为0 */
-	.weui-show .weui-half-screen-dialog.extClassSpecifications {
-		max-height: 90vh;
-		/* border-radius: 0%; */
-	}
-
-	.weui-show .weui-half-screen-dialog.extClassSpecifications .weui-half-screen-dialog__hd {
-		padding: 0 20rpx;
 	}
 
 	::-webkit-scrollbar {

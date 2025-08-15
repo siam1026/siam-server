@@ -77,10 +77,10 @@
 import https from '../../../../utils/http';
 import authService from '../../../../utils/auth';
 import GlabalConfig from '../../../../utils/global-config';
-var toastService = require('../../../../utils/toast.service');
-var systemStatus = require('../../../../utils/system-status');
-var dateHelper = require('../../../../utils/date-helper');
-var utilHelper = require('../../../../utils/util');
+import toastService from '../../../../utils/toast.service';
+import systemStatus from '../../../../utils/system-status';
+import dateHelper from '../../../../utils/date-helper';
+import utilHelper from '../../../../utils/util';
 export default {
     data() {
         return {

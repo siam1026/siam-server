@@ -13,7 +13,7 @@ public interface MenuService {
 
     void deleteByPrimaryKey(Integer id);
 
-    void insertSelective(Menu menu);
+    void insert(Menu menu);
 
     Menu selectByPrimaryKey(Integer id);
 

@@ -101,6 +101,9 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private SmsLogService smsLogService;
 
+    // 太阳码跳转地址
+    public static final String PAGE = "subPackages_pages/internal/login/choose/choose";
+
 //    @Autowired
 //    private PointsMallCouponsMemberRelationService pointsMallCouponsMemberRelationService;
 
@@ -239,13 +242,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> selectAllMemberNoneCoupons() {
-        return memberMapper.selectAllMemberNoneCoupons();
+    public List<Member> selectAllMemberNoneCoupons(Integer couponsId) {
+        return memberMapper.selectAllMemberNoneCoupons(couponsId);
     }
 
     @Override
-    public List<Member> selectAllMemberNoneCouponsByPointsMall() {
-        return memberMapper.selectAllMemberNoneCouponsByPointsMall();
+    public List<Member> selectAllMemberNoneCouponsByPointsMall(Integer couponsId) {
+        return memberMapper.selectAllMemberNoneCouponsByPointsMall(couponsId);
     }
 
     @Override
@@ -590,9 +593,9 @@ public class MemberServiceImpl implements MemberService {
 
         //获取小程序openId
         WxSession wxSession = WxLoginController.getSessionKeyFromWxByCode(param.getCode());
-        if (wxSession.getOpenid() == null) {
-            throw new StoneCustomerException("用户唯一标识获取失败");
-        }
+//        if (wxSession.getOpenid() == null) {
+//            throw new StoneCustomerException("用户唯一标识获取失败");
+//        }
         log.debug("\n\n自动注册获取的openid：" + wxSession.getOpenid());
 
         // 判断是否已经注册
@@ -631,6 +634,48 @@ public class MemberServiceImpl implements MemberService {
 
         // 判断是否已经注册
         Member dbMember = memberMapper.selectByMobile(param.getMobile());
+        if (dbMember != null) {
+            //用户已经注册，直接进行登录操作
+            //更新member记录
+            Member updateMember = new Member();
+            updateMember.setId(dbMember.getId());
+            updateMember.setLoginCount(dbMember.getLoginCount() + 1);
+            updateMember.setIsBindWx(true);
+            updateMember.setLastLoginTime(new Date());
+            //如果用户之前未绑定微信，则需要更新用户的若干字段信息
+            if(!dbMember.getIsBindWx()){
+                updateMember.setUsername(param.getUsername());
+                updateMember.setHeadImg(param.getHeadImg());
+                updateMember.setSex(param.getSex());
+                updateMember.setOpenId(param.getOpenId());
+                updateMember.setIsBindWx(true);
+            }
+            memberMapper.updateByPrimaryKeySelective(updateMember);
+        } else {
+            //用户未操作，进行自动注册操作
+            dbMember = this.autoRegister(param, Member.REGISTER_WAY_OF_WECHAT);
+        }
+
+        // 生成token
+        String token = TokenUtil.generateToken(dbMember);
+
+        //创建登录会话
+        memberSessionManager.createSession(token, dbMember);
+
+        //创建登录cookie
+        TokenUtil.addLoginCookie(token);
+
+        memberResult.setToken(token);
+        return memberResult;
+    }
+
+    @Override
+    public MemberResult wxSilenceLogin(MemberParam param) {
+        MemberResult memberResult = new MemberResult();
+        log.debug("\n\n邀请者id : " + param.getInviterId());
+
+        // 判断是否已经注册
+        Member dbMember = memberMapper.selectByOpenId(param.getOpenId());
         if (dbMember != null) {
             //用户已经注册，直接进行登录操作
             //更新member记录
@@ -732,7 +777,7 @@ public class MemberServiceImpl implements MemberService {
         String path = "data/images/invite_suncode/v1.0";
         String fileName = "suncode_" + insertMember.getId() + ".png";
         String savePath = path + "/" + fileName;
-        wxQrCodeUtils.generateSunCode("pages/login/choose/choose", "inviterId="+insertMember.getId(), savePath);
+        wxQrCodeUtils.generateSunCode(PAGE, "inviterId="+insertMember.getId(), savePath);
         Member updateMember = new Member();
         updateMember.setId(insertMember.getId());
         updateMember.setInviteSuncode(savePath);
@@ -765,13 +810,14 @@ public class MemberServiceImpl implements MemberService {
 
         //赠送系统默认优惠券-新人3折卷
         Coupons dbCoupons = couponsService.selectByPrimaryKey(BusinessType.NEW_PEOPLE_COUPONS_ID);
-        if (dbCoupons == null) {
-            throw new StoneCustomerException("系统默认优惠券-新人3折卷不存在");
+        if (dbCoupons != null) {
+            CouponsMemberRelation couponsMemberRelation = new CouponsMemberRelation();
+            couponsMemberRelation.setCouponsId(BusinessType.NEW_PEOPLE_COUPONS_ID);
+            couponsMemberRelation.setMemberId(insertMember.getId());
+            couponsMemberRelationService.insertSelective(couponsMemberRelation);
+        }else{
+            log.error("系统默认优惠券-新人3折卷不存在");
         }
-        CouponsMemberRelation couponsMemberRelation = new CouponsMemberRelation();
-        couponsMemberRelation.setCouponsId(BusinessType.NEW_PEOPLE_COUPONS_ID);
-        couponsMemberRelation.setMemberId(insertMember.getId());
-        couponsMemberRelationService.insertSelective(couponsMemberRelation);
 
         log.debug("邀请者id:" + param.getInviterId());
         if (param.getInviterId() != null && !param.getInviterId().equals("") && !param.getInviterId().equals("undefined")) {
@@ -791,13 +837,14 @@ public class MemberServiceImpl implements MemberService {
                 log.debug("start-------发送邀请优惠卷");
                 //发送邀请卷
                 Coupons inviteCoupons = couponsService.selectByPrimaryKey(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
-                if (inviteCoupons == null) {
-                    throw new StoneCustomerException("系统默认优惠券-邀请新人卷不存在");
+                if (inviteCoupons != null) {
+                    CouponsMemberRelation inviteCouponsMemberRelation = new CouponsMemberRelation();
+                    inviteCouponsMemberRelation.setCouponsId(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
+                    inviteCouponsMemberRelation.setMemberId(Integer.valueOf(param.getInviterId()));
+                    couponsMemberRelationService.insertSelective(inviteCouponsMemberRelation);
+                }else{
+                    log.error("系统默认优惠券-推荐新人3折卷不存在");
                 }
-                CouponsMemberRelation inviteCouponsMemberRelation = new CouponsMemberRelation();
-                inviteCouponsMemberRelation.setCouponsId(BusinessType.INVITE_NEW_PEOPLE_COUPONS_ID);
-                inviteCouponsMemberRelation.setMemberId(Integer.valueOf(param.getInviterId()));
-                couponsMemberRelationService.insertSelective(inviteCouponsMemberRelation);
                 log.debug("end-------发送邀请优惠卷");
 
                 //将注册方式改为邀请注册

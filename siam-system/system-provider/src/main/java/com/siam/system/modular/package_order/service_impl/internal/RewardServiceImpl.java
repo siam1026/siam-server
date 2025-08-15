@@ -1,17 +1,18 @@
 package com.siam.system.modular.package_order.service_impl.internal;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.siam.package_common.constant.Quantity;
 import com.siam.package_common.entity.BasicData;
 import com.siam.package_common.util.DateUtilsExtend;
 import com.siam.system.modular.package_goods.service.SettingService;
 import com.siam.system.modular.package_goods.service.internal.VipRechargeRecordService;
+import com.siam.system.modular.package_order.entity.Order;
 import com.siam.system.modular.package_user.service.MemberBillingRecordService;
 import com.siam.system.modular.package_user.service.MemberService;
 import com.siam.system.modular.package_user.service.MemberInviteRelationService;
 import com.siam.system.modular.package_goods.entity.Setting;
 import com.siam.system.modular.package_goods.entity.internal.VipRechargeRecord;
 import com.siam.system.modular.package_order.mapper.OrderMapper;
-import com.siam.system.modular.package_order.model.example.OrderExample;
 import com.siam.system.modular.package_order.model.example.internal.PointsMallOrderExample;
 import com.siam.system.modular.package_order.model.param.OrderParam;
 import com.siam.system.modular.package_order.model.param.internal.PointsMallOrderParam;
@@ -84,9 +85,11 @@ public class RewardServiceImpl implements RewardService {
         excludeStatusList.add(1);
         excludeStatusList.add(10);
         //查询外卖系统的符合订单数
-        OrderExample orderExample = new OrderExample();
-        orderExample.createCriteria().andIdNotEqualTo(orderId).andCreateTimeGreaterThan(vipRechargeRecord.getCreateTime()).andStatusNotIn(excludeStatusList);
-        Integer count = orderMapper.countByExample(orderExample);
+        LambdaQueryWrapper<Order> orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        orderLambdaQueryWrapper.ne(Order::getId, orderId);
+        orderLambdaQueryWrapper.gt(Order::getCreateTime, vipRechargeRecord.getCreateTime());
+        orderLambdaQueryWrapper.notIn(Order::getStatus, excludeStatusList);
+        Integer count = orderMapper.selectCount(orderLambdaQueryWrapper);
         //查询积分商城的符合订单数
         PointsMallOrderExample pointsMallOrderExample = new PointsMallOrderExample();
         pointsMallOrderExample.createCriteria().andCreateTimeGreaterThan(vipRechargeRecord.getCreateTime()).andStatusNotIn(excludeStatusList);
@@ -208,9 +211,10 @@ public class RewardServiceImpl implements RewardService {
             excludeStatusList.add(1);
             excludeStatusList.add(10);
             //查询外卖系统的符合订单数
-            OrderExample orderExample = new OrderExample();
-            orderExample.createCriteria().andCreateTimeGreaterThan(vipRechargeRecord.getCreateTime()).andStatusNotIn(excludeStatusList);
-            int count = orderMapper.countByExample(orderExample);
+            LambdaQueryWrapper<Order> orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            orderLambdaQueryWrapper.gt(Order::getCreateTime, vipRechargeRecord.getCreateTime());
+            orderLambdaQueryWrapper.notIn(Order::getStatus, excludeStatusList);
+            int count = orderMapper.selectCount(orderLambdaQueryWrapper);
             //查询积分商城的符合订单数
             PointsMallOrderExample pointsMallOrderExample = new PointsMallOrderExample();
             pointsMallOrderExample.createCriteria().andCreateTimeGreaterThan(vipRechargeRecord.getCreateTime()).andStatusNotIn(excludeStatusList);

@@ -3,7 +3,7 @@
         <view class="balance-views theme-bg">
             <view class="balance-text">
                 当前奖励金额（元）
-                <text class="iconfont iconwenhao" @tap="selectCurrent"></text>
+				<van-icon name="question-o" @tap="selectCurrent"/>
             </view>
             <view class="balance-view">
                 {{ userInfo.inviteRewardAmount }}
@@ -44,7 +44,7 @@
                 </scroll-view>
             </swiper-item>
         </swiper>
-        <van-action-sheet :show="specificationsDialog" @close="close" title="账单详情">
+        <van-action-sheet :show="specificationsDialog" @close="close" @cancel="close" title="账单详情">
             <view class="content_box">
                 <view class="order-info-view">
                     <view class="order-title">账单说明</view>
@@ -58,7 +58,7 @@
                 </view>
             </view>
         </van-action-sheet>
-        <van-action-sheet :show="selectCurrentDialog" @close="close" title="奖励规则">
+        <van-action-sheet :show="selectCurrentDialog" @close="close" @cancel="close" title="奖励规则">
             <view class="content_box">
                 <view class="order-info-view">
                     <scroll-view style="height: 55vh" scroll-y>
@@ -73,10 +73,10 @@
 <script>
 import https from '../../../../utils/http';
 import authService from '../../../../utils/auth';
-var toastService = require('../../../../utils/toast.service');
-var utilHelper = require('../../../../utils/util');
-var dateHelper = require('../../../../utils/date-helper');
-var systemStatus = require('../../../../utils/system-status');
+import toastService from '../../../../utils/toast.service';
+import utilHelper from '../../../../utils/util';
+import dateHelper from '../../../../utils/date-helper';
+import systemStatus from '../../../../utils/system-status';
 var pageNo = 1;
 var pageSize = 10;
 export default {
@@ -111,12 +111,14 @@ export default {
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-        this.getHeight();
+        
     },
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
-    onReady: function () {},
+    onReady: function () {
+		this.getHeight();
+	},
     /**
      * 生命周期函数--监听页面显示
      */
@@ -176,7 +178,7 @@ export default {
 
         getHeight() {
             //获取用户手机系统信息
-            var that = this;
+            var _this = this;
             uni.getSystemInfo({
                 success: function (res) {
                     let winHeight = res.windowHeight; //获取高度
@@ -185,9 +187,7 @@ export default {
                     query.select('.balance-views').boundingClientRect();
                     query.selectViewport().scrollOffset();
                     query.exec(function (res) {
-                        that.setData({
-                            winHeight: winHeight - res[0].height
-                        });
+                        _this.winHeight=winHeight - res[0].height;
                     });
                 }
             });

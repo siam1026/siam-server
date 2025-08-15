@@ -71,7 +71,7 @@
 //        idList.add(10);
 //
 //        for (Integer id : idList) {
-//            com.siam.system.modular.package_goods.entity.PointsMallOrder dbPointsMallOrder = orderService.selectByPrimaryKey(id);
+//            com.siam.system.modular.package_goods.entity.PointsMallOrder dbPointsMallOrder = orderService.getById(id);
 //            if (dbPointsMallOrder == null) throw new StoneCustomerException("该订单不存在");
 //
 //            com.siam.system.modular.package_goods.entity.PointsMallOrderRefund dbPointsMallOrderRefund = orderRefundService.selectByPointsMallOrderId(id);
@@ -89,7 +89,7 @@
 //            com.siam.system.modular.package_goods.entity.PointsMallOrder updatePointsMallOrder = new com.siam.system.modular.package_goods.entity.PointsMallOrder();
 //            updatePointsMallOrder.setId(id);
 //            updatePointsMallOrder.setStatus(Quantity.INT_9);
-//            orderService.updateByPrimaryKeySelective(updatePointsMallOrder);
+//            orderService.updateById(updatePointsMallOrder);
 //
 //            //进行订单自动退款操作
 //            boolean isRefundSuccess = false;

@@ -16,11 +16,11 @@ public class ShopChangeRecord {
     /* ##################################### START 扩展字段 #################################### */
 
     //开始日期
-    @TableField(select = false)
+    @TableField(exist = false)
     private Date startCreateTime;
 
     //结束日期
-    @TableField(select = false)
+    @TableField(exist = false)
     private Date endCreateTime;
 
     public Date getStartCreateTime() {
@@ -42,12 +42,10 @@ public class ShopChangeRecord {
     /* ##################################### END 扩展字段 #################################### */
 
     //页码
-    @TableField(select = false)
-    private Integer pageNo = 1;
+    @TableField(exist = false) private Integer pageNo = 1;
 
     //页面大小
-    @TableField(select = false)
-    private Integer pageSize = 20;
+    @TableField(exist = false) private Integer pageSize = 20;
 
     public Integer getPageNo() {
         return pageNo;

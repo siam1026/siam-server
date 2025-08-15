@@ -9,8 +9,11 @@
   "author": "wp",
   "license": "ISC",
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@vant/area-data": "^1.5.1",
-    "js-base64": "^3.7.5",
-    "vant": "^4.8.1"
+    "@vant/compat": "^1.0.0",
+    "@vant/touch-emulator": "^1.4.0",
+    "js-base64": "^3.7.7",
+    "vant": "^4.8.10"
   }
 }

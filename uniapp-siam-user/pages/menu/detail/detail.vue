@@ -46,11 +46,13 @@
 			</view>
 			<view class="commodity-detail-view">
 				<view class="detail-title">
-					<view>商品详情</view>
+					<view>
+						商品详情
+					</view>
 					<view
 						v-if="!shopInfo.isOutofDeliveryRange && shopInfo.isOperatingOfShop && shopInfo.shop.isOperating">
-						<view class="stepper" v-if="data.isShopCart">
-							<block>
+						<view class="stepper">
+							<block v-if="data.number>0">
 								<view class="flex_center car_reduce_add reduce-class" @tap="bindMinus"
 									:data-cartId="data.cartId" :data-number="data.number">－</view>
 								<input disabled type="number" :value="data.number" class="radd-reduce-input" />
@@ -59,13 +61,14 @@
 									＋
 								</view>
 							</block>
+							<block v-else>
+								<view class="insert-view theme-bg" :data-goodsId="data.id"
+									@tap="parseEventDynamicCode($event, data.goodsStatus != 4 ? 'openSpecifications' : '')">
+									＋
+								</view>
+							</block>
 						</view>
-						<block v-if="!data.isShopCart">
-							<view class="insert-view theme-bg" :data-goodsId="data.id"
-								@tap="parseEventDynamicCode($event, data.goodsStatus != 4 ? 'openSpecifications' : '')">
-								＋
-							</view>
-						</block>
+
 					</view>
 				</view>
 				<view class="commodity-detail">
@@ -75,7 +78,7 @@
 			<navigator class="navigator-class" :url="'../../mine/share/index/index?inviterId=' + userInfo.id">
 				<view class="invite-wrapper">
 					<image
-						:src="'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/share-invite/share_mine.png?v=' + timestamp"
+						:src="'https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/share-invite/share_mine.png?v=' + timestamp"
 						mode="aspectFill" class="invite-image"></image>
 				</view>
 			</navigator>
@@ -122,7 +125,8 @@
 					{{ isStartDeliveryPrice ? '去结算' : '差 ￥' + priceDifference + ' 起送' }}
 				</view>
 			</view>
-			<van-action-sheet :show="shoppingCartDialog" @close="closeShoppingCart" title="已选商品">
+			<van-action-sheet :show="shoppingCartDialog" @close="closeShoppingCart" @cancel="closeShoppingCart"
+				title="已选商品" z-index="0">
 				<view class="content">
 					<scroll-view style="height: 55vh" scroll-y>
 						<view class="shoppingCart-item" v-for="(item, index) in shoppingCartList" :key="index">
@@ -142,7 +146,7 @@
 								</view>
 							</view>
 						</view>
-						<view class="goodsName-packingCharges">
+						<view class="goodsName-packingCharges" :style="'padding-bottom:'+cartDetailHeight+'px;'">
 							<text class="goodsName">包装费</text>
 							<text class="goodsPrice">￥{{ packingCharges }}</text>
 							<text></text>
@@ -150,7 +154,8 @@
 					</scroll-view>
 				</view>
 			</van-action-sheet>
-			<van-action-sheet :show="specificationsDialog" @close="closeSpecificationsDialog" title="选择规格">
+			<van-action-sheet :show="specificationsDialog" @close="closeSpecificationsDialog"
+				@cancel="closeSpecificationsDialog" title="选择规格">
 				<view class="content">
 					<view class="goods-info-view">
 						<image :src="data.mainImage" mode="aspectFill" class="commodity-image"></image>
@@ -160,7 +165,7 @@
 							<view class="goods-info-price">￥{{ priceAfter }}</view>
 						</view>
 					</view>
-					<scroll-view scroll-y style="height: 56vh">
+					<scroll-view scroll-y style="height: 50vh">
 						<view class="commdity-name-type-view">
 							<!-- <view class="commdity-name">{{data.name}}</view> -->
 							<view class="commdity-type-item" v-for="(item, key) in specList" :key="key">
@@ -181,6 +186,10 @@
 									</label>
 								</radio-group>
 							</view>
+							<view class="loading_box" v-if="specLoading&&specList.length == 0">
+								<van-loading custom-class="loading_box_class" vertical>加载中...</van-loading>
+							</view>
+							<van-empty v-if="!specLoading&&specList.length == 0" description="暂无数据"></van-empty>
 						</view>
 					</scroll-view>
 					<view slot="footer" class="position-sticky-bottom">
@@ -196,11 +205,10 @@
 	import GlobalConfig from '../../../utils/global-config';
 	import https from '../../../utils/http';
 	import authService from '../../../utils/auth';
-	var toastService = require('../../../utils/toast.service');
-	var utilHelper = require('../../../utils/util');
-	var dateHelper = require('../../../utils/date-helper');
-	//获取应用实例
-	const app = getApp();
+	import toastService from '../../../utils/toast.service';
+	import utilHelper from '../../../utils/util';
+	import dateHelper from '../../../utils/date-helper'; //获取应用实例
+	let app = null;
 	var totalPrice = 0;
 	var totalNum = 0;
 	export default {
@@ -211,29 +219,26 @@
 				autoplay: true,
 				interval: 5000,
 				duration: 1000,
-
 				//beforeColor: "white",//指示点颜色,
 				afterColor: 'white',
-
 				//当前选中的指示点颜色
 				commodityNum: 1,
-
 				totalPrice: 0,
 				shoppingCartDialog: false,
 				specificationsDialog: false,
-				userInfo: app.globalData.loginUserInfo,
+				userInfo: {},
 				priceDifference: 0,
 				shoppingCartList: [],
 				shopId: '',
 				timestamp: '',
-				specList: '',
+				specList: [],
 				priceAfter: '',
 				fullPriceReduction: '',
 				fullPriceReductionIsHidden: '',
 				fullReductionRuleName: '',
-				winHeight: '',
+				winHeight: 0,
+				cartDetailHeight: 0,
 				goodsId: '',
-
 				shopInfo: {
 					isOutofDeliveryRange: '',
 					isOperatingOfShop: '',
@@ -242,9 +247,7 @@
 						isOperating: ''
 					}
 				},
-
 				isItNear: '',
-
 				data: {
 					name: '',
 					price: '',
@@ -252,51 +255,52 @@
 					id: '',
 					isShopCart: '',
 					cartId: '',
-					number: '',
+					number: 0,
 					detail: '',
 					mainImage: ''
 				},
-
 				totalNum: '',
 				isStartDeliveryPrice: '',
 				packingCharges: '',
 				fullReductionRuleList: '',
 				specListString: '',
 				collectInfo: '',
-				isCollect: ''
+				isCollect: '',
+				specLoading: false
 			};
 		},
 		/**
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad: function(options) {
-			this.autoHeigth();
-			console.log("options=",options)
-			this.setData({
-				shopId: options.shopId,
-				userInfo: app.globalData.loginUserInfo,
-				initShopInfo: JSON.parse(options.initShopInfo),
-				options:options
-			});
+			app = getApp();
+			this.userInfo = app.globalData.loginUserInfo;
 			this.getShopInfo(options.shopId);
 			this.getCommodityDetails(options.id);
 			this.getGoodsCollect(options.id);
+			console.log("options=", options)
+			this.shopId = options.shopId;
+			this.userInfo = app.globalData.loginUserInfo;
+			this.initShopInfo = JSON.parse(options.initShopInfo);
+			this.options = options;
 		},
 		/**
 		 * 生命周期函数--监听页面初次渲染完成
 		 */
-		onReady: function() {},
+		onReady: function() {
+			this.autoHeigth();
+		},
 		/**
 		 * 生命周期函数--监听页面显示
 		 */
 		onShow: function() {
-			if(this.shopId){
+			if (this.shopId) {
 				this.getShopInfo(this.shopId);
 			}
 			// if(this.options){
 			// 	this.getShopInfo(this.options.id);
 			// }
-			
+
 			this.getTimestamp();
 		},
 		/**
@@ -341,10 +345,11 @@
 					specList[firstIndex][j].checked = false;
 				}
 				//给选中的第二级分类的checked设置为true
-				for (var i in checkValue) {
-					specList[firstIndex][checkValue[i]].checked = true;
-					//console.log(specList[firstIndex][checkValue[i]])
-				}
+				specList[firstIndex][checkValue].checked = true;
+				// for (var i in checkValue) {
+				// 	specList[firstIndex][checkValue[i]].checked = true;
+				// 	//console.log(specList[firstIndex][checkValue[i]])
+				// }
 
 				let price = this.data.price;
 				for (let key in specList) {
@@ -382,7 +387,7 @@
 					}
 				}
 				this.setData({
-					specList: specList,
+					specList: JSON.stringify(specList) == '{}' ? [] : specList,
 					priceAfter: price,
 					totalPrice: utilHelper.toFixed(totalPrice, 2),
 					fullPriceReduction: utilHelper.toFixed(fullPriceReduction, 2),
@@ -443,17 +448,15 @@
 			},
 
 			updateNumber(id, number, type, callbak) {
-				https
-					.request('/rest/member/shoppingCart/updateNumber', {
-						id: id,
-						number: number,
-						type: type
-					})
-					.then((result) => {
-						if (result.success) {
-							callbak();
-						}
-					});
+				https.request('/rest/member/shoppingCart/updateNumber', {
+					id: id,
+					number: number,
+					type: type
+				}).then((result) => {
+					if (result.success) {
+						callbak();
+					}
+				});
 			},
 
 			insertShoppingCart(e) {
@@ -523,7 +526,7 @@
 				orderDetail.orderDetailList = [];
 				orderDetail.packingCharges = 0;
 				for (var key in list) {
-					orderDetail.packingCharges=orderDetail.packingCharges+list[key].packingCharges
+					orderDetail.packingCharges = orderDetail.packingCharges + list[key].packingCharges
 					orderDetail.orderDetailList.push({
 						goodsId: list[key].goodsId,
 						specList: list[key].specList,
@@ -533,7 +536,7 @@
 						price: list[key].price,
 						id: list[key].id,
 						packingCharges: list[key].packingCharges,
-						totalPrice: list[key].price*list[key].number
+						totalPrice: list[key].price * list[key].number
 					});
 				}
 				app.globalData.deliveryAndSelfTaking.payType = 'car';
@@ -549,9 +552,9 @@
 				uni.getSystemInfo({
 					success: function(res) {
 						let winHeight = res.windowHeight; //获取高度
-						var height=0;
+						var height = 0;
 						//获取class为settlement-view并减去这个高度，自适应scrollview的高度
-						setTimeout(function timeout(){
+						setTimeout(function timeout() {
 							uni.createSelectorQuery()
 								.in(_this)
 								.selectAll('.shopping-cart-detail')
@@ -562,33 +565,28 @@
 									});
 									if (rects.length > 0) {
 										_this.setData({
-											winHeight: winHeight - (height)
+											winHeight: winHeight - (height),
+											cartDetailHeight: height
 										});
 									}
-									
+
 								}).exec();
-						},1000);
+						}, 1000);
 					}
 				});
 			},
 
 			closeShoppingCart: function() {
-				this.setData({
-					shoppingCartDialog: false
-				});
+				this.shoppingCartDialog = false;
 			},
 			closeSpecificationsDialog: function() {
-				this.setData({
-					specificationsDialog: false
-				});
+				this.specificationsDialog = false;
 			},
 			openShoppingCart() {
 				authService.checkIsLogin().then((result) => {
 					if (result) {
 						if (this.shoppingCartList.length > 0) {
-							this.setData({
-								shoppingCartDialog: this.shoppingCartDialog ? false : true
-							});
+							this.shoppingCartDialog = this.shoppingCartDialog ? false : true;
 						}
 						return;
 					}
@@ -597,11 +595,10 @@
 			},
 
 			openSpecifications(e) {
-				this.setData({
-					specificationsDialog: true,
-					goodsId: e.currentTarget.dataset.goodsid
-				});
-				this.getCommodityDetails(e.currentTarget.dataset.goodsid);
+				this.specificationsDialog = true;
+				this.goodsId = e.currentTarget.dataset.goodsid;
+				this.specLoading = true;
+				this.selectByGoodsId(e.currentTarget.dataset.goodsid);
 			},
 
 			getShopInfo(shopId) {
@@ -654,18 +651,19 @@
 			},
 
 			getShoppingCartList() {
+				var _this = this;
 				https.request('/rest/member/shoppingCart/list', {
 					shopId: this.shopInfo.shop.id,
 					pageNo: -1,
 					pageSize: 20
 				}).then((result) => {
-
 					if (result.success && result.data) {
 						var packingCharges = 0;
 						var totalNum = 0;
 						var totalPrice = 0;
 						var number = 0;
 						this.data.isShopCart = false;
+						this.data.number = 0;
 						result.data.records.forEach((result, index) => {
 							let specList = '';
 							for (var key in JSON.parse(result.specList)) {
@@ -691,26 +689,29 @@
 								this.data.number = number;
 							}
 						});
-						totalPrice = utilHelper.toFixed(totalPrice, 2);
-						var isStartDeliveryPrice = false;
-						var priceDifference = 0;
-						this.shopInfo.shop.startDeliveryPrice = this.shopInfo.shop.startDeliveryPrice ? this
-							.shopInfo.shop.startDeliveryPrice : 0;
-						if (totalPrice + packingCharges >= this.shopInfo.shop.startDeliveryPrice) {
-							isStartDeliveryPrice = true;
-						}
-						console.log('获取当前店铺的起送费====', this.shopInfo.shop.startDeliveryPrice);
-						priceDifference = this.shopInfo.shop.startDeliveryPrice - (totalPrice + packingCharges);
-						this.setData({
-							data: this.data,
-							totalNum: totalNum,
-							priceDifference: utilHelper.toFixed(priceDifference, 2),
-							isStartDeliveryPrice: isStartDeliveryPrice,
-							shoppingCartList: result.data.records,
-							packingCharges: packingCharges,
-							totalPrice: utilHelper.toFixed(totalPrice + packingCharges, 2)
-						});
-						this.getShopCartFullReductionRule();
+						setTimeout(() => {
+							console.log("number=", _this.data.number);
+							totalPrice = utilHelper.toFixed(totalPrice, 2);
+							var isStartDeliveryPrice = false;
+							var priceDifference = 0;
+							_this.shopInfo.shop.startDeliveryPrice = _this.shopInfo.shop
+								.startDeliveryPrice ? _this
+								.shopInfo.shop.startDeliveryPrice : 0;
+							if (totalPrice + packingCharges >= _this.shopInfo.shop.startDeliveryPrice) {
+								isStartDeliveryPrice = true;
+							}
+							console.log('获取当前店铺的起送费====', _this.shopInfo.shop.startDeliveryPrice);
+							priceDifference = _this.shopInfo.shop.startDeliveryPrice - (totalPrice +
+								packingCharges);
+							_this.data = _this.data;
+							_this.totalNum = totalNum;
+							_this.priceDifference = utilHelper.toFixed(priceDifference, 2);
+							_this.isStartDeliveryPrice = isStartDeliveryPrice;
+							_this.shoppingCartList = result.data.records;
+							_this.packingCharges = packingCharges;
+							_this.totalPrice = utilHelper.toFixed(totalPrice + packingCharges, 2);
+							_this.getShopCartFullReductionRule();
+						}, 500);
 					}
 				});
 			},
@@ -748,66 +749,59 @@
 			},
 
 			getCommodityDetails(id) {
-				https
-					.request('/rest/goods/selectById', {
-						id: id,
-						position: app.globalData.deliveryAndSelfTaking.location
-					})
-					.then((result) => {
-						if (result.success && result.data) {
-							//获取商品的详细图片，转换以轮播图的数据格式
-							let carouselUrls = result.data.subImages.split(',');
-							for (let i = 0; i < carouselUrls.length; i++) {
-								this.carouselUrls.push(GlobalConfig.ossUrl + carouselUrls[i]);
-							}
-							result.data.mainImage = GlobalConfig.ossUrl + result.data.mainImage;
-							this.setData({
-								data: result.data,
-								carouselUrls: this.carouselUrls,
-								priceAfter: result.data.price
-							});
-							this.selectByGoodsId(id);
+				https.request('/rest/goods/selectById', {
+					id: id,
+					position: app.globalData.deliveryAndSelfTaking.location
+				}).then((result) => {
+					if (result.success && result.data) {
+						//获取商品的详细图片，转换以轮播图的数据格式
+						let carouselUrls = result.data.subImages.split(',');
+						for (let i = 0; i < carouselUrls.length; i++) {
+							this.carouselUrls.push(GlobalConfig.ossUrl + carouselUrls[i]);
 						}
-					});
+						result.data.mainImage = GlobalConfig.ossUrl + result.data.mainImage;
+						this.data = result.data;
+						this.carouselUrls = this.carouselUrls;
+						this.priceAfter = result.data.price;
+						this.selectByGoodsId(id);
+					}
+				});
 			},
 
 			selectByGoodsId(goodsId) {
-				https
-					.request('/rest/goodsSpecificationOption/selectByGoodsId', {
-						goodsId: goodsId
-					})
-					.then((result) => {
-						if (result.success && result.data) {
-							// if(!result.data){
-							//   return;
-							// }
-							//重新设置商品的规格等数据的格式
-							//let goodsSpecs = {};
-							let specList = result.data;
-							let price = this.data.price;
-							let specListString = '';
-							for (let key in specList) {
-								let isChecked = true;
-								for (let keyof in specList[key]) {
-									//拼接查询规格等的json数据格式，查询商品规格等对应的价格
-									specList[key][keyof].checked = false;
-									//设置每个规格的第一个选项为选中，当库存为0时则选中下一个
-									if (specList[key][keyof].stock == 1 && isChecked) {
-										specList[key][keyof].checked = true;
-										//选中的规格价钱在商品价钱的基础上累加
-										price = price + specList[key][keyof].price;
-										specListString = (specListString ? specListString + '/' : specListString) +
-											specList[key][keyof].name;
-										isChecked = false;
-									}
+				https.request('/rest/goodsSpecificationOption/selectByGoodsId', {
+					goodsId: goodsId
+				}).then((result) => {
+					if (result.success && result.data) {
+						// if(!result.data){
+						//   return;
+						// }
+						//重新设置商品的规格等数据的格式
+						//let goodsSpecs = {};
+						let specList = result.data;
+						let price = this.data.price;
+						let specListString = '';
+						for (let key in specList) {
+							let isChecked = true;
+							for (let keyof in specList[key]) {
+								//拼接查询规格等的json数据格式，查询商品规格等对应的价格
+								specList[key][keyof].checked = false;
+								//设置每个规格的第一个选项为选中，当库存为0时则选中下一个
+								if (specList[key][keyof].stock == 1 && isChecked) {
+									specList[key][keyof].checked = true;
+									//选中的规格价钱在商品价钱的基础上累加
+									price = price + specList[key][keyof].price;
+									specListString = (specListString ? specListString + '/' : specListString) +
+										specList[key][keyof].name;
+									isChecked = false;
 								}
 							}
-							this.setData({
-								specListString: specListString,
-								specList: specList
-							});
 						}
-					});
+						this.specListString = specListString;
+						this.specList = JSON.stringify(specList) == '{}' ? [] : specList;
+						this.specLoading = false;
+					}
+				});
 			},
 
 			insertStore() {
@@ -844,48 +838,38 @@
 			},
 
 			getGoodsCollect(goodsId) {
-				https
-					.request('/rest/member/goodsCollect/selectByGoodsId', {
-						goodsId: goodsId
-					})
-					.then((result) => {
-						if (result.success) {
-							this.setData({
-								collectInfo: result.data,
-								isCollect: result.data ? true : false
-							});
-						}
-					});
+				https.request('/rest/member/goodsCollect/selectByGoodsId', {
+					goodsId: goodsId
+				}).then((result) => {
+					if (result.success) {
+						this.setData({
+							collectInfo: result.data,
+							isCollect: result.data ? true : false
+						});
+					}
+				});
 			},
 
 			bindInsertCollect(e) {
-				https
-					.request('/rest/member/goodsCollect/insert', {
-						goodsId: e.currentTarget.dataset.goodsid
-					})
-					.then((result) => {
-						if (result.success) {
-							this.setData({
-								isCollect: true
-							});
-							toastService.showToast('收藏成功');
-						}
-					});
+				https.request('/rest/member/goodsCollect/insert', {
+					goodsId: e.currentTarget.dataset.goodsid
+				}).then((result) => {
+					if (result.success) {
+						this.isCollect = true;
+						toastService.showSuccess('收藏成功');
+					}
+				});
 			},
 
 			bindDeleteCollect(e) {
-				https
-					.request('/rest/member/goodsCollect/delete', {
-						goodsId: e.currentTarget.dataset.goodsid
-					})
-					.then((result) => {
-						if (result.success) {
-							this.setData({
-								isCollect: false
-							});
-							toastService.showToast('取消成功');
-						}
-					});
+				https.request('/rest/member/goodsCollect/delete', {
+					goodsId: e.currentTarget.dataset.goodsid
+				}).then((result) => {
+					if (result.success) {
+						this.isCollect = false;
+						toastService.showSuccess('取消成功');
+					}
+				});
 			},
 
 			uploadImage() {
@@ -1060,7 +1044,7 @@
 		text-align: center;
 		position: sticky;
 		top: 0;
-		z-index: 9999;
+		z-index: 1;
 		opacity: 0.7;
 		visibility: visible;
 	}
@@ -1078,7 +1062,7 @@
 	.shopping-cart-detail {
 		position: fixed;
 		bottom: 0;
-		z-index: 9999;
+		z-index: 1;
 		width: 100%;
 	}
 
@@ -1100,7 +1084,7 @@
 		display: flex;
 		align-items: center;
 		background: white;
-		z-index: 9999;
+		z-index: 1;
 		height: 54px;
 	}
 
@@ -1110,7 +1094,7 @@
 		display: flex;
 		align-items: center;
 		background: #505052;
-		z-index: 9999;
+		z-index: 1;
 	}
 
 	.shopping-cart-right {
@@ -1118,7 +1102,7 @@
 		height: 100%;
 		text-align: center;
 		color: white;
-		z-index: 9999;
+		z-index: 1;
 		font-size: 30rpx;
 		font-weight: bold;
 		display: flex;
@@ -1505,58 +1489,6 @@
 		height: 100%;
 	}
 
-	/* shopcart 样式 */
-	.content-fullReductionRuleName {
-		width: 100%;
-		background: #fffadc;
-		font-size: 24rpx;
-		text-align: center;
-		position: sticky;
-		top: 0;
-		z-index: -1;
-		opacity: 0.7;
-		visibility: visible;
-	}
-
-	.shopping-cart-detail {
-		position: fixed;
-		bottom: 0;
-		z-index: 9999;
-		width: 100%;
-		background-color: white;
-	}
-
-	.highlight {
-		position: relative;
-		top: -10px;
-		width: 80rpx;
-		line-height: 80rpx;
-		text-align: center;
-		height: 80rpx;
-		margin-left: 20rpx;
-		margin-right: 20rpx;
-		border-radius: 50%;
-		border: 10rpx solid #444444;
-	}
-
-	.plus-view {
-		font-size: 28rpx;
-		width: 38rpx;
-		height: 38rpx;
-		line-height: 38rpx;
-		text-align: center;
-		border-radius: 50%;
-		color: white;
-	}
-
-	.settlement-view {
-		position: fixed;
-		z-index: 999;
-		background: white;
-		top: 0;
-		border-bottom: 6rpx solid #f5f5f5;
-	}
-
 	.manjiantop {
 		position: absolute;
 		top: 0;
@@ -1741,74 +1673,6 @@
 		border-radius: 20rpx;
 	}
 
-	/* 自定义弹出框的最大高度为100%，并设置他的左右上交的border-ric为0 */
-	.weui-show .weui-half-screen-dialog.extClassShoppingCart {
-		max-height: 100vh;
-		padding: 0 20rpx;
-		position: fixed;
-		bottom: 0;
-		padding-bottom: 12%;
-	}
-
-	.weui-half-screen-dialog.extClassShoppingCart .weui-half-screen-dialog__ft {
-		padding: 20rpx 0;
-		position: sticky;
-		bottom: 0;
-	}
-
-	.weui-show .weui-half-screen-dialog.extClassShoppingCart .weui-half-screen-dialog__hd {
-		padding: 0 20rpx;
-	}
-
-	/* 选择商品规格弹窗 */
-	.weui-show .weui-half-screen-dialog.extClassSpecifications {
-		z-index: 9999999;
-	}
-
-	/* 自定义弹窗样式 */
-	.weui-show .weui-half-screen-dialog.extClassSpecifications {
-		padding: 0 20rpx;
-	}
-
-	.weui-half-screen-dialog.extClassSpecifications .weui-half-screen-dialog__ft {
-		padding: 20rpx 0 0 0;
-		position: sticky;
-		bottom: 0;
-	}
-
-	/* 自定义弹出框的最大高度为100%，并设置他的左右上交的border-ric为0 */
-	.weui-show .weui-half-screen-dialog.extClassSpecifications {
-		max-height: 90vh;
-		/* border-radius: 0%; */
-	}
-
-	.weui-show .weui-half-screen-dialog.extClassSpecifications .weui-half-screen-dialog__hd {
-		padding: 0 20rpx;
-	}
-
-	.vtabs-content-item {
-		height: 100%;
-	}
-
-	.mp-vtabs-class scroll-view {
-		height: 81vh;
-		padding-bottom: 11vh;
-		background: #eeeeee;
-	}
-
-	.weui-vtabs-content__wrp scroll-view {
-		height: 81vh;
-		padding-bottom: 11vh;
-	}
-
-	.weui-vtabs-bar__scrollview .weui-vtabs-bar__content {
-		padding-bottom: 100px;
-	}
-
-	.weui-vtabs-content__scrollview .weui-vtabs-content {
-		padding-bottom: 50px;
-	}
-
 	.is-end-item {
 		padding-bottom: 50px;
 	}
@@ -1816,11 +1680,6 @@
 	.theme-other-bg {
 		background: #353535;
 		color: #5f5e63;
-	}
-
-	.weui-vtabs-bar__item .weui-vtabs-bar__title {
-		white-space: normal;
-		text-align: center;
 	}
 
 	.evaluate-business-info {
@@ -1989,6 +1848,6 @@
 	}
 
 	.content {
-		padding: 16px 16px 16px;
+		padding: 0 16px 16px 16px;
 	}
 </style>

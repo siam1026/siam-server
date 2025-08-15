@@ -133,6 +133,7 @@ spring:
         password: admin
         instance:
           prefer-ip: true
+          service-url: http://127.0.0.1:9200/siam-server
 
 #阿里云配置
 aliyun:
@@ -197,11 +198,11 @@ wxpay:
   payUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
   #支付成功后的服务器回调url
   #  notifyUrl: https://deerspotapi.siam.cn/rest/member/wxPay/notify
-  notifyUrl: https://test-api.siam.shop/rest/member/wxPay/notify
+  notifyUrl: https://test-api.siam.shop/siam-server/rest/member/wxPay/notify
   #微信退款接口地址
   refundUrl: https://api.mch.weixin.qq.com/secapi/pay/refund
   #退款成功后的服务器回调url
-  refundSuccessNotifyUrl: https://test-api.siam.shop/rest/member/wxPay/refundSuccessNotify
+  refundSuccessNotifyUrl: https://test-api.siam.shop/siam-server/rest/member/wxPay/refundSuccessNotify
   #企业付款到零钱接口地址
   payToBalanceUrl: https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers
 
@@ -213,6 +214,11 @@ wxPublicPlatform:
   appId: siam1026@163.com
   secret: siam1026@163.com
 
+#百度地图
+baidu:
+  map:
+    ak: siam1026@163.com
+
 #mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:com/siam/**/*Mapper.xml
@@ -223,6 +229,8 @@ mybatis-plus:
 
 #rocketmq配置
 rocketmq:
+  #mq开关，关闭则启动时不加载rocketmq
+  switch: false
   #消息通道
   name-server: 127.0.0.1:9876
   producer:
@@ -258,6 +266,16 @@ management:
       enabled: false
     elasticsearch:
       enabled: false
+
+#芯烨云打印机开放 API相关配置
+xinyeyun:
+  user: siam1026@163.com
+  key: siam1026@163.com
+  domain: https://open.xpyun.net/api/openapi/
+  api_url:
+    addPrinters: ${xinyeyun.domain}/xprinter/addPrinters
+    setVoiceType: ${xinyeyun.domain}/xprinter/setVoiceType
+    print: ${xinyeyun.domain}/xprinter/print
 
 #日志配置
 logging:

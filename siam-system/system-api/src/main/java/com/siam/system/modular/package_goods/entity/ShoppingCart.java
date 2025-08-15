@@ -1,6 +1,6 @@
 package com.siam.system.modular.package_goods.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,10 +17,10 @@ import java.util.List;
 public class ShoppingCart {
 
     //加减操作
-    @TableField(select = false)
+    @TableField(exist = false)
     private Integer type;
 
-    @TableField(select = false)
+    @TableField(exist = false)
     private List<String> ids;
 
     @TableId(type = IdType.AUTO)
@@ -51,10 +51,10 @@ public class ShoppingCart {
     private Date updateTime;
 
     //页码
-    private Integer pageNo = 1;
+    @TableField(exist = false) private Integer pageNo = 1;
 
     //页面大小
-    private Integer pageSize = 20;
+    @TableField(exist = false) private Integer pageSize = 20;
 
     public Integer getPageNo() {
         return pageNo;

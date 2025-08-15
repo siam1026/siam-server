@@ -61,7 +61,7 @@ public class AdminPointsMallOrderController {
     @ApiOperation(value = "查询单个订单信息")
     @PostMapping(value = "/selectById")
     public BasicResult selectById(@RequestBody @Validated(value = {}) PointsMallOrderParam param){
-        PointsMallOrder dbPointsMallOrder = orderService.selectByPrimaryKey(param.getId());
+        PointsMallOrder dbPointsMallOrder = orderService.getById(param.getId());
         if(dbPointsMallOrder == null){
             throw new StoneCustomerException("该订单不存在");
         }

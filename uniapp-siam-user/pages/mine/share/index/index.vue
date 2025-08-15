@@ -1,8 +1,5 @@
 <template>
-	<!-- <mp-navigation-bar loading="{{loading}}" show="{{show}}" animated="{{animated}}" color="{{color}}" background="{{background}}" 
-title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></mp-navigation-bar> -->
 	<view class="share-top">
-		<!-- <view class="share-text-top" style="padding-top:{{statusBarHeight}}rpx;">全民参与·邀请好友</view> -->
 		<view class="wodejl-view" @tap="bindReward">我的奖励>></view>
 		<view>
 			<image src="/static/assets/share-invite/2.png" class="top-img" mode="aspectFit"></image>
@@ -38,7 +35,7 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 				</view>
 			</scroll-view>
 		</view>
-		<van-action-sheet :show="activityRulesDialog" @close="close" title="活动规则">
+		<van-action-sheet :show="activityRulesDialog" @close="close" @cancel="close" title="活动规则">
 			<view class="content_box">
 				<scroll-view style="height: 55vh" scroll-y>
 					<view class="activity-rule">
@@ -47,7 +44,7 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 				</scroll-view>
 			</view>
 		</van-action-sheet>
-		<van-action-sheet :show="goodShareDialog" @close="close" title="好物分享">
+		<van-action-sheet :show="goodShareDialog" @close="close" @cancel="close" title="好物分享">
 			<view class="content_box">
 				<view class="wechat-images-view flex_between">
 					<button open-type="share" class="flex_column"
@@ -101,11 +98,11 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 	import https from '../../../../utils/http';
 	import authService from '../../../../utils/auth';
 	import GlobalConfig from '../../../../utils/global-config';
-	var toastService = require('../../../../utils/toast.service');
-	var utilHelper = require('../../../../utils/util');
-	var dateHelper = require('../../../../utils/date-helper');
+	import toastService from '../../../../utils/toast.service';
+	import utilHelper from '../../../../utils/util';
+	import dateHelper from '../../../../utils/date-helper';
 	//获取应用实例
-	const app = getApp();
+	let app = null;
 	// var pageNo = -1, pageSize = 20, prevList = [];
 	export default {
 		data() {
@@ -124,15 +121,11 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 				autoplay: true,
 				interval: 10000,
 				duration: 1000,
-
 				//beforeColor: "white",//指示点颜色,
 				afterColor: '#f1a142',
-
 				//当前选中的指示点颜色
 				opacity: 0.4,
-
 				saveDialogShow: false,
-
 				buttons: [{
 						text: '取消'
 					},
@@ -146,7 +139,6 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 						text: '保存'
 					}
 				],
-
 				saveIndex: 0,
 				canvasHidden: false,
 				inviterId: '',
@@ -171,9 +163,8 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 		 */
 		onLoad: function(options) {
 			console.log(options.inviterId);
-			this.setData({
-				inviterId: options.inviterId
-			});
+			app = getApp();
+			this.inviterId = options.inviterId;
 			this.setData({
 				statusBarHeight: app.globalData.systemInfoSync.statusBarHeight * 2
 			});
@@ -221,14 +212,14 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 			console.log(inviterId);
 			var timestamp = dateHelper.getTimestamp();
 			console.log(
-				`https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/share-invite/share_wx.png?v=${timestamp}`
-				);
+				`https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/share-invite/share_wx.png?v=${timestamp}`
+			);
 			var shareObj = {
 				title: '你的好友送了你一张3折优惠券，快去领取吧～',
 				// path: '/pages/insert-share-invite/insert-share-invite?inviterId=' + inviterId,
 				path: '/pages/login/choose/choose?inviterId=' + inviterId,
 				//自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。显示图片长宽比是 5:4
-				imageUrl: `https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/bussiness/share-invite/share_wx.png?v=${timestamp}`
+				imageUrl: `https://siam-hangzhou.oss-cn-hangzhou.aliyuncs.com/data/images/business/share-invite/share_wx.png?v=${timestamp}`
 			};
 			// 默认是当前页面，必须是以‘/’开头的完整路径};
 			// 来自页面内的按钮的转发
@@ -382,7 +373,7 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 			close() {
 				this.setData({
 					goodShareDialog: false,
-					activityRulesDialog:false
+					activityRulesDialog: false
 				});
 			},
 
@@ -556,7 +547,7 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 													if (res.confirm) {
 														console.log(
 															'用户点击确定'
-															);
+														);
 													}
 													that.setData({
 														canvasHidden: true
@@ -798,46 +789,6 @@ title="全民参与 · 邀请好友" back="{{true}}" ext-class="{{extClass}}"></
 		top: 0;
 		/* margin-top: 6%; */
 		width: 100%;
-	}
-
-	/* 自定义弹出框的最大高度为100%，并设置他的左右上交的border-ric为0 */
-	.weui-show .weui-half-screen-dialog.extClassShoppingCart {
-		max-height: 100vh;
-		padding: 0 20rpx;
-		position: fixed;
-		bottom: 0;
-	}
-
-	.weui-half-screen-dialog.extClassShoppingCart .weui-half-screen-dialog__ft {
-		padding: 20rpx 0;
-		position: sticky;
-		bottom: 0;
-	}
-
-	.weui-show .weui-half-screen-dialog.extClassShoppingCart .weui-half-screen-dialog__hd {
-		padding: 0 20rpx;
-	}
-
-	/* 自定义弹出框的最大高度为100%，并设置他的左右上交的border-ric为0 */
-	.weui-show .weui-half-screen-dialog.extClassCreateGoodImg {
-		max-height: 100vh;
-		padding: 0 20rpx;
-		position: fixed;
-		bottom: 0;
-	}
-
-	.weui-half-screen-dialog.extClassCreateGoodImg .weui-half-screen-dialog__ft {
-		padding: 20rpx 0;
-		position: sticky;
-		bottom: 0;
-	}
-
-	.weui-show .weui-half-screen-dialog.extClassCreateGoodImg .weui-half-screen-dialog__hd {
-		padding: 0 20rpx;
-	}
-
-	.weui-half-screen-dialog.extClassCreateGoodImg {
-		border-radius: 0;
 	}
 
 	.activity-rule {

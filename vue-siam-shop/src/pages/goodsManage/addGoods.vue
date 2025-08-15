@@ -32,7 +32,7 @@
       </el-form-item>
 
       <el-form-item label="一口价(元)" prop="price">
-        <el-input v-model="editForm.price" class="minInput"></el-input>
+        <el-input v-model="editForm.price" class="minInput" type="number"></el-input>
       </el-form-item>
 
       <!-- <el-form-item label="折扣价(元)" prop="salePrice">
@@ -40,7 +40,7 @@
 				</el-form-item> -->
 
       <el-form-item label="包装费" prop="packingCharges">
-        <el-input v-model="editForm.packingCharges" class="minInput"></el-input>
+        <el-input v-model="editForm.packingCharges" class="minInput" type="number"></el-input>
         <!-- <el-select v-model="editForm.packingCharges" class="minInput">
 						<el-option label="1元" :value="1"></el-option>
 						<el-option label="1.5元" :value="1.5"></el-option>
@@ -140,6 +140,21 @@
               </el-form-item>
           </el-form>
 				</el-form-item> -->
+
+      <el-form-item label="后厨打印机" prop="printerId">
+        <el-select v-model="editForm.printerId" class="minInput" multiple>
+          <el-option
+            v-for="item in printerList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="打印次数" prop="printNum">
+        <el-input v-model="editForm.printNum" class="minInput" type="number"></el-input>
+      </el-form-item>
     </el-form>
     <!-- <div>
         <div class="el-form-item__label" style="width: 150px;">
@@ -294,6 +309,7 @@ export default {
   },
   data() {
     return {
+      printerList: [],
       menuList: [],
       refileList:[],
       editForm: {
@@ -427,6 +443,11 @@ export default {
           // delete param.mainImageFile;
           delete param.subImagesFile;
           // delete param.detailImagesFile
+
+          if(this.editForm.printerId){
+            param.printerId = this.editForm.printerId.join(',');
+          }
+
           let url = "";
           param.id
             ? (url = "/rest/merchant/goods/update")
@@ -476,6 +497,30 @@ export default {
         stand: "",
         stock: "",
       });
+    },
+    getPrinterList() {
+      // 获取商品类别列表
+      let vue = this;
+      let param = {
+        pageNo: -1,
+        pageSize: 10,
+        type: 1,
+      };
+      vue.$http.post(
+        vue,
+        "/rest/merchant/printer/list",
+        param,
+        (vue, data) => {
+          vue.printerList = data.data.records;
+        },
+        (error, data) => {
+          vue.$message({
+            showClose: true,
+            message: data.message,
+            type: "error",
+          });
+        }
+      );
     },
     getTypeList() {
       // 获取商品类别列表
@@ -933,6 +978,7 @@ export default {
     },
   },
   created() {
+    this.getPrinterList();
     this.getTypeList();
     this.editForm.status = 1;
     //开启订单自动打印定时器

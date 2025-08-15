@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class MemberInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private MemberSessionManager adminSessionManager;
+    private MemberSessionManager memberSessionManager;
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //从header或param里面获取token(暂时这样写，兼容之前前端的写法)
@@ -40,7 +40,7 @@ public class MemberInterceptor extends HandlerInterceptorAdapter {
         }
 
         //TODO - 目前如果此处调用出错，该方法是不会继续执行，但是目标接口依旧是返回了数据
-        Member loginMember = adminSessionManager.getSession(token);
+        Member loginMember = memberSessionManager.getSession(token);
         if(loginMember != null){
             return true;
         }

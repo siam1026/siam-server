@@ -43,7 +43,7 @@
                 </scroll-view>
             </swiper-item>
         </swiper>
-		<van-action-sheet :show="specificationsDialog" @close="close" title="账单详情">
+		<van-action-sheet :show="specificationsDialog" @close="close" @cancel="close" title="账单详情">
             <view class="content_box">
                 <view class="order-info-view">
                     <view class="order-title">账单说明</view>
@@ -63,10 +63,9 @@
 <script>
 import https from '../../../utils/http';
 import authService from '../../../utils/auth';
-var toastService = require('../../../utils/toast.service');
-var utilHelper = require('../../../utils/util');
-var dateHelper = require('../../../utils/date-helper');
-var systemStatus = require('../../../utils/system-status');
+import toastService from '../../../utils/toast.service';
+import utilHelper from '../../../utils/util';
+import dateHelper from '../../../utils/date-helper';import systemStatus from '../../../utils/system-status';
 var pageNo = 1;
 var pageSize = 10;
 export default {

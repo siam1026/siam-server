@@ -1,5 +1,7 @@
 package com.siam.system.modular.package_order.controller.member;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siam.package_common.constant.BasicResultCode;
 import com.siam.package_common.constant.Quantity;
@@ -22,7 +24,6 @@ import com.siam.system.modular.package_order.entity.Order;
 import com.siam.system.modular.package_order.entity.OrderRefund;
 import com.siam.system.modular.package_order.entity.OrderRefundProcess;
 
-import com.siam.system.modular.package_order.model.example.OrderExample;
 import com.siam.system.modular.package_order.model.param.OrderParam;
 import com.siam.system.modular.package_order.service.OrderRefundGoodsService;
 import com.siam.system.modular.package_order.service.OrderRefundProcessService;
@@ -39,6 +40,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -151,19 +155,9 @@ public class MerchantOrderController {
         //获取当前登录用户绑定的门店编号
         Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
 
-        if(param.getFlag()!= Quantity.INT_1 && param.getFlag()!=Quantity.INT_2 && param.getFlag()!=Quantity.INT_3 && param.getFlag()!=Quantity.INT_4){
-            basicResult.setSuccess(false);
-            basicResult.setCode(BasicResultCode.ERR);
-            basicResult.setMessage("标识错误");
-            return basicResult;
-        }
-
-        Order dbOrder = orderService.selectByPrimaryKey(param.getId());
+        Order dbOrder = orderService.getById(param.getId());
         if(dbOrder == null){
-            basicResult.setSuccess(false);
-            basicResult.setCode(BasicResultCode.ERR);
-            basicResult.setMessage("该订单不存在");
-            return basicResult;
+            throw new StoneCustomerException("该订单不存在");
         } else if (loginMerchant.getShopId() != dbOrder.getShopId()){
             throw new StoneCustomerException("您没有权限操作该订单");
         }
@@ -175,55 +169,77 @@ public class MerchantOrderController {
         switch (param.getFlag()){
             //处理订单
             case Quantity.INT_1:
-                if(dbOrder.getStatus() != Quantity.INT_2){
-                    basicResult.setSuccess(false);
-                    basicResult.setCode(BasicResultCode.ERR);
-                    basicResult.setMessage("该订单状态非待处理，不允许修改");
-                    return basicResult;
+                if(dbOrder.getStatus() != Order.STATUS_OF_WAIT_HANDLE){
+                    throw new StoneCustomerException("该订单状态非待处理，不允许修改");
                 }
-                //自取订单，将状态改为3=待自取(已处理)；配送订单，将状态改为4=待配送(已处理)
+                //自取订单，将状态改为 待自取(已处理)；配送订单，将状态改为 待配送(已处理)
                 if(dbOrder.getShoppingWay() == Quantity.INT_1){
-                    status = Quantity.INT_3;
+                    status = Order.STATUS_OF_WAIT_PICKUP;
                 }else if(dbOrder.getShoppingWay() == Quantity.INT_2){
-                    status = Quantity.INT_4;
+                    status = Order.STATUS_OF_WAIT_DELIVERY;
                 }
                 break;
 
             //标记完成(自取订单)
             case Quantity.INT_2:
-                if(dbOrder.getStatus() != Quantity.INT_3){
-                    basicResult.setSuccess(false);
-                    basicResult.setCode(BasicResultCode.ERR);
-                    basicResult.setMessage("该订单状态非待自取，不允许修改");
-                    return basicResult;
+                if(dbOrder.getStatus() != Order.STATUS_OF_WAIT_PICKUP){
+                    throw new StoneCustomerException("该订单状态非待自取，不允许修改");
                 }
-                //将状态改为6=已完成
-                status = Quantity.INT_6;
+                //将状态改为 已完成
+                status = Order.STATUS_OF_COMPLETED;
                 break;
 
             //标记配送
             case Quantity.INT_3:
-                if(dbOrder.getStatus() != Quantity.INT_4){
-                    basicResult.setSuccess(false);
-                    basicResult.setCode(BasicResultCode.ERR);
-                    basicResult.setMessage("该订单状态非待配送，不允许修改");
-                    return basicResult;
+                if(dbOrder.getStatus() != Order.STATUS_OF_WAIT_DELIVERY){
+                    throw new StoneCustomerException("该订单状态非待配送，不允许修改");
                 }
-                //将状态改为5=已配送
-                status = Quantity.INT_5;
+                //将状态改为 已配送
+                status = Order.STATUS_OF_WAIT_DELIVERY;
                 break;
 
             //标记完成(配送订单)
             case Quantity.INT_4:
-                if(dbOrder.getStatus() != Quantity.INT_5){
-                    basicResult.setSuccess(false);
-                    basicResult.setCode(BasicResultCode.ERR);
-                    basicResult.setMessage("该订单状态非已配送，不允许修改");
-                    return basicResult;
+                if(dbOrder.getStatus() != Order.STATUS_OF_DELIVERYED){
+                    throw new StoneCustomerException("该订单状态非已配送，不允许修改");
                 }
-                //将状态改为6=已完成
-                status = Quantity.INT_6;
+                //将状态改为 已完成
+                status = Order.STATUS_OF_COMPLETED;
                 break;
+
+//            //收银台结算订单
+//            case Quantity.INT_5:
+//                if(dbOrder.getStatus() != Order.STATUS_OF_WAIT_PAYMENT){
+//                    throw new StoneCustomerException("该订单状态非未付款，不允许修改");
+//                }
+//                //将状态改为 待处理
+//                status = Order.STATUS_OF_WAIT_HANDLE;
+//                break;
+
+            //收银台完成订单
+            case Quantity.INT_6:
+                if(dbOrder.getStatus() != Order.STATUS_OF_WAIT_PAYMENT
+                        && dbOrder.getStatus() != Order.STATUS_OF_WAIT_HANDLE
+                        && dbOrder.getStatus() != Order.STATUS_OF_WAIT_PICKUP
+                        && dbOrder.getStatus() != Order.STATUS_OF_WAIT_DELIVERY
+                        && dbOrder.getStatus() != Order.STATUS_OF_DELIVERYED){
+                    throw new StoneCustomerException("该订单状态错误，不允许修改");
+                }
+                //将状态改为 已完成
+                status = Order.STATUS_OF_COMPLETED;
+                break;
+
+            //收银台取消订单
+            case Quantity.INT_7:
+                if(dbOrder.getStatus() != Order.STATUS_OF_WAIT_PAYMENT){
+                    throw new StoneCustomerException("该订单状态非未付款，不允许修改");
+                }
+                //将状态改为 已取消(未支付)
+                status = Order.STATUS_OF_CANCLED_NOT_PAY;
+                break;
+
+            default:
+                throw new StoneCustomerException("标识错误");
         }
 
         // 更新Order数据
@@ -233,7 +249,7 @@ public class MerchantOrderController {
         if(status == Quantity.INT_6){
             updateOrder.setOrderCompletionTime(new Date());
         }
-        orderService.updateByPrimaryKeySelective(updateOrder);
+        orderService.updateById(updateOrder);
 
         //发送短信提醒自提
         if(status==Quantity.INT_3){
@@ -267,7 +283,7 @@ public class MerchantOrderController {
         //获取当前登录用户绑定的门店编号
         Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
 
-        Order dbOrder = orderService.selectByPrimaryKey(param.getId());
+        Order dbOrder = orderService.getById(param.getId());
         if(dbOrder == null){
             basicResult.setSuccess(false);
             basicResult.setCode(BasicResultCode.ERR);
@@ -363,27 +379,35 @@ public class MerchantOrderController {
         Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
 
         //自取订单-待制作订单
-        OrderExample example = new OrderExample();
-        example.createCriteria().andShopIdEqualTo(loginMerchant.getShopId()).andShoppingWayEqualTo(Quantity.INT_1).andStatusEqualTo(Quantity.INT_2);
-        int waitHandleNum = orderService.countByExample(example);
+        LambdaQueryWrapper<Order> orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        orderLambdaQueryWrapper.eq(Order::getShopId, loginMerchant.getShopId());
+        orderLambdaQueryWrapper.eq(Order::getShoppingWay, Quantity.INT_1);
+        orderLambdaQueryWrapper.eq(Order::getStatus, Quantity.INT_2);
+        int waitHandleNum = orderService.count(orderLambdaQueryWrapper);
         dataMap.put("waitHandleNum", waitHandleNum);
 
         //自取订单-待自取订单
-        example = new OrderExample();
-        example.createCriteria().andShopIdEqualTo(loginMerchant.getShopId()).andShoppingWayEqualTo(Quantity.INT_1).andStatusEqualTo(Quantity.INT_3);
-        int waitPickUpNum = orderService.countByExample(example);
+        orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        orderLambdaQueryWrapper.eq(Order::getShopId, loginMerchant.getShopId());
+        orderLambdaQueryWrapper.eq(Order::getShoppingWay, Quantity.INT_1);
+        orderLambdaQueryWrapper.eq(Order::getStatus, Quantity.INT_3);
+        int waitPickUpNum = orderService.count(orderLambdaQueryWrapper);
         dataMap.put("waitPickUpNum", waitPickUpNum);
 
         //外卖订单-待配送订单
-        example = new OrderExample();
-        example.createCriteria().andShopIdEqualTo(loginMerchant.getShopId()).andShoppingWayEqualTo(Quantity.INT_2).andStatusEqualTo(Quantity.INT_4);
-        int waitDeliveryNum = orderService.countByExample(example);
+        orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        orderLambdaQueryWrapper.eq(Order::getShopId, loginMerchant.getShopId());
+        orderLambdaQueryWrapper.eq(Order::getShoppingWay, Quantity.INT_2);
+        orderLambdaQueryWrapper.eq(Order::getStatus, Quantity.INT_4);
+        int waitDeliveryNum = orderService.count(orderLambdaQueryWrapper);
         dataMap.put("waitDeliveryNum", waitDeliveryNum);
 
         //外卖订单-已配送订单
-        example = new OrderExample();
-        example.createCriteria().andShopIdEqualTo(loginMerchant.getShopId()).andShoppingWayEqualTo(Quantity.INT_2).andStatusEqualTo(Quantity.INT_5);
-        int deliveredNum = orderService.countByExample(example);
+        orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        orderLambdaQueryWrapper.eq(Order::getShopId, loginMerchant.getShopId());
+        orderLambdaQueryWrapper.eq(Order::getShoppingWay, Quantity.INT_2);
+        orderLambdaQueryWrapper.eq(Order::getStatus, Quantity.INT_5);
+        int deliveredNum = orderService.count(orderLambdaQueryWrapper);
         dataMap.put("deliveredNum", deliveredNum);
 
         return BasicResult.success(dataMap);
@@ -404,9 +428,11 @@ public class MerchantOrderController {
             List<Integer> excludedStatusList = new ArrayList<>();
             excludedStatusList.add(Quantity.INT_1);
             excludedStatusList.add(Quantity.INT_10);
-            OrderExample example = new OrderExample();
-            example.createCriteria().andShopIdEqualTo(loginMerchant.getShopId()).andStatusNotIn(excludedStatusList).andIsPrintedEqualTo(false);
-            orders = orderService.selectByExample(example);
+            LambdaQueryWrapper<Order> orderLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            orderLambdaQueryWrapper.eq(Order::getShopId, loginMerchant.getShopId());
+            orderLambdaQueryWrapper.notIn(Order::getStatus, excludedStatusList);
+            orderLambdaQueryWrapper.eq(Order::getIsPrinted, false);
+            orders = orderService.list(orderLambdaQueryWrapper);
 
             //为了解决以下两个问题，此处需要同步修改以上订单的打印状态为已打印，需要做并发控制
             //1.浏览器打开多个商家端页面时，不造成重复打印的问题
@@ -417,13 +443,15 @@ public class MerchantOrderController {
                 orders.forEach(order -> {
                     idList.add(order.getId());
                 });
-                example = new OrderExample();
-                example.createCriteria().andIdIn(idList);
+
+                LambdaUpdateWrapper<Order> orderLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+                orderLambdaUpdateWrapper.in(Order::getId, idList);
+
                 //定义需要修改的信息
                 Order order = new Order();
                 order.setIsPrinted(true);
                 //批量修改以上订单的打印状态为已打印
-                orderService.updateByExampleSelective(order, example);
+                orderService.update(order, orderLambdaUpdateWrapper);
             }
         } finally {
             lock.unlock();
@@ -487,7 +515,7 @@ public class MerchantOrderController {
         //获取当前登录用户绑定的门店编号
         Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
 
-        Order dbOrder = orderService.selectByPrimaryKey(orderParam.getId());
+        Order dbOrder = orderService.getById(orderParam.getId());
         if(dbOrder == null) throw new StoneCustomerException("该订单不存在");
         if(dbOrder.getShopId() != loginMerchant.getShopId()) throw new StoneCustomerException("您没有权限处理该订单");
 
@@ -507,7 +535,7 @@ public class MerchantOrderController {
             Order updateOrder = new Order();
             updateOrder.setId(orderParam.getId());
             updateOrder.setStatus(Quantity.INT_9);
-            orderService.updateByPrimaryKeySelective(updateOrder);
+            orderService.updateById(updateOrder);
 
             //进行订单自动退款操作
             boolean isRefundSuccess = false;
@@ -669,7 +697,7 @@ public class MerchantOrderController {
             Order updateOrder = new Order();
             updateOrder.setId(orderParam.getId());
             updateOrder.setStatus(Quantity.INT_9);
-            orderService.updateByPrimaryKeySelective(updateOrder);
+            orderService.updateById(updateOrder);
 
             //修改退款状态 -- 退款已关闭
             OrderRefund updateOrderRefund = new OrderRefund();
@@ -803,5 +831,25 @@ public class MerchantOrderController {
         resultMap.put("lastWeekSumActualPrice", lastWeekSumActualPrice);
 
         return BasicResult.success(resultMap);
+    }
+
+    /**
+     * 新增订单(收银台点单)
+     *
+     * @return
+     * @author 暹罗
+     */
+    @PostMapping(value = "/insert")
+    public BasicResult insert(@RequestBody @Validated(value = {}) OrderParam param) throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
+        Order order = orderService.insertByMerchant(param);
+        return BasicResult.success(order);
+    }
+
+    /**
+     *
+     */
+    @PostMapping(value = "/xpYunPrinterOrderDetail")
+    public BasicResult xpYunPrinterOrderDetail(@RequestBody @Validated(value = {}) OrderParam param){
+        return orderService.xpYunPrinterOrderDetail(param,0,0,1);
     }
 }

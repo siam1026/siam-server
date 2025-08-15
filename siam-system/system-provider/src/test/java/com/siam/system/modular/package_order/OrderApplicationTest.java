@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -48,10 +49,10 @@ public class OrderApplicationTest {
     private OrderDetailMapper orderDetailMapper;
 
     @Autowired
-    private RocketMQTemplate rocketMQTemplate;
+    private ShopService shopService;
 
     @Autowired
-    private ShopService shopService;
+    private ApplicationContext applicationContext;
 
     @Autowired
     private MerchantService merchantService;
@@ -75,9 +76,9 @@ public class OrderApplicationTest {
 //        wxNotifyService.sendPickUpOrderCompleteMessage(wxOpenId, "order001", "荔枝奶茶 * 3", BigDecimal.valueOf(33.00), new Date(), "订单已付款");
 //        wxPublicPlatformNotifyService.sendNewOrderMessageForMerchant("ocYTLtxbT_Hlidv4MjZRSVhgqa8I", "荔枝奶茶 * 3", new Date(), "麓谷小镇", "张先生");
 
-        Order dbOrder = orderService.selectByPrimaryKey(953);
+        Order dbOrder = orderService.getById(953);
         List<OrderDetail> orderDetailList = orderDetailMapper.selectByOrderId(dbOrder.getId());
-        Shop dbShop = shopService.selectByPrimaryKey(dbOrder.getShopId());
+        Shop dbShop = shopService.getById(dbOrder.getShopId());
 
         //获取该订单对应的商家信息
         Merchant merchant = merchantService.selectByPrimaryKey(dbShop.getMerchantId());
@@ -210,7 +211,7 @@ public class OrderApplicationTest {
     @Test
     public void test(){
 //        orderService.selectByOrderNo("1");
-//        orderService.selectByPrimaryKey(1);
+//        orderService.getById(1);
 //        orderService.selectById(1);
 //        orderService.getListByPageWithAsc(new OrderDto());
 
@@ -232,6 +233,7 @@ public class OrderApplicationTest {
         Message message = new Message("TID_COMMON", tags, JSON.toJSONString(order).getBytes());
         //delaytime的值: messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
         message.setDelayTimeLevel(3);
+        RocketMQTemplate rocketMQTemplate = applicationContext.getBean("rocketMQTemplate", RocketMQTemplate.class);
         rocketMQTemplate.getProducer().send(message);
     }
 }

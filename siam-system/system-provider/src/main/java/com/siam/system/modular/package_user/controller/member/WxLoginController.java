@@ -1,9 +1,11 @@
 package com.siam.system.modular.package_user.controller.member;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.siam.package_common.constant.BasicResultCode;
 import com.siam.package_common.entity.BasicData;
 import com.siam.package_common.entity.BasicResult;
+import com.siam.package_common.exception.StoneCustomerException;
 import com.siam.package_weixin_basic.config.WxCode;
 import com.siam.package_weixin_basic.config.WxEncrypted;
 import com.siam.package_weixin_basic.config.WxSession;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -91,7 +94,7 @@ public class WxLoginController {
 
     @ApiOperation(value = "获取微信手机号")
     @PostMapping(value = "/getWxPhone")
-    public BasicResult getWxPhone(WxCode wxCode) throws Exception {
+    public BasicResult getWxPhone(@RequestBody WxCode wxCode) throws Exception {
         BasicData basicResult = new BasicData();
         /*
          1. 得用wxCode从wx服务器拿到session_key
@@ -100,12 +103,29 @@ public class WxLoginController {
         WxEncrypted wxEncrypted = this.getWxUserInfo(wxCode.getWxCode(), wxCode.getWxIV(), wxCode.getEncryptedData());
 
         if (wxEncrypted == null) {
-            basicResult.setSuccess(false);
-            basicResult.setCode(BasicResultCode.ERR);
-            basicResult.setMessage("操作失败");
-            return basicResult;
+            throw new StoneCustomerException("操作失败");
         }
         basicResult.setData(wxEncrypted);
+        basicResult.setSuccess(true);
+        basicResult.setCode(BasicResultCode.SUCCESS);
+        basicResult.setMessage("操作成功");
+        return basicResult;
+    }
+
+    @ApiOperation(value = "微信静默登录获取用户信息")
+    @PostMapping(value = "/silence/getLogin")
+    public BasicResult getLogin(@RequestBody JSONObject params) {
+        BasicData basicResult = new BasicData();
+        /*
+         1. 得用wxCode从wx服务器拿到session_key
+         2. 利用session_key解密wxEncryptedData,得到手机号码
+        */
+        WxSession wxSession = this.getSessionKeyFromWxByCode(params.getString("wxCode"));
+
+        if (wxSession == null) {
+            throw new StoneCustomerException("登录失败");
+        }
+        basicResult.setData(wxSession);
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);
         basicResult.setMessage("操作成功");

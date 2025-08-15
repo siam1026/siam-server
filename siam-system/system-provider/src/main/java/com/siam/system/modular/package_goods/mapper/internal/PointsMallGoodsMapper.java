@@ -18,13 +18,7 @@ public interface PointsMallGoodsMapper extends BaseMapper<PointsMallGoods> {
 
     int deleteByExample(PointsMallGoodsExample example);
 
-    int deleteByPrimaryKey(Integer id);
-
-    int insertSelective(PointsMallGoods record);
-
     List<PointsMallGoods> selectByExample(PointsMallGoodsExample example);
-
-    PointsMallGoods selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") PointsMallGoods record, @Param("example") PointsMallGoodsExample example);
 

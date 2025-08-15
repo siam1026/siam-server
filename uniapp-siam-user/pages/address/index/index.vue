@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<view id="container"></view>
 		<scroll-view @scrolltoupper="onPullDownRefresh" upper-threshold="-100" :style="'height:' + winHeight + 'px'"
 			@scrolltolower="onReachBottom" lower-threshold="20" :scroll-x="false" :scroll-y="true" class="scroll-views">
 			<view class="delivery-address-list" v-if="addressList.length > 0">
@@ -7,7 +8,8 @@
 				<view class="delivery-address-item" v-for="(item, index) in addressList" :key="index">
 					<view class="address-detail-info">
 						<view class="address-name out_of_range one_row">
-							{{ item.province }}{{ item.city }}{{ item.area }} {{ item.street }}</view>
+							{{ item.province }}{{ item.city }}{{ item.area }} {{ item.street }}
+						</view>
 						<view class="personal-info">
 							<view class="default-address" v-if="item.isDefault">默认地址</view>
 							<!-- <view class="address-tag theme-bg">家</view> -->
@@ -19,11 +21,12 @@
 				</view>
 			</view>
 			<van-empty description="您还没有地址信息" v-if="addressList.length <= 0">
-				<van-button type="primary" size="small" class="bottom-button" @tap="goToDrink"
-					custom-style="background: #004ca0;border: 1px #004ca0;">去喝一杯</van-button>
+				<van-button type="primary" size="small" color="#004ca0" class="bottom-button"
+					@tap="goToDrink">去喝一杯</van-button>
 			</van-empty>
 		</scroll-view>
-		<navigator url="../insert/insert" class="insert-address-view theme-color self-adaption">+新增地址</navigator>
+		<navigator url="../insert/insert" class="safe-area insert-address-view theme-color self-adaption">+新增地址
+		</navigator>
 	</view>
 </template>
 
@@ -31,9 +34,9 @@
 	import GlobalConfig from '../../../utils/global-config';
 	import https from '../../../utils/http';
 	import authService from '../../../utils/auth';
-	var toastService = require('../../../utils/toast.service');
+	import toastService from '../../../utils/toast.service';
 	//获取应用实例
-	const app = getApp();
+	let app = null;
 	var pageNo = -1;
 	var prevList = [];
 	export default {
@@ -41,13 +44,11 @@
 			return {
 				list: [],
 				isUpdate: false,
-
 				//是否修改
 				isInsert: false,
-
 				isDelete: false,
 				winHeight: '',
-				addressList: '',
+				addressList: [],
 				refreshKey: ''
 			};
 		},
@@ -68,7 +69,7 @@
 		 * 生命周期函数--监听页面显示
 		 */
 		onShow: function() {
-
+			
 		},
 		/**
 		 * 生命周期函数--监听页面隐藏
@@ -85,7 +86,7 @@
 			//pageNo = 1;
 			// 显示顶部刷新图标
 			uni.showNavigationBarLoading();
-			this.list = [];
+			this.addressList = [];
 			// 设置数组元素
 			this.getDeliveryAddressList();
 			// 隐藏导航栏加载框
@@ -105,7 +106,7 @@
 		onShareAppMessage: function() {},
 		methods: {
 			selfAdaption() {
-				var that = this;
+				var _this = this;
 				let winHeight = 0;
 				let height = 0;
 				uni.getSystemInfo({
@@ -123,9 +124,7 @@
 										height = height + rect.height;
 									});
 									if (rects.length > 0) {
-										_this.setData({
-											winHeight: winHeight - height
-										});
+										_this.winHeight = winHeight - height;
 									}
 
 								}).exec();
@@ -133,31 +132,27 @@
 					}
 				});
 			},
-
 			getDeliveryAddressList() {
 				toastService.showLoading();
-				https
-					.request('/rest/member/deliveryAddress/list', {
-						pageNo: -1,
-						pageSize: 10
-					})
-					.then((result) => {
-						toastService.hideLoading();
-						if (result.success) {
-							this.setData({
-								addressList: result.data.records
-							});
-						}
-					});
+				https.request('/rest/member/deliveryAddress/list', {
+					pageNo: -1,
+					pageSize: 10
+				}).then((result) => {
+					toastService.hideLoading();
+					if (result.success) {
+						this.addressList = result.data.records;
+					}
+				});
 			},
-
 			editAddressTap(e) {
+				console.log(e);
+				var index = e.currentTarget.dataset.key;
+				var address = this.addressList[index];
+				this.refreshKey = index;
 				uni.navigateTo({
-					url: '../edit/edit?detail=' + JSON.stringify(e.currentTarget.dataset.data)
+					url: '../edit/edit?detail=' + JSON.stringify(address)
 				});
-				this.setData({
-					refreshKey: e.currentTarget.dataset.key
-				});
+
 			},
 
 			onPullDownRefresh() {
@@ -226,7 +221,7 @@
 	}
 
 	.default-address {
-		padding: 5rpx;
+		padding: 10rpx 5rpx;
 		background: #9f9f9b;
 		color: white;
 		border-radius: 10rpx;

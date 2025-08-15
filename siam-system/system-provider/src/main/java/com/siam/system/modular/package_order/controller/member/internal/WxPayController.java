@@ -157,7 +157,7 @@ public class WxPayController {
             updateOrder.setTradeId(insertMemberTradeRecord.getId());
             updateOrder.setPaymentMode(Quantity.INT_1);
             updateOrder.setUpdateTime(new Date());
-            orderService.updateByPrimaryKeySelective(updateOrder);
+            orderService.updateById(updateOrder);
 
         }else if(wxPayDto.getType() == Quantity.INT_2){
             //交易类型为会员充值
@@ -230,7 +230,7 @@ public class WxPayController {
                 throw new StoneCustomerException("该笔订单状态错误，不允许操作");
             }
 
-            Shop dbShop = shopService.selectByPrimaryKey(dbOrder.getShopId());
+            Shop dbShop = shopService.getById(dbOrder.getShopId());
 
             BigDecimal merchantDeliveryFee = BigDecimal.ZERO; //商家承担配送费
             //计算配送费是否正确
@@ -280,7 +280,7 @@ public class WxPayController {
             updateOrder.setChangeToDeliveryTradeId(insertMemberTradeRecord.getId());
             updateOrder.setPaymentMode(Quantity.INT_1);
             updateOrder.setUpdateTime(new Date());
-            orderService.updateByPrimaryKeySelective(updateOrder);
+            orderService.updateById(updateOrder);
 
         }else if(wxPayDto.getType() == Quantity.INT_4){
             //原订单对象

@@ -1,0 +1,40 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/menu/index/index",
+			"style": {
+				"navigationBarTitleText": "收银台点单"
+			}
+		},
+		{
+			"path": "pages/menu/detail/detail",
+			"style": {
+				"navigationBarTitleText": "商品明细"
+			}
+		},
+		{
+			"path": "pages/menu/pay/pay",
+			"style": {
+				"navigationBarTitleText": "收银台支付"
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "收银台点单"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "暹罗收银台点餐",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+		// // #ifdef H5
+		// ,"app-plus": {
+		// 	"titleNView": false //禁用原生导航栏  
+		// }
+		// // #endif
+	},
+	"uniIdRouter": {}
+}

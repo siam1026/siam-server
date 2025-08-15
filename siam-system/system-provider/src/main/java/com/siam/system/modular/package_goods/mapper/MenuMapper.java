@@ -17,8 +17,6 @@ public interface MenuMapper extends BaseMapper<Menu> {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insertSelective(Menu record);
-
     List<Menu> selectByExample(MenuExample example);
 
     Menu selectByPrimaryKey(Integer id);

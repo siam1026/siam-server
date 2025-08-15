@@ -42,13 +42,13 @@
 				<view class="like-money-view">
 					<text class="latelyMonthlySales out_of_range one_row">已售：{{ item.latelyMonthlySales }}</text>
 					<view class="insert-car" @tap.stop.prevent="openSpecifications" :data-index="index">
-						<van-icon name="plus" class="icongouwuche1 theme-bg"/>
+						<van-icon name="plus" class="icongouwuche1 theme-bg" />
 					</view>
 				</view>
 			</view>
 		</view>
-		<van-divider contentPosition="center" custom-style="padding: 20px;" v-if="isMore">没有更多啦</van-divider>
-		<van-action-sheet :show="specificationsDialog" @close="close" title="选择规格">
+		<van-divider contentPosition="center" style="padding-bottom: 20px;" v-if="isMore">没有更多啦</van-divider>
+		<van-action-sheet :show="specificationsDialog" @close="close" @cancel="close" title="选择规格">
 			<view class="content_box">
 				<view class="goods-info-view">
 					<image :src="goods.mainImage" mode="aspectFill" class="commodity-image"></image>
@@ -58,7 +58,7 @@
 						<view class="goods-info-price">￥{{ priceAfter }}</view>
 					</view>
 				</view>
-				<scroll-view scroll-y style="height: 52vh">
+				<scroll-view scroll-y style="height: 50vh">
 					<view class="commdity-name-type-view">
 						<view class="commdity-type-item" v-if="specList" v-for="(item, key) in specList" :key="key">
 							<view class="commdity-type-name">{{ key }}</view>
@@ -96,7 +96,7 @@
 	import https from '../../../../utils/http';
 	import toastService from '../../../../utils/toast.service';
 	import authService from '../../../../utils/auth';
-	const app = getApp();
+	let app = null;
 	var pageNo = 1;
 	var pageSize = 10;
 	export default {
@@ -106,13 +106,10 @@
 				autoplay: true,
 				interval: 5000,
 				duration: 1000,
-
 				//beforeColor: "white",//指示点颜色,
 				afterColor: '#f1a142',
-
 				//当前选中的指示点颜色
 				opacity: 0.4,
-
 				recommendGoodsList: [],
 				specList: [],
 				isMore: false,
@@ -121,20 +118,18 @@
 				priceAfter: '',
 				specListString: '',
 				specificationsDialog: false,
-
 				goods: {
 					mainImage: '',
 					name: '',
 					id: ''
-				},
-
-				specLis: ''
+				}
 			};
 		},
 		/**
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad: function(options) {
+			app = getApp();
 			pageNo = 1;
 			this.getSystemUsageRecord();
 			this.getRecommendGoodsList();
@@ -176,34 +171,32 @@
 			toastService.showLoading('正在加载...');
 			var that = this;
 			pageNo = pageNo + 1;
-			https
-				.request('/rest/pointsMall/goods/recommendGoodsList', {
-					pageNo: pageNo,
-					pageSize: pageSize
-				})
-				.then((result) => {
-					toastService.hideLoading();
-					if (result.success) {
-						console.log(result.data);
-						if (result.data.records.length <= 0) {
-							pageNo = pageNo - 1;
-							that.setData({
-								isMore: result.data.hasNextPage ? false : true
-							});
-							//toastService.showToast("没有更多啦~");
-							return;
-						}
-						result.data.records.forEach(function(item, index) {
-							item.mainImage = GlobalConfig.ossUrl + item.mainImage;
-							that.recommendGoodsList.push(item);
-						});
-						console.log(this.recommendGoodsList);
-						this.setData({
-							recommendGoodsList: this.recommendGoodsList,
+			https.request('/rest/pointsMall/goods/recommendGoodsList', {
+				pageNo: pageNo,
+				pageSize: pageSize
+			}).then((result) => {
+				toastService.hideLoading();
+				if (result.success) {
+					console.log(result.data);
+					if (result.data.records.length <= 0) {
+						pageNo = pageNo - 1;
+						that.setData({
 							isMore: result.data.hasNextPage ? false : true
 						});
+						//toastService.showToast("没有更多啦~");
+						return;
 					}
-				});
+					result.data.records.forEach(function(item, index) {
+						item.mainImage = GlobalConfig.ossUrl + item.mainImage;
+						that.recommendGoodsList.push(item);
+					});
+					console.log(this.recommendGoodsList);
+					this.setData({
+						recommendGoodsList: this.recommendGoodsList,
+						isMore: result.data.hasNextPage ? false : true
+					});
+				}
+			});
 		},
 		/**
 		 * 用户点击右上角分享
@@ -221,7 +214,6 @@
 					app.globalData.checkIsAuth('scope.userInfo');
 				});
 			},
-
 			getUserInfo: function(e) {
 				https.request('/rest/member/getLoginMemberInfo', {}).then((result) => {
 					if (result.success) {
@@ -233,65 +225,57 @@
 					}
 				});
 			},
-
 			getCarouselList() {
-				https
-					.request('/rest/advertisement/list', {
-						type: 3,
-						pageNo: -1,
-						pageSize: 20
-					})
-					.then((result) => {
-						if (result.success) {
-							result.data.records.forEach(function(item, index) {
-								item.imagePath = GlobalConfig.ossUrl + item.imagePath;
-							});
-							this.setData({
-								carouselUrls: result.data.records
-							});
-						}
-					});
+				https.request('/rest/advertisement/list', {
+					type: 3,
+					pageNo: -1,
+					pageSize: 20
+				}).then((result) => {
+					if (result.success) {
+						result.data.records.forEach(function(item, index) {
+							item.imagePath = GlobalConfig.ossUrl + item.imagePath;
+						});
+						this.setData({
+							carouselUrls: result.data.records
+						});
+					}
+				});
 			},
-
 			getClassifyList() {
-				https
-					.request('/rest/pointsMall/menu/list', {
-						pageNo: 1,
-						pageSize: 8
-					})
-					.then((result) => {
-						if (result.success) {
-							result.data.records.forEach(function(item, index) {
-								item.iconUrl = GlobalConfig.ossUrl + item.icon;
-							});
-							this.setData({
-								classifyList: result.data.records
-							});
-						}
-					});
+				https.request('/rest/pointsMall/menu/list', {
+					pageNo: 1,
+					pageSize: 8
+				}).then((result) => {
+					if (result.success) {
+						result.data.records.forEach(function(item, index) {
+							item.iconUrl = GlobalConfig.ossUrl + item.icon;
+						});
+						this.setData({
+							classifyList: result.data.records
+						});
+					}
+				});
 			},
 
 			getRecommendGoodsList() {
 				toastService.showLoading();
-				https
-					.request('/rest/pointsMall/goods/recommendGoodsList', {
-						pageNo: pageNo,
-						pageSize: pageSize
-					})
-					.then((result) => {
-						toastService.hideLoading();
-						uni.stopPullDownRefresh();
-						if (result.success) {
-							result.data.records.forEach(function(item, index) {
-								item.mainImage = GlobalConfig.ossUrl + item.mainImage;
-							});
-							this.recommendGoodsList = [];
-							this.setData({
-								recommendGoodsList: result.data.records,
-								isMore: result.data.hasNextPage ? false : true
-							});
-						}
-					});
+				https.request('/rest/pointsMall/goods/recommendGoodsList', {
+					pageNo: pageNo,
+					pageSize: pageSize
+				}).then((result) => {
+					toastService.hideLoading();
+					uni.stopPullDownRefresh();
+					if (result.success) {
+						result.data.records.forEach(function(item, index) {
+							item.mainImage = GlobalConfig.ossUrl + item.mainImage;
+						});
+						this.recommendGoodsList = [];
+						this.setData({
+							recommendGoodsList: result.data.records,
+							isMore: result.data.hasNextPage ? false : true
+						});
+					}
+				});
 			},
 
 			commodityDetailTap(e) {
@@ -308,13 +292,11 @@
 			},
 
 			getSystemUsageRecord() {
-				https
-					.request('/rest/systemUsageRecord/insert', {
-						type: 'intoPointsMall'
-					})
-					.then((result) => {
-						if (result.success) {}
-					});
+				https.request('/rest/systemUsageRecord/insert', {
+					type: 'intoPointsMall'
+				}).then((result) => {
+					if (result.success) {}
+				});
 			},
 
 			openSpecifications(e) {
@@ -334,10 +316,11 @@
 					specList[firstIndex][j].checked = false;
 				}
 				//给选中的第二级分类的checked设置为true
-				for (var i in checkValue) {
-					specList[firstIndex][checkValue[i]].checked = true;
-					//console.log(specList[firstIndex][checkValue[i]])
-				}
+				// for (var i in checkValue) {
+				// 	specList[firstIndex][checkValue[i]].checked = true;
+				// 	//console.log(specList[firstIndex][checkValue[i]])
+				// }
+				specList[firstIndex][checkValue].checked = true;
 
 				let price = this.goods.price;
 				let specListString = '';
@@ -347,8 +330,7 @@
 						if (specList[key][keyof].checked) {
 							price = price + specList[key][keyof].price;
 							specListString = (specListString ? specListString + '/' : specListString) + specList[key][
-								keyof
-							].name;
+								keyof].name;
 						}
 					}
 				}
@@ -397,9 +379,8 @@
 				});
 			},
 			setTabBarBadge(num) {
-			    app.globalData.setTabBarBadge(num);
+				app.globalData.setTabBarBadge(num);
 			},
-
 			selectByGoodsId(index) {
 				let goods = this.recommendGoodsList[index];
 				https.request('/rest/pointsMall/goodsSpecificationOption/selectByGoodsId', {
@@ -603,6 +584,8 @@
 	.icongouwuche1 {
 		width: 40rpx;
 		height: 40rpx;
+		line-height: 40rpx;
+		text-align: center;
 		font-size: 24rpx;
 		border-radius: 50%;
 	}
@@ -648,8 +631,8 @@
 
 	.group-label {
 		width: 28%;
-		padding: 1%;
-		margin: 1%;
+		padding: 12rpx 1rpx;
+		margin: 5rpx 5rpx;
 		font-size: 26rpx;
 		border-radius: 18rpx;
 		text-align: center;
@@ -699,5 +682,9 @@
 	.commdity-type-name {
 		font-size: 28rpx;
 		margin-right: 30rpx;
+	}
+
+	.content_box {
+		padding-top: 0;
 	}
 </style>

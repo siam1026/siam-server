@@ -52,7 +52,7 @@ public class PointsMallOrderLogisticsController {
         BasicData basicResult = new BasicData();
         Member loginMember = memberSessionManager.getSession(TokenUtil.getToken());
 
-        PointsMallOrder dbPointsMallOrder = orderService.selectByPrimaryKey(orderLogistics.getOrderId());
+        PointsMallOrder dbPointsMallOrder = orderService.getById(orderLogistics.getOrderId());
         if(dbPointsMallOrder == null){
             throw new StoneCustomerException("该订单不存在");
         }

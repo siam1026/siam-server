@@ -151,7 +151,7 @@
 				let vue = this
 				let param = Object.assign(vue.searchMsg);
 				vue.listLoading = true;
-				vue.$http.post(vue, '/rest/merchant/courier/list', param,
+				vue.$http.post(vue, '/rest/merchant/rider/list', param,
 					(vue, data) => {
 						vue.list = data.data.records
 						vue.total = data.data.total
@@ -174,7 +174,7 @@
 					// this.listLoading = true;
 				let vue = this;
 				
-				vue.$http.delete(vue, '/rest/merchant/courier/delete', {"ids" : [id]},
+				vue.$http.delete(vue, '/rest/merchant/rider/delete', {"ids" : [id]},
 					function(vue, data) {
 						vue.$message({
 							showClose: true,
@@ -233,7 +233,7 @@
 
 						let url = '';
 						if(param.id){
-							url = '/rest/merchant/courier/update';
+							url = '/rest/merchant/rider/update';
 							vue.$http.put(vue, url, param,
 								(vue, data) => {
 									// this.editLoading = false;
@@ -255,7 +255,7 @@
 								}
 							)							
 						}else{
-							url = '/rest/merchant/courier/insert';
+							url = '/rest/merchant/rider/insert';
 							vue.$http.post(vue, url, param,
 								(vue, data) => {
 									// this.editLoading = false;

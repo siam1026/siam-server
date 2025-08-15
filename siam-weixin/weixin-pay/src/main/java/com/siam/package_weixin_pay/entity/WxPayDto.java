@@ -28,7 +28,7 @@ public class WxPayDto {
      * 付款金额
      */
     @NotNull(message = "付款金额不能为空")
-    @DecimalMin(value = "0.1", message = "付款金额不允许小于等于0")
+    @DecimalMin(value = "0.01", message = "付款金额不允许小于等于0")
     private BigDecimal total_fee;
 
     /**

@@ -91,7 +91,7 @@ public class MemberGoodsCollectController {
         }
 
         //查询该商品对应的门店信息
-        Goods dbGoods = goodsService.selectByPrimaryKey(memberGoodsCollect.getGoodsId());
+        Goods dbGoods = goodsService.getById(memberGoodsCollect.getGoodsId());
         if(dbGoods == null){
             throw new StoneCustomerException("该商品不存在");
         }

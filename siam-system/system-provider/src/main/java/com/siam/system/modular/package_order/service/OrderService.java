@@ -2,8 +2,8 @@ package com.siam.system.modular.package_order.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.siam.package_common.entity.BasicResult;
 import com.siam.system.modular.package_order.entity.Order;
-import com.siam.system.modular.package_order.model.example.OrderExample;
 import com.siam.system.modular.package_order.model.param.OrderParam;
 import com.siam.system.modular.package_order.model.vo.OrderVo;
 import com.siam.system.modular.package_order.model.vo.OrderVo2;
@@ -20,11 +20,11 @@ import java.util.Map;
 
 public interface OrderService extends IService<Order> {
 
-    int countByExample(OrderExample example);
-
     void delete(OrderParam param);
 
     Order insert(OrderParam param) throws InterruptedException, RemotingException, MQClientException, MQBrokerException;
+
+    Order insertByMerchant(OrderParam param) throws InterruptedException, RemotingException, MQClientException, MQBrokerException;
 
     void cancelOrder(OrderParam param);
 
@@ -33,14 +33,6 @@ public interface OrderService extends IService<Order> {
     void applyRefund(OrderParam param) throws IOException;
 
     void confirmReceipt(OrderParam param);
-
-    List<Order> selectByExample(OrderExample example);
-
-    Order selectByPrimaryKey(Integer id);
-
-    void updateByExampleSelective(Order record, OrderExample example);
-
-    void updateByPrimaryKeySelective(Order record);
 
     Page<Order> getListByPageWithAsc(OrderParam param);
 
@@ -168,4 +160,13 @@ public interface OrderService extends IService<Order> {
 
     Map statistic(OrderParam param) throws ParseException;
 
+    /**
+     *
+     * @param param
+     * @param isMerchant 是否后台打印 0是 1否
+     * @param isPrinterCheckOut 是否打印结账单 0是 1否
+     * @param isPrinterBackKitchent 是否打印后出单 0是 1否
+     * @return
+     */
+    BasicResult xpYunPrinterOrderDetail(OrderParam param,int isMerchant,int isPrinterCheckOut,int isPrinterBackKitchent);
 }

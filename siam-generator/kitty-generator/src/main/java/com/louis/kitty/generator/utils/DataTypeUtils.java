@@ -21,6 +21,7 @@ public class DataTypeUtils {
 	public static final String Time = "java.sql.Time";
 	public static final String Timestamp = "java.sql.Timestamp";
 	public static final String Object = "java.lang.Object";
+	public static final String BigDecimal = "java.math.BigDecimal";
 
 	public static final String CHAR = "CHAR";
 	public static final String TEXT = "TEXT";
@@ -79,8 +80,10 @@ public class DataTypeUtils {
 				javaType = Integer;
 			}  else if (dataType.contains(FLOAT)) {
 				javaType = Float;
-			} else if (dataType.contains(NUMBER) || dataType.contains(DECIMAL) || dataType.contains(DOUBLE)) {
+			} else if (dataType.contains(NUMBER) || dataType.contains(DOUBLE)) {
 				javaType = Double;
+			} else if (dataType.contains(DECIMAL)) {
+				javaType = BigDecimal;
 			} else if (dataType.contains(DATE) || dataType.contains(TIME)) {
 				javaType = Date;
 			} else if (dataType.contains(OBJECT)) {

@@ -79,3 +79,9 @@ $uni-font-size-paragraph:15px;
   font-size: 20px;
   background-color: pink;
 }
+
+/* #ifdef H5 */ 
+    .uni-page-head { 
+        display: none; 
+    } 
+/* #endif */

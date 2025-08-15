@@ -25,7 +25,7 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package com.siam.package_common.pojo.login;
 
 import cn.hutool.core.lang.Dict;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

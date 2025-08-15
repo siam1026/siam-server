@@ -151,7 +151,7 @@ public class PlatformPayController {
             updateOrder.setTradeId(insertMemberTradeRecord.getId());
             updateOrder.setPaymentMode(Quantity.INT_2);
             updateOrder.setUpdateTime(new Date());
-            orderService.updateByPrimaryKeySelective(updateOrder);
+            orderService.updateById(updateOrder);
 
         }else if(platformPayDto.getType() == Quantity.INT_3){
             //交易类型为自取订单改为配送
@@ -172,7 +172,7 @@ public class PlatformPayController {
                 throw new StoneCustomerException("该笔订单状态错误，不允许操作");
             }
 
-            Shop dbShop = shopService.selectByPrimaryKey(dbOrder.getShopId());
+            Shop dbShop = shopService.getById(dbOrder.getShopId());
 
             BigDecimal merchantDeliveryFee = BigDecimal.ZERO; //商家承担配送费
             //计算配送费是否正确
@@ -221,7 +221,7 @@ public class PlatformPayController {
             updateOrder.setChangeToDeliveryTradeId(insertMemberTradeRecord.getId());
             updateOrder.setPaymentMode(Quantity.INT_2);
             updateOrder.setUpdateTime(new Date());
-            orderService.updateByPrimaryKeySelective(updateOrder);
+            orderService.updateById(updateOrder);
         }
 
         //判断支付密码是否正确

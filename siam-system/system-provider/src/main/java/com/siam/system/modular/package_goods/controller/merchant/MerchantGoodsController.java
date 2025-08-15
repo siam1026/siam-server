@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siam.package_common.annoation.MerchantPermission;
 import com.siam.package_common.exception.StoneCustomerException;
 import com.siam.system.modular.package_goods.service.*;
-import com.siam.system.modular.package_goods.service.*;
 import com.siam.package_common.entity.BasicData;
 import com.siam.package_common.entity.BasicResult;
 import com.siam.package_common.constant.BasicResultCode;
@@ -24,12 +23,18 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +44,7 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 @Api(tags = "商家端商品模块相关接口", description = "MerchantGoodsController")
 public class MerchantGoodsController {
+
     @Autowired
     private GoodsService goodsService;
 
@@ -145,64 +151,8 @@ public class MerchantGoodsController {
     })
     @PostMapping(value = "/insert")
     public BasicResult insert(@RequestBody @Validated(value = {}) Goods goods, HttpServletRequest request){
-        BasicResult basicResult = new BasicResult();
-
-        //获取当前登录用户绑定的门店编号
-        Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
-
-        //商品的主图 等于 商品轮播图的第一张图
-        if(StringUtils.isNotBlank(goods.getSubImages())){
-            goods.setMainImage(goods.getSubImages().split(",")[0]);
-        }
-
-        //添加商品记录
-        //设置默认库存为0
-        goods.setShopId(loginMerchant.getShopId());
-        goods.setStock(Quantity.INT_0);
-        goods.setMonthlySales(Quantity.INT_0);
-        goods.setTotalSales(Quantity.INT_0);
-        goods.setTotalComments(Quantity.INT_0);
-        goods.setCreateTime(new Date());
-        goods.setUpdateTime(new Date());
-        //兑换商品所需积分数量新增时默认等于折扣价
-        goods.setExchangePoints(goods.getPrice().intValue());
-        goodsService.insertSelective(goods);
-
-        //建立商品与类别的关系
-        MenuGoodsRelation insertMenuGoodsRelation = new MenuGoodsRelation();
-        insertMenuGoodsRelation.setGoodsId(goods.getId());
-        insertMenuGoodsRelation.setMenuId(goods.getMenuId());
-        insertMenuGoodsRelation.setCreateTime(new Date());
-        insertMenuGoodsRelation.setUpdateTime(new Date());
-        menuGoodsRelationService.insertSelective(insertMenuGoodsRelation);
-
-        //生成商品公共规格
-        goodsSpecificationService.insertPublicGoodsSpecification(goods.getId());
-
-        //TODO(MARK)-目前只能通过图片地址来判别重复，后续可以优化成那个啥位数来判定唯一
-        //添加图片上传记录
-        if(StringUtils.isNotBlank(goods.getSubImages())){
-            String[] array = goods.getSubImages().split(",");
-            for (String str : array) {
-                PictureUploadRecordExample uploadRecordExample = new PictureUploadRecordExample();
-                uploadRecordExample.createCriteria().andUrlEqualTo(str);
-                int count = pictureUploadRecordService.countByExample(uploadRecordExample);
-                if(count == 0){
-                    PictureUploadRecord uploadRecord = new PictureUploadRecord();
-                    uploadRecord.setShopId(loginMerchant.getShopId());
-                    uploadRecord.setUrl(str);
-                    uploadRecord.setModule(Quantity.INT_1);
-                    uploadRecord.setCreateTime(new Date());
-                    uploadRecord.setUpdateTime(new Date());
-                    pictureUploadRecordService.insertSelective(uploadRecord);
-                }
-            }
-        }
-
-        basicResult.setSuccess(true);
-        basicResult.setCode(BasicResultCode.SUCCESS);
-        basicResult.setMessage("新增成功");
-        return basicResult;
+        goodsService.insert(goods);
+        return BasicResult.success();
     }
 
     @MerchantPermission
@@ -238,7 +188,7 @@ public class MerchantGoodsController {
         //获取当前登录用户绑定的门店编号
         Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
 
-        Goods dbGoods = goodsService.selectByPrimaryKey(goods.getId());
+        Goods dbGoods = goodsService.getById(goods.getId());
         if (dbGoods == null){
             throw new StoneCustomerException("该商品不存在");
         } else if (loginMerchant.getShopId() != dbGoods.getShopId()){
@@ -252,7 +202,7 @@ public class MerchantGoodsController {
 
         // 修改商品信息
         goods.setUpdateTime(new Date());
-        goodsService.updateByPrimaryKeySelective(goods);
+        goodsService.updateById(goods);
 
         //判断商品类别关系  目前不考虑一个商品有多个类别的情况
         MenuGoodsRelationExample example = new MenuGoodsRelationExample();
@@ -316,7 +266,7 @@ public class MerchantGoodsController {
         //获取当前登录用户绑定的门店编号
         Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
 
-        Goods dbGoods = goodsService.selectByPrimaryKey(param.getId());
+        Goods dbGoods = goodsService.getById(param.getId());
         if(dbGoods == null){
             basicResult.setSuccess(false);
             basicResult.setCode(BasicResultCode.ERR);
@@ -343,7 +293,7 @@ public class MerchantGoodsController {
         couponsGoodsRelationService.deleteByGoodsId(dbGoods.getId());
 
         //删除商品
-        goodsService.deleteByPrimaryKey(dbGoods.getId());
+        goodsService.removeById(dbGoods.getId());
 
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);
@@ -351,83 +301,68 @@ public class MerchantGoodsController {
         return basicResult;
     }
 
-//    @ApiOperation(value = "导入商品Excel报表")
-//    @PostMapping(value = "/import")
-//    public BasicResult importGoods(@RequestParam(value = "file", required = true) MultipartFile file){
-//        BasicResult basicResult = new BasicResult();
-//
-//        if(file==null || file.getSize()==0){
-//            basicResult.setSuccess(false);
-//            basicResult.setCode(BasicResultCode.ERR);
-//            basicResult.setMessage("上传文件不能为空");
-//            return basicResult;
-//        }
-//
-//        if(!file.getOriginalFilename().endsWith(".xls") && !file.getOriginalFilename().endsWith(".xlsx")){
-//            basicResult.setSuccess(false);
-//            basicResult.setCode(BasicResultCode.ERR);
-//            //basicResult.setMessage("上传文件类型错误，后缀名只允许为.xls和.xlsx");
-//            basicResult.setMessage("请上传Excel文件");
-//            return basicResult;
-//        }
-//
-//        try {
-//            InputStream inputStream = file.getInputStream();
-//            //List<Goods> goodsList = goodsService.parseExcel(inputStream);
-//            List<Goods> goodsList = goodsService.parseExcel_plus(inputStream);
-//            goodsList.forEach(goods -> {
-//                goods.setMonthlySales(Quantity.INT_0);
-//                goods.setTotalSales(Quantity.INT_0);
-//                goods.setTotalComments(Quantity.INT_0);
-//
-//                goods.setCreateTime(new Date());
-//                goods.setUpdateTime(new Date());
-//                goodsService.insertSelective(goods);
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        basicResult.setSuccess(true);
-//        basicResult.setCode(BasicResultCode.SUCCESS);
-//        basicResult.setMessage("导入商品成功");
-//        return basicResult;
-//    }
-//
-//    @ApiOperation(value = "导出商品Excel报表")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "pageNo", value = "页码(值为-1不分页)", required = true, paramType = "query", dataType = "int", defaultValue = "1"),
-//            @ApiImplicitParam(name = "pageSize", value = "页数", required = true, paramType = "query", dataType = "int", defaultValue = "20"),
-//    })
-//    @GetMapping(value = "/export")
-//    public void exportGoods(int pageNo, int pageSize, Goods goods, HttpServletResponse response){
-//        try {
-//            // 生成Excel数据
-//            Page<Goods> page = goodsService.getListByPage(param.getPageNo(), param.getPageSize(), goods);
-//            XSSFWorkbook workbook = goodsService.createExcel(page.getRecords());
-//
-//            // 设置响应体
-//            String fileName = "商品信息表_"+ System.currentTimeMillis() +".xlsx";
-//            // 这里必须用ISO8859-1重新编码，否则文件名里面的中文无法解析，会以下划线代替
-//            fileName = new String(fileName.getBytes(),"ISO8859-1");
-//            response.setContentType("application/octet-stream;charset=UTF-8"); //这里的编码写啥都可以
-//            response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
-//            response.addHeader("Pargam", "no-cache");
-//            response.addHeader("Cache-Control", "no-cache");
-//
-//            // 将Excel数据写入输出流
-//            OutputStream os = response.getOutputStream();
-//            workbook.write(os);
-//
-//            // 关闭资源
-//            os.flush();
-//            os.close();
-//            workbook.close();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @ApiOperation(value = "导入商品Excel报表")
+    @PostMapping(value = "/import")
+    public BasicResult importGoods(@RequestParam(value = "file", required = true) MultipartFile file){
+        //获取当前登录用户绑定的门店编号
+        Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
+
+        if(file==null || file.getSize()==0){
+            throw new StoneCustomerException("上传文件不能为空");
+        }
+
+        if(!file.getOriginalFilename().endsWith(".xls") && !file.getOriginalFilename().endsWith(".xlsx")){
+            throw new StoneCustomerException("请上传Excel文件");
+        }
+
+        try {
+            InputStream inputStream = file.getInputStream();
+            //List<Goods> goodsList = goodsService.parseExcel(inputStream);
+            List<Goods> goodsList = goodsService.parseExcel_plus(inputStream);
+            goodsList.forEach(goods -> {
+                goodsService.insert(goods);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return BasicResult.success();
+    }
+
+    @ApiOperation(value = "导出商品Excel报表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码(值为-1不分页)", required = true, paramType = "query", dataType = "int", defaultValue = "1"),
+            @ApiImplicitParam(name = "pageSize", value = "页数", required = true, paramType = "query", dataType = "int", defaultValue = "20"),
+    })
+    @GetMapping(value = "/export")
+    public void exportGoods(int pageNo, int pageSize, Goods goods, HttpServletResponse response){
+        try {
+            // 生成Excel数据
+            Page<Goods> page = goodsService.getListByPage(goods.getPageNo(), goods.getPageSize(), goods);
+            XSSFWorkbook workbook = goodsService.createExcel(page.getRecords());
+
+            // 设置响应体
+            String fileName = "商品信息表_"+ System.currentTimeMillis() +".xlsx";
+            // 这里必须用ISO8859-1重新编码，否则文件名里面的中文无法解析，会以下划线代替
+            fileName = new String(fileName.getBytes(),"ISO8859-1");
+            response.setContentType("application/octet-stream;charset=UTF-8"); //这里的编码写啥都可以
+            response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
+            response.addHeader("Pargam", "no-cache");
+            response.addHeader("Cache-Control", "no-cache");
+
+            // 将Excel数据写入输出流
+            OutputStream os = response.getOutputStream();
+            workbook.write(os);
+
+            // 关闭资源
+            os.flush();
+            os.close();
+            workbook.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 //    @ApiOperation(value = "菜单状态修改（启用或禁用）")
 //    @ApiImplicitParams({
@@ -457,7 +392,7 @@ public class MerchantGoodsController {
         //获取当前登录用户绑定的门店编号
         Merchant loginMerchant = merchantSessionManager.getSession(TokenUtil.getToken());
 
-        Goods dbGoods = goodsService.selectByPrimaryKey(param.getId());
+        Goods dbGoods = goodsService.getById(param.getId());
         if (dbGoods == null){
             throw new StoneCustomerException("该商品不存在");
         } else if (loginMerchant.getShopId() != dbGoods.getShopId()){

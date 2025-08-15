@@ -14,8 +14,19 @@
 					</view>
 				</view>
 				<view>
-					<mp-searchbar @selectresult="selectResult" :search="search" @clear="searchInputClear"
-						@hide="searchInputClear" placeholder="商品名称"></mp-searchbar>
+					<form action="/">
+						<van-search v-model="searchGoodsName" placeholder="商品名称" show-action @search="onSearch"
+							@change="onFocus" @update:model-value="onFocus" background="#ededed" use-action-slot>
+							// #ifdef APP-PLUS||H5
+							<template #action>
+								<view @click="searchBtn">搜索</view>
+							</template>
+							// #endif
+							// #ifdef MP-WEIXIN||MP-ALIPAY
+							<view slot="action" @click="searchBtn" class="van-search__action" role="button">搜索</view>
+							// #endif
+						</van-search>
+					</form>
 				</view>
 				<view class="swiper-content">
 					<view class="swiper-tab self-adaption">
@@ -34,16 +45,16 @@
 			<checkbox-group class="weui-slidecells" @change="checkboxChange">
 				<view class="page__bd">
 					<view class="weui-slidecells" v-for="(item, index) in collectList" :key="index">
-						<mp-slideview :buttons="slideButtons" :icon="true" :data-goodsid="item.goodsId"
-							@buttontap="slideButtonTap($event, { goodsid: item.goodsId })" throttle="300">
+						<van-swipe-cell :right-width="65">
 							<view :class="'weui-slidecell ' + (item.disable ? 'isDisable' : '')">
 								<label class="checkbox-group-label" v-if="isShowCheckbox">
 									<checkbox :value="index" :index="index" class="theme-color theme-border-color"
-										:checked="item.checked" :disabled="item.disable" />
+										:checked="item.checked" :disabled="item.disable" iconColor="#FFFFFF" />
 								</label>
 								<view class="commdity-item" :data-id="item.goodsId" :data-shopid="item.shopId"
 									@tap.stop.prevent="parseEventDynamicCode($event, collectTab == 0 ? 'bindMemberDetails' : 'bindPointsMallDetails')">
-									<image :src="item.mainImage ? item.mainImage : '/static/assets/images/load-image.png'"
+									<image
+										:src="item.mainImage ? item.mainImage : '/static/assets/images/load-image.png'"
 										mode="aspectFill" class="commodity-icon"></image>
 									<view class="sell-out out-store" v-if="item.goodsStatus == 1">未上架</view>
 									<view class="sell-out out-store" v-else-if="item.goodsStatus == 3">已下架</view>
@@ -61,16 +72,32 @@
 									</view>
 								</view>
 							</view>
-						</mp-slideview>
+							// #ifdef APP-PLUS||H5
+							<template #right>
+								<view style="height: 100%;" class="flex_center">
+									<view class="flvan-swipe-cell__right flex_between" :data-checkboxIndex="index"
+										@tap="slideButtonTap($event, { goodsid: item.goodsId })">
+										<van-icon name="like-o" />
+									</view>
+								</view>
+							</template>
+							// #endif
+							// #ifdef MP-WEIXIN||MP-ALIPAY
+							<view slot="right" class="flvan-swipe-cell__right flex_between" :data-checkboxIndex="index"
+								@tap="slideButtonTap($event, { goodsid: item.goodsId })">
+								<van-icon name="like-o" />
+							</view>
+							// #endif
+						</van-swipe-cell>
 					</view>
 				</view>
 			</checkbox-group>
 		</view>
-		<view v-if="isShowCheckbox" class="show-checkbox">
+		<view v-if="isShowCheckbox" class="safe-area show-checkbox">
 			<view class="checkbox-class">
-				<checkbox class="all-checkbox" @tap="allChange" :checked="isAlls">全选</checkbox>
+				<checkbox class="all-checkbox" @tap="allChange" :checked="isAlls" iconColor="#FFFFFF">全选</checkbox>
 			</view>
-			<text class="iconfont iconshanchuguan" @tap="batchDelete"></text>
+			<van-icon name="like-o" @tap="batchDelete" color="red" size="25"/>
 		</view>
 		<van-empty description="暂无收藏" v-if="collectList.length <= 0" />
 	</view>
@@ -81,10 +108,10 @@
 	import https from '../../../../utils/http';
 	import authService from '../../../../utils/auth';
 	import CustomPage from '../../../../base/CustomPage';
-	var toastService = require('../../../../utils/toast.service');
-	var utilHelper = require('../../../../utils/util');
-	var dateHelper = require('../../../../utils/date-helper');
-	var systemStatus = require('../../../../utils/system-status');
+	import toastService from '../../../../utils/toast.service';
+	import utilHelper from '../../../../utils/util';
+	import dateHelper from '../../../../utils/date-helper';
+	import systemStatus from '../../../../utils/system-status';
 	export default {
 		data() {
 			return {
@@ -120,7 +147,7 @@
 				isAlls: false,
 				searchGoodsName: '',
 				search: '',
-				goodsIdList: '',
+				goodsIdList: [],
 				isSale: false,
 				noDataTip: ''
 			};
@@ -129,9 +156,6 @@
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad: function(options) {
-			this.setData({
-				search: this.search.bind(this)
-			});
 			this.getMemberCollect();
 		},
 		/**
@@ -190,10 +214,7 @@
 							this.getPointsMallCollect(true, this.searchGoodsName);
 						}
 					}
-					this.setData({
-						currentTab: e.target.dataset.current
-					});
-					// this.getHeight();
+					this.currentTab = e.target.dataset.current;
 				}
 			},
 
@@ -206,49 +227,72 @@
 					} else {
 						this.getPointsMallCollect(false, this.searchGoodsName);
 					}
-					this.setData({
-						collectTab: e.target.dataset.current,
-						currentTab: 0,
-						isAlls: false
-					});
-					// this.getHeight();
+					this.collectTab = e.target.dataset.current;
+					this.currentTab = 0;
+					this.isAlls = false;
 				}
 			},
 
-			searchFun: function(value) {
-				console.log(value);
-				return new Promise((resolve, reject) => {
-					//判断大标签页
-					if (this.collectTab == 0) {
-						//判断小标签页
-						if (this.currentTab == 0) {
-							this.getMemberCollect(false, value);
-						}
-						if (this.currentTab == 1) {
-							this.getMemberCollect(true, value);
-						}
-						resolve([]);
-					}
-					if (this.collectTab == 1) {
-						//判断小标签页
-						if (this.currentTab == 0) {
-							this.getPointsMallCollect(false, value);
-						}
-						if (this.currentTab == 1) {
-							this.getPointsMallCollect(true, value);
-						}
-						resolve([]);
-					}
-					this.setData({
-						searchGoodsName: value
-					});
-				});
-			},
+			onSearch: function(e) {
+				console.log(e);
+				var value = this.searchGoodsName;
 
-			selectResult: function(e) {
-				console.log('select result', e.detail);
+				//判断大标签页
+				if (this.collectTab == 0) {
+					//判断小标签页
+					if (this.currentTab == 0) {
+						this.getMemberCollect(false, value);
+					}
+					if (this.currentTab == 1) {
+						this.getMemberCollect(true, value);
+					}
+				}
+				if (this.collectTab == 1) {
+					//判断小标签页
+					if (this.currentTab == 0) {
+						this.getPointsMallCollect(false, value);
+					}
+					if (this.currentTab == 1) {
+						this.getPointsMallCollect(true, value);
+					}
+				}
+				this.searchGoodsName = value;
 			},
+			onFocus(e) {
+				console.log('select result', e);
 
+				// #ifdef H5
+				if (!e.type) {
+					this.searchGoodsName = e;
+				}
+				// #endif
+				// #ifdef MP-WEIXIN||MP-ALIPAY
+				this.searchGoodsName = e.detail;
+				// #endif
+			},
+			searchBtn(e) {
+				console.log('searchBtn', this.searchGoodsName);
+				var value = this.searchGoodsName;
+				//判断大标签页
+				if (this.collectTab == 0) {
+					//判断小标签页
+					if (this.currentTab == 0) {
+						this.getMemberCollect(false, value);
+					}
+					if (this.currentTab == 1) {
+						this.getMemberCollect(true, value);
+					}
+				}
+				if (this.collectTab == 1) {
+					//判断小标签页
+					if (this.currentTab == 0) {
+						this.getPointsMallCollect(false, value);
+					}
+					if (this.currentTab == 1) {
+						this.getPointsMallCollect(true, value);
+					}
+				}
+			},
 			searchInputClear(e) {
 				console.log(e);
 				if (this.collectTab == 0) {
@@ -299,14 +343,16 @@
 			getMemberCollect(isBuy, goodsName) {
 				let data = {
 					pageNo: -1,
-					pageSize: 20
+					pageSize: 20,
+					isBuy: isBuy ? isBuy : false,
+					goodsName: goodsName ? goodsName : ''
 				};
-				if (isBuy) {
-					data.isBuy = true;
-				}
-				if (goodsName) {
-					data.goodsName = goodsName;
-				}
+				// if (isBuy) {
+				// 	data.isBuy = isBuy;
+				// }
+				// if (goodsName) {
+				// 	data.goodsName = goodsName;
+				// }
 				this.collectList = [];
 				https.request('/rest/member/goodsCollect/list', data).then((result) => {
 					if (result.success) {
@@ -329,7 +375,7 @@
 
 			bindPointsMallDetails(e) {
 				uni.navigateTo({
-					url: '../../../mall/detail/detail?id=' + e.currentTarget.dataset.id
+					url: '../../../internal/mall/detail/detail?id=' + e.currentTarget.dataset.id
 				});
 			},
 
@@ -373,64 +419,58 @@
 			},
 
 			slideButtonTap(e, _dataset) {
-				/* ---处理dataset begin--- */
-				this.handleDataset(e, _dataset);
-				/* ---处理dataset end--- */
+				console.log("点击取消收藏按钮=", _dataset, e)
 				var deleteIds = [];
-				let goodsid = e.currentTarget.dataset.goodsid; //商品下标
+				let goodsid = _dataset.goodsid; //商品下标
 				deleteIds.push(goodsid);
-				this.setData({
-					goodsIdList: deleteIds
-				});
+				this.goodsIdList = deleteIds;
 				this.batchDelete();
 			},
 
 			batchDelete() {
+				console.log("this.goodsIdList", this.goodsIdList);
 				if (this.goodsIdList.length <= 0) {
-					toastService.showToast('请选择要操作的数据');
+					toastService.showToast('请选择要取消的收藏');
 					return;
 				}
-				var that = this;
-				toastService.showModal(
-					null,
-					'确定要删除这' + this.goodsIdList.length + '条数据吗?',
+				var _this = this;
+				toastService.showModal(null, '确定要取消这' + this.goodsIdList.length + '条收藏吗?',
 					function confirm() {
 						let url = '/rest/member/pointsMall/goodsCollect/batchDelete';
-						if (that.collectTab == 0) {
+						if (_this.collectTab == 0) {
 							url = '/rest/member/goodsCollect/batchDelete';
 						}
-						https
-							.request(url, {
-								goodsIdList: that.goodsIdList
-							})
-							.then((result) => {
-								if (result.success) {
-									toastService.showToast(result.message);
-									//判断大标签页
-									if (that.collectTab == 0) {
-										//判断小标签页
-										if (that.currentTab == 0) {
-											that.getMemberCollect();
-										}
-										if (that.currentTab == 1) {
-											that.getMemberCollect(true);
-										}
+						https.request(url, {
+							goodsIdList: _this.goodsIdList
+						}).then((result) => {
+							if (result.success) {
+								if (_this.isAlls) {
+									_this.isShowCheckbox = false;
+									_this.isAlls = false;
+								}
+								toastService.showSuccess("取消成功");
+								//判断大标签页
+								if (_this.collectTab == 0) {
+									//判断小标签页
+									if (_this.currentTab == 0) {
+										_this.getMemberCollect();
 									}
-									if (that.collectTab == 1) {
-										//判断小标签页
-										if (that.currentTab == 0) {
-											that.getPointsMallCollect();
-										}
-										if (that.currentTab == 1) {
-											that.getPointsMallCollect(true);
-										}
+									if (_this.currentTab == 1) {
+										_this.getMemberCollect(true);
 									}
 								}
-							});
-					},
-					null,
-					true
-				);
+								if (_this.collectTab == 1) {
+									//判断小标签页
+									if (_this.currentTab == 0) {
+										_this.getPointsMallCollect();
+									}
+									if (_this.currentTab == 1) {
+										_this.getPointsMallCollect(true);
+									}
+								}
+							}
+						});
+					}, null, true);
 			}
 		}
 	};
@@ -588,26 +628,6 @@
 		color: #858585;
 	}
 
-	/*checkbox 选项框大小  */
-
-	checkbox .wx-checkbox-input {
-		width: 40rpx;
-		height: 40rpx;
-	}
-
-	/*checkbox选中后样式  */
-
-	checkbox .wx-checkbox-input.wx-checkbox-input-checked {
-		width: 40rpx;
-		height: 40rpx;
-	}
-
-	checkbox {
-		width: 50rpx;
-		height: 50rpx;
-		margin-right: 15rpx;
-	}
-
 	.commdity-money-add-subtract {
 		width: 50%;
 		display: flex;
@@ -627,5 +647,29 @@
 		font-size: 24rpx;
 		border-radius: 20rpx;
 		padding: 2rpx 10rpx;
+	}
+
+	.flvan-swipe-cell__right {
+		color: red;
+		width: 100%;
+		height: 100rpx;
+		line-height: 100rpx;
+		font-size: 48rpx;
+		width: 100rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: white;
+		border-radius: 50%;
+	}
+	
+	.van-swipe-cell__right {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.van-search__action {
+		padding: 0 10rpx;
 	}
 </style>

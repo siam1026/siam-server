@@ -9,8 +9,8 @@ docker stop siam-server
 docker rm siam-server
 
 ###运行镜像
-# docker run -d -p 9602:9602 -p 9612:9041 --name siam-server -v /home/dockerdata/oap/volume/siam-system/apache-skywalking-apm-bin/:/opt/apache-skywalking-apm-bin/ siam-server:v1.0
-docker run -d -p 9602:9602 --name siam-server siam-server:v1.0
+# docker run -d -p 9630:9630 -p 9631:9041 --name siam-server -v /home/dockerdata/oap/volume/siam-system/apache-skywalking-apm-bin/:/opt/apache-skywalking-apm-bin/ siam-server:v1.0
+docker run -d -p 9630:9630 -e JAVA_OPTS="-Xms128m -Xmx256m" -e JAVA_PROFILES_ACTIVE="-Dspring.profiles.active=local" --name siam-server siam-server:v1.0
 
 ###推送至阿里云容器镜像
 spawn docker login --username=siam registry-vpc.cn-hangzhou.aliyuncs.com

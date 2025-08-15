@@ -20,14 +20,14 @@
 				<view class="input-image">
 					<text
 						:class="data.realName ? 'userinfo-text' : 'placeholder-text'">{{ data.realName ? data.realName : '请输入真实姓名' }}</text>
-					<text class="iconfont iconhtbArrowright02"></text>
+					<van-icon name="arrow" />
 				</view>
 			</view>
 			<view class="userinfo-item" @tap="openConfirm">
 				<text class="title-text">性别</text>
 				<view class="input-image">
 					<text class="userinfo-text">{{ data.sex == 1 ? '男' : data.sex == 2 ? '女' : '保密' }}</text>
-					<text class="iconfont iconhtbArrowright02"></text>
+					<van-icon name="arrow" />
 				</view>
 			</view>
 			<view class="userinfo-item" @tap="openEmail">
@@ -38,7 +38,7 @@
 					<!-- <input placeholder-class="placeholder-email" class="userinfo-text" placeholder="请输入邮箱地址" value="{{data.email}}" disabled="disabled"></input> -->
 					<text
 						:class="data.email ? 'userinfo-text' : 'placeholder-text'">{{ data.email ? data.email : '请输入邮箱地址' }}</text>
-					<text class="iconfont iconhtbArrowright02"></text>
+					<van-icon name="arrow" />
 				</view>
 			</view>
 
@@ -47,22 +47,22 @@
 				<text class="title-text">绑定微信</text>
 				<view class="bind-wx">
 					<text class="userinfo-text">{{ data.isBindWx ? '已绑定' : '未绑定' }}</text>
-					<text class="iconfont iconhtbArrowright02"></text>
+					<van-icon name="arrow" />
 				</view>
 			</view>
 		</view>
-		<van-action-sheet :show="dialogShow" @close="close" title="选择性别">
+		<van-action-sheet :show="dialogShow" @close="close" @cancel="close" title="选择性别">
 			<view class="content_box">
 				<scroll-view scroll-y style="height: 52vh">
 					<radio-group @change="radioChange" class="sex-radio-group">
 						<label :data-radioIndex="index" class="radio-group-label" v-for="(item, index) in modeList"
 							:key="index">
 							{{ item.name }}
-					
+
 							<radio :value="item.value" class="radio-group-label-radio" :checked="item.checked" />
 						</label>
 					</radio-group>
-					
+
 				</scroll-view>
 				<view class="flex_between">
 					<view class="close-botton good-choice-btn" @tap="close">取消
@@ -72,7 +72,7 @@
 				</view>
 			</view>
 		</van-action-sheet>
-		<van-action-sheet :show="dialogShowEmail" @close="close" title="编辑邮箱">
+		<van-action-sheet :show="dialogShowEmail" @close="close" @cancel="close" title="编辑邮箱">
 			<view class="content_box">
 				<scroll-view scroll-y style="height: 52vh">
 					<view class="content_box">
@@ -80,7 +80,7 @@
 							@input="bindInputEmail" />
 					</view>
 				</scroll-view>
-				
+
 				<view class="flex_between">
 					<view class="close-botton good-choice-btn" @tap="close">取消
 					</view>
@@ -89,14 +89,14 @@
 				</view>
 			</view>
 		</van-action-sheet>
-		<van-action-sheet :show="dialogShowRealName" @close="close" title="确认真实姓名">
+		<van-action-sheet :show="dialogShowRealName" @close="close" @cancel="close" title="确认真实姓名">
 			<view class="content_box">
 				<scroll-view scroll-y style="height: 52vh">
 					<view class="title-tip">请于身份证上保持一致，信息有误影响奖励提现</view>
 					<input class="userinfo-text input-email" placeholder="请输入真实姓名" :value="data.realName"
 						@input="bindInputRealName" />
 				</scroll-view>
-				
+
 				<view class="flex_between">
 					<view class="close-botton good-choice-btn" @tap="close">取消
 					</view>
@@ -113,11 +113,10 @@
 	import GlobalConfig from '../../../utils/global-config';
 	import https from '../../../utils/http';
 	import authService from '../../../utils/auth';
-	var toastService = require('../../../utils/toast.service');
-	var utils = require('../../../utils/util');
-	var dateHelper = require('../../../utils/date-helper');
-	//获取应用实例
-	const app = getApp();
+	import toastService from '../../../utils/toast.service';
+	import utilHelper from '../../../utils/util';
+	import dateHelper from '../../../utils/date-helper'; //获取应用实例
+	let app = null;
 	export default {
 		data() {
 			return {
@@ -156,19 +155,16 @@
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad: function(options) {
+			app = getApp();
 			if (app.globalData.userInfo) {
-				this.setData({
-					userInfo: app.globalData.userInfo,
-					hasUserInfo: true
-				});
+				this.userInfo = app.globalData.userInfo;
+				this.hasUserInfo = true;
 			} else if (this.canIUse) {
 				// 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
 				// 所以此处加入 callback 以防止这种情况
 				app.globalData.userInfoReadyCallback = (res) => {
-					this.setData({
-						userInfo: res.userInfo,
-						hasUserInfo: true
-					});
+					this.userInfo = res.userInfo;
+					this.hasUserInfo = true;
 				};
 			} else {
 				// 在没有 open-type=getUserInfo 版本的兼容处理
@@ -462,9 +458,11 @@
 		font-size: 22rpx;
 		color: red;
 	}
-	.close-botton{
+
+	.close-botton {
 		background-color: #ededed;
 	}
+
 	.good-choice-btn {
 		width: 100%;
 		text-align: center;
@@ -472,8 +470,7 @@
 		border-radius: 15rpx;
 		font-size: 28rpx;
 		font-weight: bold;
-		
+
 		margin: 20rpx;
 	}
-	
 </style>

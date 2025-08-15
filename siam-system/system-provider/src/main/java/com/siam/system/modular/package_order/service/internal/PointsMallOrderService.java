@@ -2,6 +2,8 @@ package com.siam.system.modular.package_order.service.internal;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.siam.system.modular.package_order.entity.Order;
 import com.siam.system.modular.package_order.entity.internal.PointsMallOrder;
 import com.siam.system.modular.package_order.model.example.internal.PointsMallOrderExample;
 import com.siam.system.modular.package_order.model.param.internal.PointsMallOrderParam;
@@ -17,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public interface PointsMallOrderService {
+public interface PointsMallOrderService extends IService<PointsMallOrder> {
 
     int countByExample(PointsMallOrderExample example);
 

@@ -44,8 +44,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void insertSelective(Menu menu) {
-        menuMapper.insertSelective(menu);
+    public void insert(Menu menu) {
+        menuMapper.insert(menu);
     }
 
     @Override

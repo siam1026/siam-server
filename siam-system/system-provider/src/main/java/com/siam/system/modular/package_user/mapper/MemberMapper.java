@@ -40,6 +40,10 @@ public interface MemberMapper extends BaseMapper<Member> {
     Member selectByMobile(@Param("mobile") String mobile);
 
     @ResultMap("BaseResultMap")
+    @Select("select * from tb_member where open_id = #{openId} order by id desc limit 1 ")
+    Member selectByOpenId(@Param("openId") String openId);
+
+    @ResultMap("BaseResultMap")
     @Select("select * from tb_member where username = #{username} or mobile = #{username} order by id desc limit 1 ")
     Member selectByUsernameOrMobile(@Param("username") String username);
 
@@ -71,7 +75,7 @@ public interface MemberMapper extends BaseMapper<Member> {
             "<if test=\"member.isNewPeople != null\"> AND m.is_new_people = #{member.isNewPeople} </if>"+
             "<if test=\"member.startCreateTime != null\"> AND DATE_FORMAT(m.create_time, '%Y/%m/%d') &gt;= #{member.startCreateTime} </if>" +
             "<if test=\"member.endCreateTime != null\"> AND DATE_FORMAT(m.create_time, '%Y/%m/%d') &lt;= #{member.endCreateTime} </if>" +
-            "</where> order by m.id asc" +
+            "</where> order by m.create_time desc" +
             "</script>")
     Page<Map<String, Object>> getListByPage(@Param("page") Page page, @Param("member") MemberParam member);
 
@@ -101,16 +105,16 @@ public interface MemberMapper extends BaseMapper<Member> {
     @ResultMap("BaseResultMap")
     @Select("select * from tb_member where id not in(" +
             "select m.id from tb_member as m,tb_coupons_member_relation as cmr " +
-            "where m.id=cmr.member_id and cmr.is_used=0 and cmr.is_expired=0 and cmr.is_valid=1" +
+            "where m.id=cmr.member_id and cmr.is_used=0 and cmr.is_expired=0 and cmr.is_valid=1 and cmr.coupons_id = #{couponsId}" +
             ") ")
-    List<Member> selectAllMemberNoneCoupons();
+    List<Member> selectAllMemberNoneCoupons(@Param("couponsId") Integer couponsId);
 
     @ResultMap("BaseResultMap")
     @Select("select * from tb_member where id not in(" +
             "select m.id from tb_member as m,tb_points_mall_coupons_member_relation as cmr " +
-            "where m.id=cmr.member_id and cmr.is_used=0 and cmr.is_expired=0 and cmr.is_valid=1" +
+            "where m.id=cmr.member_id and cmr.is_used=0 and cmr.is_expired=0 and cmr.is_valid=1 and cmr.coupons_id = #{couponsId}" +
             ") ")
-    List<Member> selectAllMemberNoneCouponsByPointsMall();
+    List<Member> selectAllMemberNoneCouponsByPointsMall(@Param("couponsId") Integer couponsId);
 
     @Update("update tb_member set is_remind_new_people = 1 where is_new_people = 1 and is_remind_new_people = 0")
     int updateIsRemindNewPeople();
@@ -153,7 +157,7 @@ public interface MemberMapper extends BaseMapper<Member> {
             "<if test=\"member.isNewPeople != null\"> AND m.is_new_people = #{member.isNewPeople} </if>"+
             "<if test=\"member.startCreateTime != null\"> AND DATE_FORMAT(m.create_time, '%Y/%m/%d') &gt;= #{member.startCreateTime} </if>" +
             "<if test=\"member.endCreateTime != null\"> AND DATE_FORMAT(m.create_time, '%Y/%m/%d') &lt;= #{member.endCreateTime} </if>" +
-            "</where> order by m.id asc" +
+            "</where> order by m.create_time desc" +
             "</script>")
     Page<Member> purchasedList(@Param("page") Page page, @Param("member") MemberParam member);
 
@@ -185,7 +189,7 @@ public interface MemberMapper extends BaseMapper<Member> {
             "<if test=\"member.isNewPeople != null\"> AND m.is_new_people = #{member.isNewPeople} </if>"+
             "<if test=\"member.startCreateTime != null\"> AND DATE_FORMAT(m.create_time, '%Y/%m/%d') &gt;= #{member.startCreateTime} </if>" +
             "<if test=\"member.endCreateTime != null\"> AND DATE_FORMAT(m.create_time, '%Y/%m/%d') &lt;= #{member.endCreateTime} </if>" +
-            "</where> order by m.id asc" +
+            "</where> order by m.create_time desc" +
             "</script>")
     Page<Member> unPurchasedList(@Param("page") Page page, @Param("member") MemberParam member);
 

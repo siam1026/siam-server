@@ -9,6 +9,8 @@ import com.siam.package_common.constant.BusinessType;
 import com.siam.package_common.exception.StoneCustomerException;
 import com.siam.system.modular.package_goods.entity.internal.PointsMallCoupons;
 import com.siam.system.modular.package_goods.entity.internal.PointsMallCouponsMemberRelation;
+import com.siam.system.modular.package_user.entity.Member;
+import com.siam.system.modular.package_user.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/rest/admin/pointsMall/couponsMemberRelation")
@@ -28,8 +31,8 @@ public class AdminPointsMallCouponsMemberRelationController {
     @Autowired
     private PointsMallCouponsMemberRelationService pointsMallCouponsMemberRelationService;
 
-//    @Autowired
-//    private MemberService memberService;
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private PointsMallCouponsService pointsMallCouponsService;
@@ -68,28 +71,24 @@ public class AdminPointsMallCouponsMemberRelationController {
             endTime=coupons.getValidEndTime();
         }
 
-//        //查询出所有的用户
-//        MemberExample queryMemberExample = new MemberExample();
-//        //List<Member> memberList = memberService.selectByExample(queryMemberExample);
-//        List<Member> memberList = memberService.selectAllMemberNoneCouponsByPointsMall();
-//
-//        //给所有用户派发优惠卷
-//        for (Member member : memberList) {
-//            PointsMallCouponsMemberRelation couponsMemberRelation = new PointsMallCouponsMemberRelation();
-//            couponsMemberRelation.setCouponsId(couponsId);
-//            couponsMemberRelation.setMemberId(member.getId());
-//            couponsMemberRelation.setCouponsName(coupons.getName());
-//            couponsMemberRelation.setIsUsed(false);
-//            couponsMemberRelation.setIsExpired(false);
-//            couponsMemberRelation.setIsValid(true);
-//            couponsMemberRelation.setStartTime(startTime);
-//            couponsMemberRelation.setEndTime(endTime);
-//            couponsMemberRelation.setCreateTime(new Date());
-//            pointsMallCouponsMemberRelationService.insertSelective(couponsMemberRelation);
-//
-//            //发送短信
-//            /*aliyunSms.sendPointsMallCouponsDistributeReminderMessage(member.getMobile(), coupons.getName());*/
-//        }
+        //给所有用户派发优惠卷
+        List<Member> memberList = memberService.selectAllMemberNoneCouponsByPointsMall(param.getCouponsId());
+        for (Member member : memberList) {
+            PointsMallCouponsMemberRelation couponsMemberRelation = new PointsMallCouponsMemberRelation();
+            couponsMemberRelation.setCouponsId(param.getCouponsId());
+            couponsMemberRelation.setMemberId(member.getId());
+            couponsMemberRelation.setCouponsName(coupons.getName());
+            couponsMemberRelation.setIsUsed(false);
+            couponsMemberRelation.setIsExpired(false);
+            couponsMemberRelation.setIsValid(true);
+            couponsMemberRelation.setStartTime(startTime);
+            couponsMemberRelation.setEndTime(endTime);
+            couponsMemberRelation.setCreateTime(new Date());
+            pointsMallCouponsMemberRelationService.insertSelective(couponsMemberRelation);
+
+            //发送短信
+            /*aliyunSms.sendPointsMallCouponsDistributeReminderMessage(member.getMobile(), coupons.getName());*/
+        }
 
         basicResult.setSuccess(true);
         basicResult.setCode(BasicResultCode.SUCCESS);

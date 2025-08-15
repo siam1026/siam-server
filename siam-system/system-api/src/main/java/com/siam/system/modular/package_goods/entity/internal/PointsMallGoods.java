@@ -1,6 +1,6 @@
 package com.siam.system.modular.package_goods.entity.internal;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.IdType; import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +17,7 @@ import java.util.List;
 @ApiModel(value = "商品表")
 public class PointsMallGoods {
 
-    @TableField(select = false)
+    @TableField(exist = false)
     private Integer menuId;
 
     /**
@@ -28,6 +28,7 @@ public class PointsMallGoods {
     public static final int STATUS_OFF_SHELF = 3;
     public static final int STATUS_SELL_OUT = 4;
 
+    @TableField(exist = false)
     private List<Integer> ids;
 
     @TableId(type = IdType.AUTO)
@@ -100,10 +101,10 @@ public class PointsMallGoods {
     private Date updateTime;
 
     //页码
-    private Integer pageNo = 1;
+    @TableField(exist = false) private Integer pageNo = 1;
 
     //页面大小
-    private Integer pageSize = 20;
+    @TableField(exist = false) private Integer pageSize = 20;
 
     public Integer getPageNo() {
         return pageNo;

@@ -21,10 +21,10 @@
 <script>
 import https from '../../../../../utils/http';
 import authService from '../../../../../utils/auth';
-var toastService = require('../../../../../utils/toast.service');
-var utilHelper = require('../../../../../utils/util');
-var dateHelper = require('../../../../../utils/date-helper');
-var systemStatus = require('../../../../../utils/system-status');
+import toastService from '../../../../../utils/toast.service';
+import utilHelper from '../../../../../utils/util';
+import dateHelper from '../../../../../utils/date-helper';
+import systemStatus from '../../../../../utils/system-status';
 var pageNo = 1;
 var pageSize = 10;
 export default {
