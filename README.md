@@ -1,10 +1,10 @@
 <p align=center>
-  <a href="http://www.siamit.cn">
+  <a href="http://web.siamit.cn">
     <img src="./doc/images/gitee/logo.png" alt="暹罗点餐" style="width:200px;height:200px">
   </a>
 </p>
 
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">暹罗点餐 v1.0</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">暹罗点餐 v2.0</h1>
 <h4 align="center">基于SpringBoot开发的餐饮点餐系统</h4>
 
 <p align="center">
@@ -49,6 +49,7 @@
 12. 订单小票打印，本地打印、云端打印
 13. Excel数据导出，导出表格更加美观、可视
 
+![image text](./doc/images/wxapplet-user/appAll.png)
 
 ## 软件架构
 
@@ -59,7 +60,8 @@
 ## 相关资料获取
 
 1. 获取sql文件
-2. 获取商家端小程序、骑手端小程序、骑手管理web端代码
+2. 获取项目文档
+3. 获取用户端、商家端小程序/App/H5代码
 
 [请加入QQ群或微信群获取](https://github.com/siam1026/siam-server#关注和交流)，进群前先在右上角Star本项目
 
@@ -87,29 +89,13 @@ com.siam
 
 ## 站点演示
 
-> 【演示商家后台】：http://spa.show.siamit.cn/server-shop
+> 【官网】：http://web.siamit.cn
 >
-> 【演示调度后台】：http://spa.show.siamit.cn/server-admin
+> 【调度后台网页版】：http://spa.show.siamit.cn/server-admin
 >
-> 【演示账号】：[点击获取](https://github.com/siam1026/siam-server/raw/master/doc/images/wechat/公众号_演示账号.png)
+> 【商家后台网页版】：http://spa.show.siamit.cn/server-shop
 >
-> 【小程序】暹罗点餐的移动端版本，微信上架审核中，[请加入QQ群或微信群获取体验版本](https://github.com/siam1026/siam-server#关注和交流)
-
-|                                                          |
-| :------------------------------------------------------: |
-| <img src="./doc/images/wechat/微信小程序.jpg" width="200" /> |
-
-## 项目中初始用户和密码
-
-- **小程序登录**：
-账号密码登录：siam，123456
-手机验证码登录：13121865386，123456
-- **商家后台登录**：用户：admin-ludian，密码：123456
-- **调度中心登录**：用户：admin，密码：123456
-
-## 项目文档
-
-文档地址：https://www.yuque.com/yuqueyonghuwukmla/siam-opensource
+> 【各端小程序/App/H5演示版、演示账号】：[点击获取](https://github.com/siam1026/siam-server/raw/master/doc/images/wechat/公众号_演示账号.png)
 
 ## 项目地址
 
@@ -128,27 +114,42 @@ com.siam
 | <img src="https://github.com/siam1026/siam-server/raw/master/doc/images/wechat/添加暹罗.jpg" width="200" /> | <img src="https://github.com/siam1026/siam-server/raw/master/doc/images/qq/qqGroup4.jpg" width="200" /> |
 
 
-## 微信小程序截图
+## 用户端截图
 
-|                        微信小程序                         |                                                       |
+|                        用户端                         |                                                       |
 | :----------------------------------------------------: | :---------------------------------------------------: |
-|      ![image text](./doc/images/wxapplet-user/home.jpg)       |    ![image text](./doc/images/wxapplet-user/shop.jpg)    |
-|      ![image text](./doc/images/wxapplet-user/order_takeout.jpg)       |    ![image text](./doc/images/wxapplet-user/order_list.jpg)    |
-|      ![image text](./doc/images/wxapplet-user/coupons.jpg)       |    ![image text](./doc/images/wxapplet-user/points_mall_home.jpg)    |
-|      ![image text](./doc/images/wxapplet-user/my.jpg)       |    ![image text](./doc/images/wxapplet-user/vip.jpg)    |
-|      ![image text](./doc/images/wxapplet-user/reward_withdrawal.jpg)       |    ![image text](./doc/images/wxapplet-user/invite.jpg)    |
+|      <img src="./doc/images/wxapplet-user/home.jpg" width="300">       |    <img src="./doc/images/wxapplet-user/pickup.jpg" width="300">    |
+|      <img src="./doc/images/wxapplet-user/takeout.jpg" width="300">       |    <img src="./doc/images/wxapplet-user/order_list.jpg" width="300">    |
+|      <img src="./doc/images/wxapplet-user/orderPay.jpg" width="300">       |    <img src="./doc/images/wxapplet-user/points_mall_home.jpg" width="300">    |
+|      <img src="./doc/images/wxapplet-user/my.jpg" width="300">       |    <img src="./doc/images/wxapplet-user/vip.jpg" width="300">    |
+|      <img src="./doc/images/wxapplet-user/coupons.jpg" width="300">       |    <img src="./doc/images/wxapplet-user/vip_recharge.jpg" width="300">    |
+|      <img src="./doc/images/wxapplet-user/reward_withdrawal.jpg" width="300">       |    <img src="./doc/images/wxapplet-user/invite.jpg" width="300">    |
 
-## 网站截图
+## 商家端截图
 
-|                        商家后台                         |                                                       |
+|                        商家端                         |                                                       |
 | :----------------------------------------------------: | :---------------------------------------------------: |
-|      ![image text](./doc/images/vue-shop/statisticGraph.png)       |    ![image text](./doc/images/vue-shop/refundOrderList.png)    |
-|      ![image text](./doc/images/vue-shop/goodsList.png)       |    ![image text](./doc/images/vue-shop/couponsList.png)    |
-|      ![image text](./doc/images/vue-shop/shopInfoImportant.png)       |    ![image text](./doc/images/vue-shop/ticketPrinterList.png)    |
-|                       **调度后台**                        |                                                       |
+|      <img src="./doc/images/uniapp-shop/home.jpg" width="300">       |    <img src="./doc/images/uniapp-shop/shopManagement.jpg" width="300">    |
+|      <img src="./doc/images/uniapp-shop/mine.jpg" width="300">       |    <img src="./doc/images/uniapp-shop/goodsManagement.jpg" width="300">    |
+
+
+## 调度后台网页版截图
+
+|                        调度后台网页版                         |                                                       |
+| :----------------------------------------------------: | :---------------------------------------------------: |
 |       ![image text](./doc/images/vue-admin/statisticGraph.png)        |      ![image text](./doc/images/vue-admin/memberList.png)       |
-|       ![image text](./doc/images/vue-admin/refundOrderList.png)        |      ![image text](./doc/images/vue-admin/shopList.png)       |
-|       ![image text](./doc/images/vue-admin/shopListOfApplyChangeData.png)        |      ![image text](./doc/images/vue-admin/couponsList.png)       |
+|       ![image text](./doc/images/vue-admin/shopList.png)        |      ![image text](./doc/images/vue-admin/couponsList.png)       |
+|       ![image text](./doc/images/vue-admin/forHereOrderList.png)        |      ![image text](./doc/images/vue-admin/refundOrderList.png)       |
+|       ![image text](./doc/images/vue-admin/merchantBillingRecord.png)        |      ![image text](./doc/images/vue-admin/platformBillingRecord.png)       |
+|       ![image text](./doc/images/vue-admin/pointsMall_statisticGraph.png)        |      ![image text](./doc/images/vue-admin/settingList.png)       |
+
+## 商家后台网页版截图
+
+|                        商家后台网页版                         |                                                       |
+| :----------------------------------------------------: | :---------------------------------------------------: |
+|      ![image text](./doc/images/vue-shop/statisticGraph.png)       |    ![image text](./doc/images/vue-shop/shopInfo.png)    |
+|      ![image text](./doc/images/vue-shop/goodsList.png)       |    ![image text](./doc/images/vue-shop/ticketPrinterList.png)    |
+|      ![image text](./doc/images/vue-shop/diningTableList.png)       |    ![image text](./doc/images/vue-shop/merchantBillingRecord.png)    |
 
 
 ## 赞赏
